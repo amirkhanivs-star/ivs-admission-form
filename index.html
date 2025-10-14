@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>IVS Admission Registration Form</title>
+
+  <link rel="stylesheet" href="styles.css"/>
+
+  <!-- PDF libs -->
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <div class="wrapper">
+    <form id="admissionForm">
+      <!-- ================= PAGE 1 ================= -->
+      <div class="page" id="page1">
+        <header class="header">
+          <div class="header-top with-logos">
+            <div class="logo">
+              <img src="img/logo-left.png" alt="IVS Logo" crossorigin="anonymous"/>
+            </div>
+
+            <div class="brand">
+              <div class="brand-title">IQRA VIRTUAL SCHOOL</div>
+              <div class="brand-sub">
+                <span class="line">An Online Project of</span>
+                <span class="emph">Al Furqan Children Academy</span>
+              </div>
+              <div class="brand-chip">Based on British Curriculum</div>
+            </div>
+
+            <div class="logo">
+              <img src="img/logo-right.png" alt="Academy Emblem" crossorigin="anonymous"/>
+            </div>
+          </div>
+
+          <div class="title">
+            Admission Registration <span class="title-accent">Form</span>
+          </div>
+
+          <div class="meta meta--top">
+            <div class="field-stack">
+              <div class="stack-label">SESSION:</div>
+              <div class="stack-value">2025–26</div>
+              <div class="stack-underline"></div>
+            </div>
+
+            <div class="field-stack">
+              <div class="stack-label">DATE OF REGISTRATION</div>
+              <div class="date-boxes" id="regBoxes">
+                <input class="box" maxlength="1" id="rb1" data-next="rb2" inputmode="numeric" />
+                <input class="box" maxlength="1" id="rb2" data-next="rb3" data-prev="rb1" inputmode="numeric" />
+                <span class="slash">/</span>
+                <input class="box" maxlength="1" id="rb3" data-next="rb4" data-prev="rb2" inputmode="numeric" />
+                <input class="box" maxlength="1" id="rb4" data-next="rb5" data-prev="rb3" inputmode="numeric" />
+                <span class="slash">/</span>
+                <input class="box" maxlength="1" id="rb5" data-next="rb6" data-prev="rb4" inputmode="numeric" />
+                <input class="box" maxlength="1" id="rb6" data-next="rb7" data-prev="rb5" inputmode="numeric" />
+                <input class="box" maxlength="1" id="rb7" data-next="rb8" data-prev="rb6" inputmode="numeric" />
+                <input class="box" maxlength="1" id="rb8" data-prev="rb7" inputmode="numeric" />
+              </div>
+              <input type="hidden" id="regDate" name="regDate" />
+            </div>
+          </div>
+        </header>
+
+        <section class="section">
+          <h3>STUDENT INFORMATION</h3>
+          <div class="content">
+            <div class="grid cols-2">
+              <div><div class="label">Student Name</div><input id="studentName" class="input" required></div>
+              <div><div class="label">Father Name</div><input id="fatherName" class="input"></div>
+              <div><div class="label">Date of Birth</div><input id="dob" class="input" type="date"></div>
+              <div>
+                <div class="label">Gender</div>
+                <div class="inline">
+                  <label><input type="radio" name="gender" value="Male"> Male</label>
+                  <label><input type="radio" name="gender" value="Female"> Female</label>
+                </div>
+              </div>
+              <div><div class="label">Guardian WhatsApp #</div><input id="gWhats" class="input" placeholder="+92-xxx-xxxxxxx"></div>
+              <div><div class="label">Religion</div><input id="religion" class="input"></div>
+              <div><div class="label">Father Occupation</div><input id="fOcc" class="input"></div>
+              <div><div class="label">Nationality</div><input id="nation" class="input"></div>
+            </div>
+
+            <hr class="sep"/>
+
+            <div class="label"><strong>Grade:</strong> (tick)</div>
+            <div class="grades">
+              <label class="grade-box"><input id="g_nur" type="checkbox"> Nur / LKG / KG-1</label>
+              <label class="grade-box"><input id="g_prep" type="checkbox"> Prep / UKG / KG-2</label>
+              <label class="grade-box"><input id="g_1" type="checkbox"> Grade 1</label>
+              <label class="grade-box"><input id="g_2" type="checkbox"> Grade 2</label>
+              <label class="grade-box"><input id="g_3" type="checkbox"> Grade 3</label>
+              <label class="grade-box"><input id="g_4" type="checkbox"> Grade 4</label>
+              <label class="grade-box"><input id="g_5" type="checkbox"> Grade 5</label>
+              <label class="grade-box"><input id="g_6" type="checkbox"> Grade 6</label>
+              <label class="grade-box"><input id="g_7" type="checkbox"> Grade 7</label>
+              <label class="grade-box"><input id="g_8fb" type="checkbox"> Grade 8 (FB)</label>
+              <label class="grade-box"><input id="g_9fb" type="checkbox"> Grade 9 (FB)</label>
+              <label class="grade-box"><input id="g_11fb" type="checkbox"> Grade 11 (FB)</label>
+              <label class="grade-box"><input id="g_ig" type="checkbox"> IGCSE / O'Level (type below)</label>
+            </div>
+            <div style="margin-top:8px">
+              <input id="igcse_text" class="input" placeholder="For IGCSE & O'Level, write exact grade here">
+            </div>
+          </div>
+        </section>
+
+        <section class="section">
+          <h3>ADDRESS DETAIL</h3>
+          <div class="content">
+            <div class="grid">
+              <div><div class="label">Present Address</div><textarea id="addr" class="textarea"></textarea></div>
+            </div>
+            <div class="grid cols-3">
+              <div><div class="label">The City</div><input id="city" class="input"></div>
+              <div><div class="label">Present State</div><input id="state" class="input"></div>
+              <div><div class="label">Zip Code</div><input id="zip" class="input"></div>
+            </div>
+            <div class="grid cols-2">
+              <div><div class="label">Guardian Contact</div><input id="gContact" class="input"></div>
+              <div><div class="label">Secondary Contact</div><input id="sContact" class="input"></div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- ================= PAGE 2 ================= -->
+      <div class="page" id="page2">
+        <div class="title" style="margin-top:18px;">DECLARATION OF PARENT/GUARDIAN</div>
+
+        <div class="badge-row">
+          <div class="badge">Affiliated with PSRA & Federal Board</div>
+          <div class="badge">Based on British & Federal Board Curriculum</div>
+          <div class="badge">Students across 50+ countries</div>
+        </div>
+
+        <section class="section">
+          <div class="content declaration-list">
+            <ol>
+              <li>I acknowledge admission is subject to space and fulfilling all requirements.</li>
+              <li>I ensure my child’s regular attendance and discipline.</li>
+              <li>Use of mobile phones, abusive language, or violations won’t be tolerated.</li>
+              <li>I commit to respectful behavior by my child toward teachers, staff, and students.</li>
+              <li>Contact with teachers/students outside IVS-approved platforms is prohibited.</li>
+              <li>In disciplinary issues I’ll communicate with school management directly.</li>
+              <li>Uninformed absence may lead to restricted classes or withheld reports.</li>
+              <li>IVS materials/resources are for my child’s use only and not shared externally.</li>
+              <li>I agree to regular check-ins about my child’s progress.</li>
+              <li>I have read and understood all rules and fee policies.</li>
+            </ol>
+
+            <!-- Signature area (compact + instructions on right) -->
+            <div class="signature">
+              <div class="sig-row">
+                <div class="sig-col">
+                  <div class="label">Signature of Parent/Guardian (draw here)</div>
+                  <canvas id="sig" width="480" height="140"></canvas>
+                  <div class="sig-actions">
+                    <button id="clearSig" type="button" class="btn secondary">Clear Signature</button>
+                  </div>
+                </div>
+
+                <aside class="sig-notes">
+                  <div class="sig-notes-title">How to complete your admission</div>
+                  <ol class="sig-steps">
+                    <li>Draw your signature on the left.</li>
+                    <li>Click <strong>Save filled form as PDF</strong>.</li>
+                    <li>When WhatsApp opens, send the PDF with the file <strong>attached</strong>.</li>
+                    <li>That’s it — your admission request will be completed.</li>
+                  </ol>
+                  <div class="sig-hint">
+                    Note: If the share sheet doesn’t open, the PDF will be saved and a WhatsApp chat will open.
+                    Please attach the saved file using the paperclip and send it.
+                  </div>
+                </aside>
+              </div>
+            </div>
+
+            <div class="actions hide-in-pdf" style="margin-top:14px">
+              <button id="btnPdf" class="btn" type="button">Save filled form as PDF</button>
+              <button id="btnPrint" class="btn secondary" type="button">Print</button>
+            </div>
+          </div>
+        </section>
+      </div> <!-- /page2 -->
+    </form>
+  </div>
+
+  <!-- Your main JS -->
+  <script src="script.js"></script>
+
+  <!-- Date boxes -> hidden regDate (safe, tiny, and FIXED) -->
+  <script>
+  (function initDateBoxes(){
+    const container = document.getElementById('regBoxes');
+    if (!container) return;
+
+    const boxes  = Array.from(container.querySelectorAll('.box'));
+    const hidden = document.getElementById('regDate');
+
+    function normalize(){
+      const v = boxes.map(b => (b.value || '').replace(/\D/g,'')).join('');
+      if (v.length === 8) {
+        const mm = v.slice(0,2), dd = v.slice(2,4), yyyy = v.slice(4,8);
+        hidden.value = yyyy + '-' + mm + '-' + dd;
+      } else {
+        hidden.value = '';
+      }
+    }
+
+    boxes.forEach((b) => {
+      b.addEventListener('input', (e) => {
+        e.target.value = e.target.value.replace(/\D/g,'').slice(0,1);
+        if (e.target.value && b.dataset.next) {
+          const nx = document.getElementById(b.dataset.next);
+          if (nx) nx.focus();
+        }
+        normalize();
+      });
+
+      b.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && !b.value && b.dataset.prev) {
+          const pv = document.getElementById(b.dataset.prev);
+          if (pv) pv.focus();
+        }
+      });
+
+      b.addEventListener('paste', (e) => {
+        const text = (e.clipboardData || window.clipboardData)
+          .getData('text').replace(/\D/g,'').slice(0,8);
+        if (!text) return;
+        e.preventDefault();
+        for (let i = 0; i < text.length && i < boxes.length; i++) boxes[i].value = text[i];
+        normalize();
+        boxes[Math.min(text.length, boxes.length - 1)].focus();
+      });
+    });
+  })();
+  </script>
+
+  <!-- Info Navbar -->
+  <nav class="info-bar" role="contentinfo">
+    <div class="info-wrap">
+      <span><strong>Administration Contact/WhatsApp #:</strong> +92 335 524 5551</span>
+      <span><strong>Web:</strong> www.iqravirtualschool.com</span>
+      <span><strong>E-mail:</strong> acivs2021@gmail.com</span>
+    </div>
+  </nav>
+</body>
+</html>
