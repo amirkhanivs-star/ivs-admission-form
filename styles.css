@@ -1,0 +1,856 @@
+:root{
+  --blue:#253a77;
+  --maroon:#b41f2d;
+  --ink:#0f172a;
+  --border:#d9dee8;
+  --paper:#ffffff;
+  --bg:#f3f4f6;
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink)}
+
+.wrapper{max-width:980px;margin:24px auto;padding:12px}
+
+/* hide the old top toolbar */
+.toolbar{display:none}
+
+/* compact page so no big empty area */
+.page{
+  width:794px;
+  min-height:auto;
+  background:var(--paper);
+  border:1px solid var(--border);
+  box-shadow:0 10px 24px rgba(0,0,0,.08);
+  padding:0 24px 24px;
+  margin:0 auto 16px;
+}
+
+.header{border-bottom:6px solid var(--maroon); padding:14px 0 16px}
+.header-top{display:flex;justify-content:space-between;align-items:center}
+.brand{text-align:center}
+.brand h1{margin:0;color:#fff;background:var(--blue);padding:6px 14px;border-radius:8px;letter-spacing:.5px;font-size:22px}
+.brand small{color:#334155}
+.title{color:var(--maroon);font-weight:800;font-size:26px;text-align:center;margin:14px 0 6px}
+
+.meta{display:flex;justify-content:space-between;color:#475569;font-size:14px;margin-bottom:6px}
+.meta .chip{border:1px solid var(--border);padding:6px 8px;border-radius:6px;background:#f8fafc}
+
+.section{margin-top:16px;border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.section h3{margin:0;padding:10px 12px;background:#f1f5f9;color:#0f172a;border-bottom:1px solid var(--border);font-size:16px}
+.section .content{padding:12px}
+
+.grid{display:grid;gap:10px}
+.grid.cols-2{grid-template-columns:1fr 1fr}
+.grid.cols-3{grid-template-columns:repeat(3,1fr)}
+.label{font-size:12px;color:#334155;margin-bottom:4px}
+.input,.textarea{width:100%;border:1px solid var(--border);border-radius:8px;padding:10px;background:#fff;min-height:40px}
+.textarea{min-height:64px;resize:vertical}
+.inline{display:flex;gap:14px;align-items:center}
+.grades{display:grid;grid-template-columns:repeat(4,minmax(120px,1fr));gap:8px}
+.grade-box{border:1px solid var(--border);border-radius:8px;padding:8px;display:flex;gap:8px;align-items:center}
+.grade-box input{transform:scale(1.1)}
+hr.sep{border:none;border-top:2px dashed #e2e8f0;margin:14px 0}
+
+/* declaration page tweaks */
+.declaration-list{font-size:13px;line-height:1.35}
+.badge-row{display:flex;gap:8px;justify-content:center;margin:8px 0}
+.badge{background:#0ea5e9;color:#fff;padding:4px 8px;border-radius:6px;font-size:12px}
+.signature{ margin-top: 12px; }
+.signature canvas{border:1px dashed #94a3b8;border-radius:8px;background:#fff}
+
+/* buttons beside submit */
+.btn{border:0;background:var(--blue);color:#fff;padding:10px 14px;border-radius:10px;font-weight:600;cursor:pointer}
+.btn.secondary{background:#334155}
+.actions{margin-top:16px;display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+
+/* print */
+@media print{
+  body{background:var(--paper)}
+  .actions{display:none}
+  .page{box-shadow:none;border:0;width:auto;min-height:auto;margin:0}
+}
+/* ====== Enhancements (safe to append) ====== */
+
+/* Buttons: hover, active, focus */
+.btn{
+  transition: background-color .15s ease, box-shadow .15s ease, transform .06s ease;
+  box-shadow: 0 6px 14px rgba(37,58,119,.18);
+}
+.btn:hover{ background:#1f2f66; box-shadow:0 10px 18px rgba(37,58,119,.22) }
+.btn:active{ transform: translateY(1px) }
+.btn:focus{ outline: none; box-shadow: 0 0 0 4px rgba(37,58,119,.18) }
+.btn.secondary:hover{ background:#232b3a }
+
+/* Inputs & textarea: clear focus ring + subtle placeholder */
+.input::placeholder, .textarea::placeholder{ color:#8a95a6 }
+.input:focus, .textarea:focus{
+  border-color: var(--blue);
+  box-shadow: 0 0 0 4px rgba(37,58,119,.16);
+  outline: 0;
+}
+
+/* Radio/checkbox accent matches theme (supported browsers) */
+input[type="radio"], input[type="checkbox"]{
+  accent-color: var(--blue);
+}
+
+/* Grade boxes: gentle hover without loud colors */
+.grade-box{
+  transition: border-color .15s ease, box-shadow .15s ease, transform .06s ease;
+  background:#fff;
+}
+.grade-box:hover{
+  border-color: var(--blue);
+  box-shadow: 0 0 0 4px rgba(37,58,119,.10);
+  transform: translateY(-1px);
+}
+
+/* Sections: slightly softer card look on hover (desktop only) */
+@media (hover:hover){
+  .section:hover{ box-shadow: 0 8px 24px rgba(0,0,0,.06) }
+}
+
+/* Header: slim red underline accent (clean, optional) */
+.header{
+  position: relative;
+}
+.header::after{
+  content:"";
+  position:absolute; left:0; right:0; bottom:-6px; height:3px;
+  background: var(--maroon);
+  border-radius: 2px;
+}
+
+/* Badge chips: softer look + hover */
+.badge{
+  background:#e6f3ff;
+  color:#0f172a;
+  border:1px solid #cfe5ff;
+  transition: box-shadow .15s ease, transform .06s ease;
+}
+.badge:hover{ box-shadow:0 6px 14px rgba(14,165,233,.15); transform: translateY(-1px) }
+
+/* Signature canvas: clearer hover cue */
+.signature canvas{
+  transition: box-shadow .15s ease, background-color .15s ease, border-color .15s ease;
+}
+.signature canvas:hover{
+  box-shadow: 0 0 0 6px rgba(14,165,233,.15);
+  background:#fff;
+  border-color:#7b8ba5;
+}
+
+/* Responsive grids on small screens */
+@media (max-width: 900px){
+  .grid.cols-2, .grid.cols-3{ grid-template-columns: 1fr; }
+  .page{ width: 100%; }
+}
+
+/* Print: keep your clean cards but drop extra shadows */
+@media print{
+  .section{ box-shadow: none !important; }
+}
+/* ===== Success Page (big, clean, celebratory) ===== */
+/* Success page should use the same background as the main form pages */
+.success-hero{
+  min-height: 100vh;
+  padding: 48px 16px;
+  display: grid;
+  place-items: center;
+  background: var(--bg);         /* exact same bg as the rest of the site */
+}
+
+
+.success-card{
+  position: relative;
+  width: min(900px, 92vw);
+  text-align: center;
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: 0 18px 50px rgba(0,0,0,.08);
+  padding: 36px 28px 28px;
+}
+
+.success-icon{
+  font-size: 64px;
+  line-height: 1;
+  display: inline-block;
+  transform: scale(1);
+  animation: popIn .6s ease both, floatY 3s ease-in-out infinite .6s;
+}
+@keyframes popIn {
+  0% { transform: scale(.6); filter: blur(2px); opacity: 0; }
+  100%{ transform: scale(1); filter: blur(0); opacity: 1; }
+}
+@keyframes floatY {
+  0%,100% { transform: translateY(0); }
+  50%     { transform: translateY(-6px); }
+}
+
+.success-title{
+  margin: 12px 0 6px;
+  font-size: clamp(28px, 4.6vw, 40px);
+  font-weight: 900;
+  color: var(--ink);
+}
+
+.success-sub{
+  margin: 0 auto 18px;
+  max-width: 720px;
+  color: #334155;
+  font-size: clamp(15px, 2vw, 18px);
+}
+
+.success-actions{
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* Confetti layer */
+.confetti{
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+.confetti-bit{
+  position: absolute;
+  top: -10vh;
+  animation: confettiFall 2.8s linear forwards;
+  opacity: .95;
+}
+@keyframes confettiFall {
+  0%   { transform: translateY(-10vh) rotate(0deg); opacity: .0; }
+  10%  { opacity: 1; }
+  100% { transform: translateY(120vh) rotate(360deg); opacity: 0; }
+}
+
+/* Keep the card above confetti */
+.success-card{ position: relative; z-index: 1; }
+
+/* Print cleanup */
+@media print{
+  .confetti{ display: none !important; }
+  .success-hero{ background: #fff; padding: 0; }
+  .success-card{ box-shadow: none; border: 1px solid #bbb; }
+}
+/* ==== Session chip fix ==== */
+.meta{ flex-wrap: wrap; gap: 12px; }  /* chhoti screen par wrap allow */
+.meta .chip{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  white-space: nowrap;          /* text wrap na ho */
+  flex: 0 0 auto;               /* shrink na ho */
+  line-height: 1.2;
+}
+.meta .chip .label{ color:#475569; }
+.meta .chip .value{
+  font-weight: 700;
+  letter-spacing: .2px;
+  font-variant-numeric: tabular-nums;  /* 2025–26 digits aligned */
+}
+
+/* optional: dono chips (session + date) ki height/feel same */
+.meta .chip input{
+  height: 36px;                 /* date input height */
+  padding: 6px 8px;
+}
+/* === Session chip: make "SESSION" bold like the value === */
+.meta .chip{
+  display:inline-flex; align-items:center; gap:8px;
+  padding:8px 12px; white-space:nowrap; flex:0 0 auto; line-height:1.2;
+}
+
+/* If you are using: <div class="chip">SESSION: <strong>2025–26</strong></div> */
+.meta .chip { font-weight:700; }              /* whole chip bold */
+.meta .chip strong { font-weight:700; }       /* keep value bold too */
+
+/* If you used the label/value version:
+   <div class="chip chip--session"><span class="label">SESSION:</span><span class="value">2025–26</span></div>
+   these rules will also work (fallback safe) */
+.meta .chip .label,
+.meta .chip .value { font-weight:700; }
+
+/* keep numbers aligned and spacing clean */
+.meta .chip .value,
+.meta .chip .label{
+  letter-spacing:.2px;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+/* ===== Top meta (Session + Date) ===== */
+.meta.meta--top{
+  display:flex; justify-content:space-between; align-items:flex-end; gap:16px;
+}
+.field-stack{min-width:220px}
+.stack-label{
+  font-size:13px; font-weight:800; color:#0f172a; letter-spacing:.3px;
+  text-transform:uppercase;
+}
+.stack-value{
+  font-size:18px; font-weight:800; color:#0f172a; margin-top:2px;
+}
+.stack-underline{
+  height:3px; width:100%; background:#e5e7eb; margin-top:6px; border-radius:2px;
+}
+
+/* Date boxes (MM/DD/YYYY) */
+.date-boxes{display:flex; align-items:center; gap:8px; margin-top:4px}
+.date-boxes .box{
+  width:34px; height:34px; border:2px solid #cbd5e1; border-radius:4px;
+  text-align:center; font-weight:700; font-size:16px; outline:none;
+}
+.date-boxes .box:focus{ border-color:#253a77; box-shadow:0 0 0 3px rgba(37,58,119,.15); }
+.date-boxes .slash{ font-weight:800; color:#0f172a; padding:0 2px; }
+
+@media (max-width:700px){
+  .meta.meta--top{flex-direction:column; align-items:flex-start}
+}
+/* ===== Header with logos ===== */
+.header-top.with-logos{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  padding:8px 0 2px;
+}
+
+.header-top.with-logos .logo{
+  flex:0 0 auto;
+  display:flex; align-items:center; justify-content:center;
+}
+
+.header-top.with-logos .logo img{
+  height:72px;               /* desktop */
+  width:auto;
+  display:block;
+  object-fit:contain;
+}
+
+/* Center brand block */
+.brand{
+  text-align:center;
+  flex:1 1 auto;
+}
+
+.brand .brand-title{
+  background:#253a77;       /* brand blue */
+  color:#fff;
+  display:inline-block;
+  padding:6px 16px;
+  border-radius:8px;
+  font-weight:800;
+  letter-spacing:.5px;
+  font-size:22px;
+}
+
+.brand .brand-sub{
+  margin-top:6px;
+  font-size:14px;
+  color:#111827;
+}
+
+.brand .brand-sub .line{ opacity:.9; margin-right:6px; }
+.brand .brand-sub .emph{ font-weight:700; color:#8b1c24; } /* maroon text */
+
+.brand .brand-chip{
+  margin-top:6px;
+  display:inline-block;
+  background:#253a77;
+  color:#fff;
+  padding:4px 10px;
+  border-radius:6px;
+  font-size:13px;
+  font-weight:700;
+}
+
+/* Keep header bottom rule as before */
+.header{ border-bottom:6px solid #b41f2d; }
+
+/* Responsive tweaks */
+@media (max-width:900px){
+  .header-top.with-logos .logo img{ height:60px; }
+  .brand .brand-title{ font-size:20px; }
+}
+@media (max-width:640px){
+  .header-top.with-logos{ gap:10px; }
+  .header-top.with-logos .logo img{ height:48px; }
+  .brand .brand-title{ font-size:18px; padding:5px 12px; }
+  .brand .brand-sub{ font-size:13px; }
+  .brand .brand-chip{ font-size:12px; }
+}
+
+/* Print: keep logos crisp */
+@media print{
+  .header-top.with-logos .logo img{ height:56px; }
+}
+/* === BIG HEADER (logos + brand + heading + date boxes) === */
+
+/* logos much larger */
+.header-top.with-logos .logo img{
+  height: 128px;            /* try 140–150 if you want even bigger */
+  width: auto;
+}
+
+/* brand title + sublines larger and bolder */
+.brand .brand-title{
+  font-size: 34px;          /* was 28 */
+  padding: 10px 24px;
+  border-radius: 10px;
+  letter-spacing: .6px;
+}
+.brand .brand-sub{
+  font-size: 18px;          /* was 16 */
+  margin-top: 8px;
+}
+.brand .brand-chip{
+  font-size: 16px;          /* was 14 */
+  padding: 7px 14px;
+  border-radius: 8px;
+  margin-top: 8px;
+}
+
+/* red divider already there; add bottom breathing space */
+.header{ padding-bottom: 12px; }
+
+/* main page title (Admission Registration Form) – make big like sample */
+.title{
+  font-size: 36px;          /* tweak 34–40 as you like */
+  font-weight: 800;
+  margin: 14px 0 8px;
+}
+
+/* SESSION + DATE row spacing and sizes */
+.meta.meta--top{
+  gap: 36px;
+  align-items: flex-end;
+}
+
+.stack-label{ font-size: 15px; font-weight: 800; }
+.stack-value{ font-size: 22px; font-weight: 800; }
+.stack-underline{ height: 4px; }
+
+/* big MM/DD/YYYY boxes */
+.date-boxes{ gap: 12px; }
+.date-boxes .box{
+  width: 48px;              /* was 40 */
+  height: 48px;
+  font-size: 22px;
+  border-width: 2px;
+  border-radius: 6px;
+}
+.date-boxes .slash{ font-size: 22px; }
+
+/* keep it sane on small screens */
+@media (max-width: 900px){
+  .header-top.with-logos .logo img{ height: 100px; }
+  .brand .brand-title{ font-size: 28px; }
+  .title{ font-size: 30px; }
+  .date-boxes .box{ width: 42px; height: 42px; font-size: 20px; }
+}
+@media (max-width: 640px){
+  .header-top.with-logos .logo img{ height: 84px; }
+  .brand .brand-title{ font-size: 24px; padding: 8px 18px; }
+  .brand .brand-sub{ font-size: 16px; }
+  .brand .brand-chip{ font-size: 14px; }
+  .title{ font-size: 26px; }
+  .date-boxes .box{ width: 38px; height: 38px; font-size: 18px; }
+}
+
+/* print: still large but a tad tighter */
+@media print{
+  .header-top.with-logos .logo img{ height: 110px; }
+  .brand .brand-title{ font-size: 30px; }
+  .title{ font-size: 32px; }
+}
+/* ====== IVS reference look: borders, colors, sizing, typography ====== */
+
+/* Palette tuned to your screenshot */
+:root{
+  --maroon: #8b1c24;        /* headings / bars */
+  --navy:   #253a77;        /* school blue */
+  --ink:    #111827;
+  --line:   #c9ced8;        /* input borders */
+  --paper:  #ffffff;
+}
+
+/* Big black outer frame like the sample */
+.page{
+  border: 10px solid #1f2937;        /* outer dark frame */
+  border-radius: 4px;
+  padding: 0 28px 24px;
+  box-shadow: none;
+}
+
+/* red horizontal divider under the logos area */
+.header{ 
+  border-bottom: 6px solid var(--maroon);
+  padding-top: 12px;
+  padding-bottom: 10px;
+}
+
+/* Center brand already styled; make it a bit stronger (matches sample) */
+.brand .brand-title{
+  background: var(--navy);
+  font-size: 30px;
+  padding: 8px 18px;
+  border-radius: 8px;
+}
+.brand .brand-sub{ font-size: 16px; color:#6b7280 }
+.brand .brand-sub .emph{ color: var(--maroon); font-weight: 800; }
+.brand .brand-chip{ background: var(--navy); font-weight: 700 }
+
+/* Main page title: maroon + purple accent for the word "Form" */
+.title{
+  color: var(--maroon);
+  font-size: 36px;
+  font-weight: 900;
+  letter-spacing: .2px;
+  text-align: center;
+  margin: 14px 0 8px;
+}
+.title .title-accent{
+  color: #402c8e;           /* deep purple like the sample */
+}
+
+/* SESSION / DATE row like reference */
+.meta.meta--top{
+  margin-top: 8px;
+  align-items: flex-end;
+  gap: 40px;
+}
+.stack-label{
+  font-size: 14px; font-weight: 800; color:#0f172a; text-transform:uppercase;
+}
+.stack-value{
+  font-size: 18px; font-weight: 800; color:#0f172a; margin-top:4px;
+}
+.stack-underline{ height:4px; background:#e5e7eb; margin-top:8px; border-radius:2px }
+
+/* Bigger MM/DD/YYYY squares */
+.date-boxes{ gap: 10px }
+.date-boxes .box{
+  width: 42px; height: 42px;
+  border: 2px solid #9aa3b2;
+  border-radius: 4px;
+  text-align: center;
+  font-weight: 800; font-size: 18px;
+}
+.date-boxes .box:focus{ border-color: var(--navy); box-shadow: 0 0 0 3px rgba(37,58,119,.15) }
+.date-boxes .slash{ font-weight: 800; font-size: 18px }
+
+/* Section headers look: navy text, small maroon underline */
+.section{
+  border: 1.5px solid #d8dde7;
+  border-radius: 8px;
+}
+.section h3{
+  background: #eef2f7;
+  color: var(--navy);
+  font-weight: 800;
+  letter-spacing: .2px;
+  border-bottom: 1.5px solid #dde3ee;
+  position: relative;
+}
+.section h3::after{
+  content:"";
+  position: absolute;
+  left: 12px; bottom: 8px;
+  width: 54px; height: 3px;
+  background: var(--maroon);
+  border-radius: 2px;
+}
+
+/* Compact inputs like the printed form */
+.input, .textarea{
+  background: #fff;
+  border: 1.5px solid var(--line);
+  border-radius: 6px;
+  min-height: 38px;
+  box-shadow: inset 0 0 0 rgba(136, 3, 3, 0);
+}
+.input:focus, .textarea:focus{
+  outline: none;
+  border-color: var(--navy);
+  box-shadow: 0 0 0 3px rgba(37,58,119,.12);
+}
+.label{ color:#111827; font-weight: 700; font-size: 12px }
+
+/* Grade check boxes squared & tidy */
+.grade-box{
+  border: 1.5px solid var(--line);
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-weight: 600;
+}
+.grade-box input{ transform: scale(1.05) }
+
+/* Dotted separator between sub-sections */
+hr.sep{
+  border:0; border-top:2px dashed #d8dde7; margin:14px 0;
+}
+
+/* Declaration title chip row already exists — keep subtle */
+.badge-row .badge{
+  background: var(--navy);
+  color:#fff;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-weight: 700;
+}
+
+/* Signature box mimic (light dashed) */
+.signature canvas{
+  border: 1.5px dashed #94a3b8;
+  border-radius: 8px;
+}
+
+/* Buttons minimal (not part of printed look) */
+.actions .btn{ background: var(--navy) }
+.actions .btn.secondary{ background:#374151 }
+
+/* Print-friendly: remove drop shadows & keep frame */
+@media print{
+  body{ background: #fff }
+  .actions{ display:none }
+  .page{ box-shadow:none }
+}
+/* ===== Info Navbar (footer-style) ===== */
+.info-bar{
+  position: fixed;           /* sticks to bottom */
+  left: 0; right: 0; bottom: 0;
+  background: #1f2937;       /* dark navy */
+  color: #fff;
+  z-index: 1000;
+  border-top: 4px solid #b41f2d; /* thin maroon line like sample */
+  font-size: 13px;
+}
+.info-wrap{
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  white-space: nowrap;
+}
+.info-wrap span{ opacity: .95 }
+.info-wrap span + span{
+  position: relative;
+  padding-left: 18px;
+}
+.info-wrap span + span::before{
+  content: "•";
+  position: absolute; left: 6px; top: 0; color: #cbd5e1; opacity: .8;
+}
+
+/* small screens: stack nicely */
+@media (max-width: 720px){
+  .info-wrap{
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    white-space: normal;
+  }
+  .info-wrap span + span{ padding-left: 0 }
+  .info-wrap span + span::before{ content: none }
+}
+
+/* don't include in print/PDF */
+@media print{
+  .info-bar{ display: none !important; }
+}
+
+/* give page bottom room so bar doesn't cover content */
+body{ padding-bottom: 54px; }
+/* PDF export mode: shadows/fixed items off */
+.pdf-export { background:#fff !important; }
+.pdf-export .page{ box-shadow:none !important; }
+.pdf-export .info-bar{ display:none !important; }  /* fixed footer hide */
+/* === Page outer frame in maroon (matches title color) === */
+.page{
+  border: 10px solid var(--maroon) !important; /* was dark blue/black */
+  border-radius: 4px;
+  box-shadow: none;
+}
+
+/* keep maroon border in printed/PDF version too */
+@media print{
+  .page{ border-color: var(--maroon) !important; }
+}
+/* === Make page background match the info navbar color === */
+html, body{
+  background: #1f2937 !important;    /* same as .info-bar background */
+}
+
+/* optional: thoda center glow so page pop ho */
+body{
+  background-image: radial-gradient(1200px 600px at 50% -10%, rgba(255,255,255,.06), rgba(255,255,255,0));
+  background-repeat: no-repeat;
+}
+/* Hide UI controls (PDF + Print) */
+.pdf-export .hide-in-pdf { display: none !important; }
+@media print {
+  .hide-in-pdf { display: none !important; }
+}
+/* === Center the info navbar exactly with the form page === */
+.info-wrap{
+  /* page ki fixed width: 794px (your .page width) */
+  max-width: 794px !important;
+  width: 100%;
+  margin: 0 auto;                 /* center horizontally */
+  justify-content: center !important;  /* items center */
+  text-align: center;
+  gap: 18px;
+}
+
+/* bullets theek lagein even when centered */
+.info-wrap span + span{
+  position: relative;
+  padding-left: 18px;
+}
+.info-wrap span + span::before{
+  content: "•";
+  position: absolute; left: 6px; top: 0; color: #cbd5e1; opacity: .8;
+}
+
+/* small screens: center + wrap nicely */
+@media (max-width: 820px){
+  .info-wrap{
+    max-width: 100% !important;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+  }
+  .info-wrap span + span{ padding-left: 0 }
+  .info-wrap span + span::before{ content: none }
+}
+/* Force the success page background to match site bg (dark/navy) */
+.success-hero{
+  background: transparent !important;  /* remove any fill/gradient */
+}
+
+/* (optional) keep the card readable and consistent */
+.success-card{
+  background: var(--paper);
+  border: 1px solid var(--border);
+  box-shadow: 0 18px 50px rgba(0,0,0,.08);
+}
+/* ===== Signature row (canvas + right-side instructions) ===== */
+.sig-row{
+  display: grid;
+  grid-template-columns: 1fr 1fr;   /* left canvas | right notes */
+  gap: 16px;
+  align-items: start;
+}
+
+.sig-col{
+  /* left side wraps the canvas and button */
+}
+
+.signature canvas{
+  width: 480px;     /* match HTML canvas width for crisp render */
+  height: 140px;    /* match HTML canvas height */
+  max-width: 100%;
+  border: 1.5px dashed #94a3b8;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.sig-actions{
+  margin-top: 8px;
+  display: flex;
+  gap: 8px;
+}
+
+.sig-notes{
+  background: #f8fafc;          /* ہلکا کارڈ */
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+
+.sig-notes-title{
+  font-weight: 800;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+
+.sig-steps{
+  margin: 0 0 10px 18px;
+  padding: 0;
+  color: #334155;
+  line-height: 1.4;
+  font-size: 14px;
+}
+
+.sig-steps li{ margin-bottom: 6px; }
+
+.sig-hint{
+  font-size: 12px;
+  background: #eef2f7;
+  border: 1px solid #dde3ee;
+  border-radius: 8px;
+  padding: 8px 10px;
+  color: #334155;
+}
+
+/* Responsive: stack on small screens */
+@media (max-width: 820px){
+  .sig-row{
+    grid-template-columns: 1fr;
+  }
+  .signature canvas{
+    width: 100%;
+    height: 160px;   /* تھوڑا اونچا موبائل پر */
+  }
+}
+/* Signature: ensure the canvas receives input and sits above overlaps */
+.signature { position: relative; }
+.signature canvas{
+  touch-action: none;   /* stop page scroll on touch while drawing */
+  pointer-events: auto;
+  position: relative;
+  z-index: 2;
+}
+
+/* ===== FIX: prevent text clipping in inputs/textarea when exporting to PDF ===== */
+.pdf-export input.input,
+.pdf-export .input,
+.pdf-export textarea.textarea,
+.pdf-export .textarea{
+  line-height: 1.35 !important;
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+  height: auto !important;
+  -webkit-appearance: none;
+  appearance: none;
+  box-shadow: none !important;
+  border-width: 1.5px !important;
+}
+
+/* Apply same safety during actual print as well */
+@media print{
+  input.input, .input, textarea.textarea, .textarea{
+    line-height: 1.35 !important;
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+    height: auto !important;
+    -webkit-appearance: none;
+    appearance: none;
+    box-shadow: none !important;
+    border-width: 1.5px !important;
+  }
+}
+
+/* Make printed colors look closer to screen when possible */
+.page{
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
