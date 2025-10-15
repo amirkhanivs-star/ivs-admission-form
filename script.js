@@ -283,5 +283,17 @@ function initSingleGradeSelect() {
     });
   });
 }
+(function guardDeclButton(){
+  const btn = document.getElementById('btnPdf');
+  const boxes = Array.from(document.querySelectorAll('input.decl[type="checkbox"]'));
+  if (!btn || boxes.length === 0) return;
+
+  const sync = () => {
+    btn.disabled = boxes.some(b => !b.checked);
+  };
+  boxes.forEach(b => b.addEventListener('change', sync));
+  sync();
+})();
+
 
 
