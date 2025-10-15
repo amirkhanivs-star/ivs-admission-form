@@ -6,7 +6,9 @@ document.addEventListener("DOMContentLoaded", () => {
   wireButtons();
   initSingleGradeSelect();   // <<< make Grade checkboxes single-select
   autoFillRegDate();         // <<< NEW: auto-fill DATE OF REGISTRATION with today's date
+   initDeclarationMaster();   // <<< NEW
 });
+
 
 /* ---------- NEW: Auto-fill DATE OF REGISTRATION (MM/DD/YYYY boxes) ---------- */
 function autoFillRegDate() {
@@ -265,3 +267,4 @@ function initSingleGradeSelect() {
     });
   });
 }
+
