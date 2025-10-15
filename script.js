@@ -182,6 +182,21 @@ async function buildPdfFromPages() {
   const filename = `IVS-Admission-${new Date().toISOString().slice(0,10)}.pdf`;
   return { pdf, filename };
 }
+async function exportPdfAndOpenWhatsAppApp() {
+  // Master "I agree" لازمی
+  const master = document.getElementById('declMaster');
+  if (master && !master.checked) {
+    alert('برائے مہربانی “I agree” چیک باکس کو ٹک کریں۔');
+    return;
+  }
+
+  // (اختیاری) اگر آپ 1–10 والے hidden/رکھے ہوئے چیک باکس بھی ساتھ ٹک کرانا چاہتے ہیں:
+  document.querySelectorAll('.declaration-list input.decl')
+    .forEach(cb => cb.checked = true);
+
+  // ---- یہاں سے آپ کا موجودہ PDF + WhatsApp والا کوڈ as-is رہے گا ----
+}
+
 
 /* ---------- 4) Share to WhatsApp APP with attached PDF (native share) ---------- */
 async function exportPdfAndOpenWhatsAppApp() {
@@ -297,5 +312,6 @@ function initDeclarationMaster(){
     }
   });
 }
+
 
 
