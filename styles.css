@@ -963,6 +963,37 @@ html,body{overflow-x:hidden}
 .meta.meta--top .field-stack:first-child .stack-underline{
   display: none !important;
 }
+/* mobile par sirf dekhne ke liye zoom; export me disable */
+@media (max-width: 860px){
+  .page{ width:794px; transform-origin: top center; }
+}
+.pdf-export .page{ transform: none !important; }  /* export time */
+/* === CRISP PDF EXPORT (no half lines) === */
+.pdf-export .page { transform: none !important; }
+
+.pdf-export .input,
+.pdf-export .textarea,
+.pdf-export .grade-box,
+.pdf-export .date-boxes .box,
+.pdf-export .section {
+  border-width: 2px !important;           /* thin 1px -> 2px so anti-aliasing na lage */
+  border-color: #cbd5e1 !important;
+  box-shadow: none !important;
+  background-clip: padding-box !important;
+}
+
+.pdf-export hr.sep {                       /* dashed separator */
+  border-top-width: 2px !important;
+}
+
+.pdf-export .stack-underline {             /* woh faint white/grey line hide karni ho */
+  display: none !important;
+}
+
+/* Inputs ki height/padding integer rakho (no half px) */
+.input, .textarea { min-height: 42px; padding: 10px 12px; }
+.date-boxes .box   { width: 42px; height: 42px; }
+
 
 
 
