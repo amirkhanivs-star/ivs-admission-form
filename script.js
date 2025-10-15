@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   wireButtons();
   initSingleGradeSelect();   // <<< make Grade checkboxes single-select
   autoFillRegDate();         // <<< NEW: auto-fill DATE OF REGISTRATION with today's date
+   initDeclarationMaster();   // <<< NEW
 });
 
 /* ---------- NEW: Auto-fill DATE OF REGISTRATION (MM/DD/YYYY boxes) ---------- */
@@ -182,33 +183,24 @@ async function buildPdfFromPages() {
 }
 
 /* ---------- 4) Share to WhatsApp APP with attached PDF (native share) ---------- */
-/* ---------- 4) Share to WhatsApp APP with attached PDF (native share) ---------- */
 async function exportPdfAndOpenWhatsAppApp() {
-  // ===== GUARD: All declaration checkboxes must be ticked =====
-  // Primary selector: inputs you marked with class="decl"
-  let declBoxes = Array.from(document.querySelectorAll('input.decl[type="checkbox"]'));
-
-  // Fallbacks in case the class isn't present yet:
-  if (declBoxes.length === 0) {
-    declBoxes = Array.from(document.querySelectorAll(
-      '.declaration-list input[type="checkbox"], ' +        // your earlier container
-      'input[type="checkbox"][name^="decl"], ' +            // name="decl1", "decl2", ...
-      'input[type="checkbox"][data-decl]'                   // data-decl attribute
-    ));
+  // ==== Master "I agree" guard ====
+  const master = document.getElementById('declMaster');
+  if (master && !master.checked) {
+    alert('Please tick "I agree" to confirm you accept all 10 points.');
+    return;
   }
+  // master tick hote hi saare hidden per-item checkboxes bhi checked mark kar do
+  document.querySelectorAll('.declaration-list input.decl')
+    .forEach(cb => cb.checked = true);
 
-  // Only enforce if we actually found declaration checkboxes
-  if (declBoxes.length > 0) {
-    const firstUnchecked = declBoxes.find(cb => !cb.checked);
-    if (firstUnchecked) {
-      alert('Please tick all declaration points (1–10) to complete your admission.');
-      try {
-        firstUnchecked.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        firstUnchecked.focus();
-      } catch (_) {}
-      return; // stop here — do not create/share PDF
-    }
-  }
+  // ---- aage aapka existing code as-is ----
+  const built = await buildPdfFromPages();
+  if (!built) return;
+  const { pdf, filename } = built;
+  // ...
+}
+
   // ===== /GUARD =====
 
   // Build PDF
@@ -283,17 +275,18 @@ function initSingleGradeSelect() {
     });
   });
 }
-(function guardDeclButton(){
+function initDeclarationMaster(){
+  const master = document.getElementById('declMaster');
   const btn = document.getElementById('btnPdf');
-  const boxes = Array.from(document.querySelectorAll('input.decl[type="checkbox"]'));
-  if (!btn || boxes.length === 0) return;
+  // agar master hi nahi hai to kuch na karein (old flow chalta rahe)
+  if (!master || !btn) return;
 
-  const sync = () => {
-    btn.disabled = boxes.some(b => !b.checked);
-  };
-  boxes.forEach(b => b.addEventListener('change', sync));
-  sync();
-})();
+  const toggle = () => { btn.disabled = !master.checked; };
+  master.addEventListener('change', toggle);
+  toggle(); // initial state
+}
+
+
 
 
 
