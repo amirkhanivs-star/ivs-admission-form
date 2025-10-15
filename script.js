@@ -116,75 +116,58 @@ function getSignatureDataURL() {
   return sigCanvas.toDataURL("image/png");
 }
 
-/* ---------- Build PDF from .page elements (same on PC & Mobile) ---------- */
+/* ---------- 3) Build PDF from .page elements (A4, top-aligned) ---------- */
 async function buildPdfFromPages() {
   const { jsPDF } = window.jspdf;
   const pages = Array.from(document.querySelectorAll(".page"));
   if (!pages.length) return null;
 
-  // export mode: fixed look, no shadows/footers/transforms
+  // export mode: hide fixed footer
   document.body.classList.add("pdf-export");
   const infoBar = document.querySelector(".info-bar");
   const prevBarDisp = infoBar ? infoBar.style.display : null;
   if (infoBar) infoBar.style.display = "none";
 
-  // 1) fonts + images ready
-  try { if (document.fonts?.ready) await document.fonts.ready; } catch {}
+  // ensure images are ready (logos, etc.)
   await Promise.all(
-    Array.from(document.images).map(img => img.complete
-      ? Promise.resolve()
-      : new Promise(res => { img.onload = img.onerror = res; })
-    )
+    Array.from(document.images).map(img => {
+      if (img.complete) return Promise.resolve();
+      return new Promise(res => { img.onload = img.onerror = res; });
+    })
   );
-
-  // 2) HTML2Canvas config – force same export width on all devices
-  const EXPORT_W = 794;   // px (A4 portrait @ CSS width)
-  const SCALE = 2;        // rendering quality (independent of DPR)
 
   const pdf = new jsPDF("p", "pt", "a4");
   const pageW = pdf.internal.pageSize.getWidth();   // ~595pt
   const pageH = pdf.internal.pageSize.getHeight();  // ~842pt
-  const M = 18;                                     // margin
+  const M = 18;
 
   for (let i = 0; i < pages.length; i++) {
     const el = pages[i];
 
-    // 3) temporarily remove any inline transform that might affect size
-    const prevTransform = el.style.transform;
-    el.style.transform = "none";
-
     const canvas = await html2canvas(el, {
-      width: EXPORT_W,               // <- force same layout width
-      windowWidth: EXPORT_W,         // <- ignore device width
-      scale: SCALE,                  // <- constant quality
-      backgroundColor: "#ffffff",
+      scale: 2.2,
       useCORS: true,
       allowTaint: false,
+      backgroundColor: "#ffffff",
       logging: false,
-      scrollY: -window.scrollY,
-      foreignObjectRendering: false
-       removeContainer: true,
-  imageTimeout: 0,
-  letterRendering: true
+      windowWidth: document.documentElement.scrollWidth,
+      scrollY: -window.scrollY
     });
-
-    // restore transform back (for screen)
-    el.style.transform = prevTransform;
 
     const img = canvas.toDataURL("image/jpeg", 0.95);
     const wpx = canvas.width, hpx = canvas.height;
 
-    // fit inside A4 with top alignment (same math on all devices)
-    let ratio = (pageW - 2*M) / wpx;
+    // fit inside A4 while preserving aspect — top aligned
+    let ratio = (pageW - 2 * M) / wpx; // fit width
     let wpt = wpx * ratio, hpt = hpx * ratio;
-    if (hpt > pageH - 2*M) {
-      ratio = (pageH - 2*M) / hpx;
+    if (hpt > pageH - 2 * M) {         // too tall? fit height
+      ratio = (pageH - 2 * M) / hpx;
       wpt = wpx * ratio;
       hpt = hpx * ratio;
     }
 
-    const x = (pageW - wpt) / 2;
-    const y = M;
+    const x = (pageW - wpt) / 2; // center horizontally
+    const y = M;                 // top aligned
 
     if (i > 0) pdf.addPage();
     pdf.addImage(img, "JPEG", x, y, wpt, hpt, "", "FAST");
@@ -197,6 +180,7 @@ async function buildPdfFromPages() {
   const filename = `IVS-Admission-${new Date().toISOString().slice(0,10)}.pdf`;
   return { pdf, filename };
 }
+
 
 
 /* ---------- 4) Share to WhatsApp APP with attached PDF (native share) ---------- */
@@ -283,6 +267,7 @@ function initSingleGradeSelect() {
     });
   });
 }
+
 
 
 
