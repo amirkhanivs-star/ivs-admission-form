@@ -6,7 +6,6 @@ document.addEventListener("DOMContentLoaded", () => {
   wireButtons();
   initSingleGradeSelect();   // <<< make Grade checkboxes single-select
   autoFillRegDate();         // <<< NEW: auto-fill DATE OF REGISTRATION with today's date
-   initDeclarationMaster();   // <<< NEW
 });
 
 /* ---------- NEW: Auto-fill DATE OF REGISTRATION (MM/DD/YYYY boxes) ---------- */
@@ -184,31 +183,11 @@ async function buildPdfFromPages() {
 
 /* ---------- 4) Share to WhatsApp APP with attached PDF (native share) ---------- */
 async function exportPdfAndOpenWhatsAppApp() {
-  // ==== Master "I agree" guard ====
-  const master = document.getElementById('declMaster');
-  if (master && !master.checked) {
-    alert('Please tick "I agree" to confirm you accept all 10 points.');
-    return;
-  }
-  // master tick hote hi saare hidden per-item checkboxes bhi checked mark kar do
-  document.querySelectorAll('.declaration-list input.decl')
-    .forEach(cb => cb.checked = true);
-
-  // ---- aage aapka existing code as-is ----
-  const built = await buildPdfFromPages();
-  if (!built) return;
-  const { pdf, filename } = built;
-  // ...
-}
-
-  // ===== /GUARD =====
-
-  // Build PDF
   const built = await buildPdfFromPages();
   if (!built) return;
   const { pdf, filename } = built;
 
-  // Web Share with attached file (best path)
+  // Build a File for Web Share API (required for attaching to WhatsApp)
   const blob = pdf.output("blob");
   const file = new File([blob], filename, { type: "application/pdf" });
 
@@ -219,30 +198,41 @@ async function exportPdfAndOpenWhatsAppApp() {
     `Please review the attached PDF. Thank you.`;
 
   try {
+    // ✅ Best path: native share with FILES (Android Chrome, iOS Safari 16.4+ over HTTPS)
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
       await navigator.share({
         files: [file],
         title: "IVS Admission Form",
         text: caption
       });
+
+      // optional: also save a local copy for the user
       try { pdf.save(filename); } catch {}
-      return;
+      return; // stop here — user is now in WhatsApp app with the file attached
     }
   } catch (err) {
     console.warn("Native share failed, will fallback:", err);
   }
 
-  // Fallback: save + open WhatsApp app with helper text (cannot auto-attach via URL)
+  // ❗ Fallbacks (no WhatsApp Web):
+  // 1) Save the PDF locally so the user can attach inside WhatsApp app
   try { pdf.save(filename); } catch {}
+
+  // 2) Try to open WhatsApp app with a helpful prefilled text (cannot attach via URL)
+  // On many phones, this deep link opens the app directly.
   const helper =
-    `Assalamu Alaikum. I have saved my admission form PDF (${filename}). I will attach the file here and send.`;
-  window.location.href = `whatsapp://send?text=${encodeURIComponent(helper)}`;
+    `Assalamu Alaikum. I have saved my admission form PDF (${filename}). ` +
+    `I will attach the file here and send.`;
+  const deepLink = `whatsapp://send?text=${encodeURIComponent(helper)}`;
+
+  // Try deep link first (opens app on mobile). If it fails silently, show a tip.
+  window.location.href = deepLink;
+
+  // As a final hint if nothing happens (desktop, unsupported), guide the user.
   setTimeout(() => {
     alert("If WhatsApp didn’t open automatically, please open the WhatsApp app and attach the saved PDF from your downloads.");
   }, 1200);
 }
-
-
 
 /* ---------- 5) Grade: force single selection (radio-like) ---------- */
 function initSingleGradeSelect() {
@@ -275,18 +265,3 @@ function initSingleGradeSelect() {
     });
   });
 }
-function initDeclarationMaster(){
-  const master = document.getElementById('declMaster');
-  const btn = document.getElementById('btnPdf');
-  // agar master hi nahi hai to kuch na karein (old flow chalta rahe)
-  if (!master || !btn) return;
-
-  const toggle = () => { btn.disabled = !master.checked; };
-  master.addEventListener('change', toggle);
-  toggle(); // initial state
-}
-
-
-
-
-
