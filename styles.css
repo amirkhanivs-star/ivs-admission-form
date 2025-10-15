@@ -909,4 +909,13 @@ html, body { overflow-x: hidden; }
   .sig-row { grid-template-columns: 1fr; }
 }
 @media (max-width: 420px){ .info-bar { display:none; } }
+/* === Mobile auto-scale support === */
+.page-zoom-wrap { position: relative; width: 100%; }
+@media (max-width: 840px){
+  html,body{ overflow-x:hidden; }
+  .page { transform-origin: top center; }   /* smooth scaling pivot */
+  /* optional: shadow کم کر دیں تاکہ چھوٹا ہونے پر ساف لگے */
+  .page.is-scaled{ box-shadow:none; }
+}
+
 
