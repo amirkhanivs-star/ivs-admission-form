@@ -963,6 +963,46 @@ html,body{overflow-x:hidden}
 .meta.meta--top .field-stack:first-child .stack-underline{
   display: none !important;
 }
+/* Declaration checklist styling */
+.decl-list{
+  list-style: none;
+  counter-reset: item;
+  padding-left: 0;
+  margin: 0;
+}
+.decl-list li{
+  display: grid;
+  grid-template-columns: 22px 22px 1fr; /* number | checkbox | text */
+  align-items: start;
+  gap: 8px;
+  margin: 6px 0;
+  line-height: 1.35;
+}
+.decl-list li::before{
+  counter-increment: item;
+  content: counter(item) ".";
+  font-weight: 700;
+  color: var(--ink);
+  text-align: right;
+}
+.decl-list input[type="checkbox"]{
+  transform: scale(1.15);
+  margin-top: 2px;        /* aligns with first line of text */
+  accent-color: var(--blue);
+}
+.decl-list label{
+  user-select: none;
+  cursor: pointer;
+}
+
+/* Print / PDF: keep layout tidy and visible */
+@media print{
+  .decl-list input[type="checkbox"]{
+    /* html2canvas/jspdf capture these fine; keep as is for crispness */
+    transform: scale(1.1);
+  }
+}
+
 
 
 
