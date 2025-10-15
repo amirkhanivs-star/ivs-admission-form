@@ -963,45 +963,45 @@ html,body{overflow-x:hidden}
 .meta.meta--top .field-stack:first-child .stack-underline{
   display: none !important;
 }
-/* Declaration checklist styling */
+/* Declaration checklist — keep classic 1–10 look with a tick beside text */
 .decl-list{
-  list-style: none;
-  counter-reset: item;
-  padding-left: 0;
+  list-style: decimal;          /* use browser numbering 1., 2., ... */
+  padding-left: 22px;           /* indent for the numbers */
   margin: 0;
 }
+
 .decl-list li{
-  display: grid;
-  grid-template-columns: 22px 22px 1fr; /* number | checkbox | text */
-  align-items: start;
-  gap: 8px;
+  display: flex;                /* checkbox + text on one row (wraps nicely) */
+  align-items: flex-start;
+  gap: 10px;                    /* space between checkbox and text */
   margin: 6px 0;
   line-height: 1.35;
 }
-.decl-list li::before{
-  counter-increment: item;
-  content: counter(item) ".";
-  font-weight: 700;
-  color: var(--ink);
-  text-align: right;
-}
+
+/* In case you previously added custom counters, turn them off */
+.decl-list li::before{ content: none !important; }
+
+/* Make the tick a touch bigger and align with first line of text */
 .decl-list input[type="checkbox"]{
   transform: scale(1.15);
-  margin-top: 2px;        /* aligns with first line of text */
+  margin-top: 2px;
   accent-color: var(--blue);
-}
-.decl-list label{
-  user-select: none;
-  cursor: pointer;
+  flex: 0 0 auto;
 }
 
-/* Print / PDF: keep layout tidy and visible */
-@media print{
-  .decl-list input[type="checkbox"]{
-    /* html2canvas/jspdf capture these fine; keep as is for crispness */
-    transform: scale(1.1);
-  }
+/* Let the text take the remaining width */
+.decl-list label{
+  display: block;
+  flex: 1 1 auto;
+  cursor: pointer;
+  user-select: none;
 }
+
+/* Print/PDF: keep checkboxes visible and crisp */
+@media print{
+  .decl-list input[type="checkbox"]{ transform: scale(1.05); }
+}
+
 
 
 
