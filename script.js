@@ -183,9 +183,19 @@ async function buildPdfFromPages() {
 
 /* ---------- 4) Share to WhatsApp APP with attached PDF (native share) ---------- */
 async function exportPdfAndOpenWhatsAppApp() {
-  const built = await buildPdfFromPages();
-  if (!built) return;
-  const { pdf, filename } = built;
+  // --- Guard: require ALL declaration checkboxes to be checked (1–10) ---
+  // Looks for checkboxes only inside the declaration block
+  const reqBoxes = document.querySelectorAll('.declaration-list input[type="checkbox"]');
+  if (reqBoxes.length && [...reqBoxes].some(cb => !cb.checked)) {
+    alert('Please tick all declaration checkboxes (1–10) to complete your admission.');
+    // Scroll to the first unchecked box to help the user
+    const firstUnchecked = [...reqBoxes].find(cb => !cb.checked);
+    try {
+      firstUnchecked.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      firstUnchecked.focus?.();
+    } catch {}
+    return;
+  }
 
   // Build a File for Web Share API (required for attaching to WhatsApp)
   const blob = pdf.output("blob");
@@ -265,3 +275,4 @@ function initSingleGradeSelect() {
     });
   });
 }
+
