@@ -959,6 +959,10 @@ html,body{overflow-x:hidden}
   .info-bar{position:static; margin-top:10px}
   body{padding-bottom:0}
 }
+/* paste at the end of styles.css */
+.stack-underline{ display:none !important; }
+.meta.meta--top .field-stack{ margin-bottom:0; }
+
 
 
 
