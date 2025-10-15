@@ -917,24 +917,6 @@ html, body { overflow-x: hidden; }
   /* optional: shadow کم کر دیں تاکہ چھوٹا ہونے پر ساف لگے */
   .page.is-scaled{ box-shadow:none; }
 }
-/* ===== Mobile: full-screen form (no dark bg, no outer margins) ===== */
-@media (max-width: 840px){
-  /* page ko screen ke billkul top se dikhayein */
-  .wrapper{ max-width: none; margin: 0; padding: 0; }
-
-  /* background white so sirf form nazar aaye */
-  html, body{ background:#ffffff !important; padding-bottom:0 !important; }
-
-  /* fixed footer hide sochhota screen par space mile */
-  .info-bar{ display:none !important; }
-
-  /* transform pivot center-top */
-  .page{ transform-origin: top center; }
-  .page.is-scaled{ box-shadow:none; } /* optional: shadow band */
-}
-
-/* helper: scale wrap jisme .page ko rakhte hain */
-.page-zoom-wrap{ position: relative; width:100vw; overflow:hidden; }
 
 
 
