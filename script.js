@@ -267,4 +267,35 @@ function initSingleGradeSelect() {
     });
   });
 }
+function initDeclarationMaster(){
+  const master = document.getElementById('declMaster');   // ماسٹر "I agree" چیک باکس
+  const btn     = document.getElementById('btnPdf');      // PDF بٹن
+
+  if (!master || !btn) return;
+
+  // بٹن کی حالت سیٹ کریں
+  const setBtnState = () => {
+    if (master.checked) {
+      btn.removeAttribute('aria-disabled');
+    } else {
+      btn.setAttribute('aria-disabled', 'true');
+    }
+  };
+
+  // صفحہ کھلتے ہی حالت سیٹ
+  setBtnState();
+
+  // چیک باکس بدلے تو حالت اپڈیٹ
+  master.addEventListener('change', setBtnState);
+
+  // اگر agree نہیں ہوا اور بٹن دبایا تو پیغام دکھائیں
+  btn.addEventListener('click', (e) => {
+    if (!master.checked) {
+      e.preventDefault();
+      alert('برائے مہربانی آگے بڑھنے کے لیے “I agree” چیک باکس لازمی ٹک کریں۔');
+      try { master.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch {}
+    }
+  });
+}
+
 
