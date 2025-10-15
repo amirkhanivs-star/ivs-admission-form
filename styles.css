@@ -963,60 +963,7 @@ html,body{overflow-x:hidden}
 .meta.meta--top .field-stack:first-child .stack-underline{
   display: none !important;
 }
-/* === Make both logos the same visual size === */
-.header-top.with-logos {
-  display: grid;
-  grid-template-columns: 140px 1fr 140px; /* left logo | brand | right logo */
-  align-items: center;
-  gap: 16px;
-}
 
-/* Equal logo boxes */
-.header-top.with-logos .logo {
-  width: 140px;          /* same box for both sides */
-  height: 120px;         /* adjust 110–140 as you like */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Fit image inside the box, keep aspect ratio */
-.header-top.with-logos .logo img {
-  max-width: 100%;
-  max-height: 100%;
-  width: auto;
-  height: auto;
-  object-fit: contain;   /* no cropping, no stretch */
-  display: block;
-}
-
-/* Responsive: thoda chhota on small screens */
-@media (max-width: 900px){
-  .header-top.with-logos {
-    grid-template-columns: 100px 1fr 100px;
-  }
-  .header-top.with-logos .logo {
-    width: 100px; height: 90px;
-  }
-}
-@media (max-width: 640px){
-  .header-top.with-logos {
-    grid-template-columns: 84px 1fr 84px;
-  }
-  .header-top.with-logos .logo {
-    width: 84px; height: 76px;
-  }
-}
-
-/* Print/PDF: crisp, same size */
-@media print{
-  .header-top.with-logos {
-    grid-template-columns: 120px 1fr 120px;
-  }
-  .header-top.with-logos .logo {
-    width: 120px; height: 100px;
-  }
-}
 
 
 
