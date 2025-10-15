@@ -1001,6 +1001,18 @@ html,body{overflow-x:hidden}
 @media print{
   .decl-list input[type="checkbox"]{ transform: scale(1.05); }
 }
+/* One-line note above the declaration checkboxes */
+.decl-note{
+  margin: 6px 0 10px;
+  font-size: 13px;
+  color: #475569;
+  background: #fff7ed;                /* subtle highlight */
+  border: 1px solid rgba(245,158,11,.35);
+  padding: 6px 8px;
+  border-radius: 6px;
+}
+.decl-note strong{ color:#111827; }
+
 
 
 
