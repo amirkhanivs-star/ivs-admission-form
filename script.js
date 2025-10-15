@@ -307,11 +307,12 @@ function initDeclarationMaster(){
   btn.addEventListener('click', (e) => {
     if (!master.checked) {
       e.preventDefault();
-      alert('برائے مہربانی آگے بڑھنے کے لیے “I agree” چیک باکس لازمی ٹک کریں۔');
+      alert('Please tick the “I agree” checkbox to proceed.');
       try { master.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch {}
     }
   });
 }
+
 
 
 
