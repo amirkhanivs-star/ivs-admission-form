@@ -265,12 +265,11 @@ function initSingleGradeSelect() {
     });
   });
 }
-/* ===== Auto-scale the A4 .page on small screens (mobile only) ===== */
+/* ===== Mobile auto-scale: fill 100% screen width, no side bg ===== */
 (function(){
-  const A4_WIDTH = 794; // your design width in px
+  const A4_WIDTH = 794; // your .page ki design width
 
   function ensureWrappers(){
-    // ہر .page کے باہر ایک wrap بنا دیں تاکہ scale کے بعد صحیح height reserve ہو
     document.querySelectorAll('.page').forEach(p => {
       if (!p.parentElement.classList.contains('page-zoom-wrap')) {
         const w = document.createElement('div');
@@ -285,32 +284,28 @@ function initSingleGradeSelect() {
     const vw = Math.min(window.innerWidth, document.documentElement.clientWidth || window.innerWidth);
     const wraps = document.querySelectorAll('.page-zoom-wrap');
     const pages = document.querySelectorAll('.page');
-
     if (!pages.length) return;
 
-    // Desktop: کوئی scaling نہیں
-    if (vw >= A4_WIDTH + 2) {
-      pages.forEach(p => {
-        p.style.transform = '';
-        p.classList.remove('is-scaled');
-      });
-      wraps.forEach(w => { w.style.height = ''; w.style.overflow = ''; });
+    // Desktop: koi scaling nahi
+    if (vw >= A4_WIDTH + 2){
+      pages.forEach(p => { p.style.transform=''; p.classList.remove('is-scaled'); });
+      wraps.forEach(w => { w.style.height=''; w.style.overflow=''; w.style.width='100%'; });
       return;
     }
 
-    // Mobile: viewport کے مطابق scale
-    // تھوڑا سا اندرونی gutter (16px) چھوڑ دیتے ہیں تاکہ کنارے نہ لگیں
-    const scale = Math.max(0.35, (vw - 16) / A4_WIDTH);
+    // Mobile: bilkul screen width ke barabar scale (no gutter)
+    const scale = vw / A4_WIDTH;
 
     pages.forEach((p, i) => {
-      // اصل height لیں تاکہ wrapper میں scaled height set ہو سکے
-      const naturalHeight = p.offsetHeight; // unscaled layout height
+      // natural (unscaled) height nikaal lo
+      const naturalHeight = p.offsetHeight / (p.style.transform?.includes('scale(') ? parseFloat(p.style.transform.match(/scale\((.+?)\)/)?.[1] || 1) : 1);
+
       p.style.transform = `scale(${scale})`;
       p.classList.add('is-scaled');
 
-      // wrapper کو scaled height دیں تاکہ overlap نہ ہو
       const wrap = wraps[i];
       wrap.style.height = (naturalHeight * scale) + 'px';
+      wrap.style.width  = '100vw';
       wrap.style.overflow = 'hidden';
     });
   }
@@ -318,14 +313,13 @@ function initSingleGradeSelect() {
   function initAutoScale(){
     ensureWrappers();
     fitPages();
-    window.addEventListener('resize', fitPages, { passive: true });
+    window.addEventListener('resize', fitPages, { passive:true });
     window.addEventListener('orientationchange', fitPages);
   }
 
-  if (document.readyState === 'loading') {
+  if (document.readyState === 'loading'){
     document.addEventListener('DOMContentLoaded', initAutoScale);
   } else {
     initAutoScale();
   }
 })();
-
