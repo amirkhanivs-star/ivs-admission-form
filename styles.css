@@ -1029,6 +1029,13 @@ html,body{overflow-x:hidden}
   border-radius:6px;
   font-weight:600;
 }
+/* PDF بٹن تب تک ہلکا/گرے رہے جب تک agree ٹک نہ ہو */
+#btnPdf[aria-disabled="true"]{
+  opacity:.5;
+  cursor:not-allowed;
+  filter: grayscale(40%);
+}
+
 
 
 
