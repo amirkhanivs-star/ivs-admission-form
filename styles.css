@@ -890,6 +890,76 @@ body{
 /* safety: images never overflow the page */
 img{ max-width:100%; height:auto; }
 @media (max-width: 480px){ .info-bar{ display:none; } }
+/* =========================
+   MOBILE FIX PACK (paste at end)
+   ========================= */
+
+/* images never overflow */
+img{max-width:100%; height:auto; display:block}
+
+/* iOS sometimes causes 1-px overflow; hide it */
+html,body{overflow-x:hidden}
+
+/* Phone layout */
+@media (max-width: 600px){
+
+  .wrapper{padding:8px 6px}
+
+  /* page uses full screen width; border not clipped */
+  .page{
+    width:100%;
+    max-width:100%;
+    margin:8px auto;
+    padding:0 10px 14px;
+    border-width:6px;           /* a bit thinner on phones */
+    box-shadow:none;
+  }
+
+  .header{padding-bottom:8px}
+
+  /* logos scale nicely */
+  .header-top.with-logos{gap:8px}
+  .header-top.with-logos .logo img{
+    height: clamp(46px, 18vw, 72px);
+  }
+
+  /* titles scale */
+  .brand .brand-title{font-size:clamp(16px,5vw,22px); padding:4px 10px}
+  .brand .brand-chip{font-size:clamp(12px,3.5vw,14px); padding:3px 8px}
+  .title{font-size:clamp(20px,6vw,28px)}
+
+  /* DATE OF REGISTRATION: boxes grow/shrink, won’t clip last digit */
+  .date-boxes{
+    gap: clamp(4px, 1.5vw, 8px);
+    flex-wrap: wrap;            /* if space tight, wrap to next line */
+  }
+  .date-boxes .box{
+    width:  clamp(28px, 8vw, 40px);
+    height: clamp(28px, 8vw, 40px);
+    font-size: clamp(14px, 4vw, 18px);
+    border-width:2px;
+  }
+  .date-boxes .slash{font-size:clamp(14px,4vw,18px)}
+
+  /* form controls */
+  .label{font-size:12px}
+  .input,.textarea{min-height:36px; font-size:15px}
+
+  /* grids become 1-column to avoid half-cuts */
+  .grid.cols-2, .grid.cols-3{grid-template-columns:1fr}
+
+  /* grades reflow: 2 columns on small, 1 column on very small */
+  .grades{grid-template-columns:repeat(2, 1fr); gap:10px}
+  @media (max-width:380px){
+    .grades{grid-template-columns:1fr}
+  }
+  .grade-box{font-size:14px; padding:10px}
+
+  /* bottom info bar should not cover content on phones */
+  .info-bar{position:static; margin-top:10px}
+  body{padding-bottom:0}
+}
+
 
 
 
