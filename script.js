@@ -117,10 +117,10 @@ function getSignatureDataURL() {
 }
 
 /* ---------- 3) Build PDF from .page elements (A4, top-aligned) ---------- */
-async function exportPdfAndOpenWhatsAppApp() {
-  const built = await buildPdfFromPages();
-  if (!built) return;
-  const { pdf, filename } = built;
+async function buildPdfFromPages() {
+  const { jsPDF } = window.jspdf;
+  const pages = Array.from(document.querySelectorAll(".page"));
+  if (!pages.length) return null;
 
   // export mode: hide fixed footer
   document.body.classList.add("pdf-export");
@@ -181,14 +181,12 @@ async function exportPdfAndOpenWhatsAppApp() {
   return { pdf, filename };
 }
 
-
-
 /* ---------- 4) Share to WhatsApp APP with attached PDF (native share) ---------- */
 async function exportPdfAndOpenWhatsAppApp() {
   const built = await buildPdfFromPages();
   if (!built) return;
   const { pdf, filename } = built;
-   
+
   // Build a File for Web Share API (required for attaching to WhatsApp)
   const blob = pdf.output("blob");
   const file = new File([blob], filename, { type: "application/pdf" });
@@ -267,13 +265,3 @@ function initSingleGradeSelect() {
     });
   });
 }
-
-
-
-
-
-
-
-
-
-
