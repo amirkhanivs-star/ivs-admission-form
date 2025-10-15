@@ -182,19 +182,31 @@ async function buildPdfFromPages() {
 }
 
 /* ---------- 4) Share to WhatsApp APP with attached PDF (native share) ---------- */
+/* ---------- 4) Share to WhatsApp APP with attached PDF (native share) ---------- */
 async function exportPdfAndOpenWhatsAppApp() {
-  // --- Guard: ALL declaration checkboxes must be checked (1–10) ---
-  const reqBoxes = document.querySelectorAll('.declaration-list input[type="checkbox"]');
-  if (reqBoxes.length && [...reqBoxes].some(cb => !cb.checked)) {
-    alert('Please tick all declaration checkboxes (1–10) to complete your admission.');
-    const firstUnchecked = [...reqBoxes].find(cb => !cb.checked);
-    try {
-      firstUnchecked.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      firstUnchecked.focus?.();
-    } catch {}
-    return;
-  }
+  // ===== GUARD: Require all declaration checkboxes to be checked =====
+  // We try multiple selectors so it works with your current HTML structure.
+  const candidates = document.querySelectorAll(
+    '.declaration-list input[type="checkbox"], input[type="checkbox"][name^="decl"], input[type="checkbox"].decl, input[type="checkbox"][data-decl]'
+  );
+  const declBoxes = Array.from(candidates);
 
+  // Only enforce if there ARE declaration checkboxes on the page
+  if (declBoxes.length > 0) {
+    const unchecked = declBoxes.filter(cb => !cb.checked);
+    if (unchecked.length > 0) {
+      alert('Please tick all declaration points (1–10) to complete your admission.');
+      // optional UX: take user to the first unchecked box
+      try {
+        unchecked[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        unchecked[0].focus();
+      } catch (_) {}
+      return; // stop here — do not create/share PDF
+    }
+  }
+  // ===== /GUARD =====
+
+  // Build PDF
   const built = await buildPdfFromPages();
   if (!built) return;
   const { pdf, filename } = built;
@@ -210,7 +222,7 @@ async function exportPdfAndOpenWhatsAppApp() {
     `Please review the attached PDF. Thank you.`;
 
   try {
-    // ✅ Best path: native share with FILES (Android Chrome, iOS Safari 16.4+ over HTTPS)
+    // ✅ Native share with file (WhatsApp app attach)
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
       await navigator.share({
         files: [file],
@@ -220,31 +232,26 @@ async function exportPdfAndOpenWhatsAppApp() {
 
       // optional: also save a local copy for the user
       try { pdf.save(filename); } catch {}
-      return; // stop here — user is now in WhatsApp app with the file attached
+      return; // user is now in WhatsApp app with the file attached
     }
   } catch (err) {
     console.warn("Native share failed, will fallback:", err);
   }
 
-  // ❗ Fallbacks (no WhatsApp Web):
-  // 1) Save the PDF locally so the user can attach inside WhatsApp app
+  // ❗ Fallbacks: save locally + open WhatsApp app with helper text (no auto-attach possible via URL)
   try { pdf.save(filename); } catch {}
 
-  // 2) Try to open WhatsApp app with a helpful prefilled text (cannot attach via URL)
-  // On many phones, this deep link opens the app directly.
   const helper =
     `Assalamu Alaikum. I have saved my admission form PDF (${filename}). ` +
     `I will attach the file here and send.`;
   const deepLink = `whatsapp://send?text=${encodeURIComponent(helper)}`;
-
-  // Try deep link first (opens app on mobile). If it fails silently, show a tip.
   window.location.href = deepLink;
 
-  // As a final hint if nothing happens (desktop, unsupported), guide the user.
   setTimeout(() => {
     alert("If WhatsApp didn’t open automatically, please open the WhatsApp app and attach the saved PDF from your downloads.");
   }, 1200);
 }
+
 
 /* ---------- 5) Grade: force single selection (radio-like) ---------- */
 function initSingleGradeSelect() {
@@ -277,3 +284,4 @@ function initSingleGradeSelect() {
     });
   });
 }
+
