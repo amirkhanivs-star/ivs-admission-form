@@ -854,6 +854,42 @@ body{
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
 }
+/* ===== Mobile: form full screen (no dark side bars) ===== */
+@media (max-width: 840px){
+  html, body{
+    background:#ffffff !important;   /* sirf form nazar aaye */
+    overflow-x:hidden;                /* horizontal scroll band */
+    padding-bottom:0 !important;
+  }
+
+  .wrapper{
+    max-width:none;
+    margin:0;                         /* outer gap remove */
+    padding:0;
+  }
+
+  .page{
+    width:100vw;                      /* A4 fixed width -> fluid */
+    min-height:auto;
+    border-width:8px;                 /* thoda patla frame mobile par */
+    padding:0 12px 16px;              /* inner padding compact */
+    box-sizing:border-box;
+    box-shadow:none;                  /* clean mobile look */
+  }
+
+  /* logos responsive so overflow na ho */
+  .header-top.with-logos .logo img{
+    max-width:32vw;                   /* left/right logo kabhi narrow screens par na faile */
+    height:auto;
+  }
+
+  /* grids already collapse — ensure single column where needed */
+  .grid.cols-2, .grid.cols-3{ grid-template-columns:1fr; }
+}
+
+/* safety: images never overflow the page */
+img{ max-width:100%; height:auto; }
+
 
 
 
