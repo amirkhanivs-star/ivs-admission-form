@@ -184,22 +184,27 @@ async function buildPdfFromPages() {
 /* ---------- 4) Share to WhatsApp APP with attached PDF (native share) ---------- */
 /* ---------- 4) Share to WhatsApp APP with attached PDF (native share) ---------- */
 async function exportPdfAndOpenWhatsAppApp() {
-  // ===== GUARD: Require all declaration checkboxes to be checked =====
-  // We try multiple selectors so it works with your current HTML structure.
-  const candidates = document.querySelectorAll(
-    '.declaration-list input[type="checkbox"], input[type="checkbox"][name^="decl"], input[type="checkbox"].decl, input[type="checkbox"][data-decl]'
-  );
-  const declBoxes = Array.from(candidates);
+  // ===== GUARD: All declaration checkboxes must be ticked =====
+  // Primary selector: inputs you marked with class="decl"
+  let declBoxes = Array.from(document.querySelectorAll('input.decl[type="checkbox"]'));
 
-  // Only enforce if there ARE declaration checkboxes on the page
+  // Fallbacks in case the class isn't present yet:
+  if (declBoxes.length === 0) {
+    declBoxes = Array.from(document.querySelectorAll(
+      '.declaration-list input[type="checkbox"], ' +        // your earlier container
+      'input[type="checkbox"][name^="decl"], ' +            // name="decl1", "decl2", ...
+      'input[type="checkbox"][data-decl]'                   // data-decl attribute
+    ));
+  }
+
+  // Only enforce if we actually found declaration checkboxes
   if (declBoxes.length > 0) {
-    const unchecked = declBoxes.filter(cb => !cb.checked);
-    if (unchecked.length > 0) {
+    const firstUnchecked = declBoxes.find(cb => !cb.checked);
+    if (firstUnchecked) {
       alert('Please tick all declaration points (1–10) to complete your admission.');
-      // optional UX: take user to the first unchecked box
       try {
-        unchecked[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
-        unchecked[0].focus();
+        firstUnchecked.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        firstUnchecked.focus();
       } catch (_) {}
       return; // stop here — do not create/share PDF
     }
@@ -211,7 +216,7 @@ async function exportPdfAndOpenWhatsAppApp() {
   if (!built) return;
   const { pdf, filename } = built;
 
-  // Build a File for Web Share API (required for attaching to WhatsApp)
+  // Web Share with attached file (best path)
   const blob = pdf.output("blob");
   const file = new File([blob], filename, { type: "application/pdf" });
 
@@ -222,35 +227,29 @@ async function exportPdfAndOpenWhatsAppApp() {
     `Please review the attached PDF. Thank you.`;
 
   try {
-    // ✅ Native share with file (WhatsApp app attach)
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
       await navigator.share({
         files: [file],
         title: "IVS Admission Form",
         text: caption
       });
-
-      // optional: also save a local copy for the user
       try { pdf.save(filename); } catch {}
-      return; // user is now in WhatsApp app with the file attached
+      return;
     }
   } catch (err) {
     console.warn("Native share failed, will fallback:", err);
   }
 
-  // ❗ Fallbacks: save locally + open WhatsApp app with helper text (no auto-attach possible via URL)
+  // Fallback: save + open WhatsApp app with helper text (cannot auto-attach via URL)
   try { pdf.save(filename); } catch {}
-
   const helper =
-    `Assalamu Alaikum. I have saved my admission form PDF (${filename}). ` +
-    `I will attach the file here and send.`;
-  const deepLink = `whatsapp://send?text=${encodeURIComponent(helper)}`;
-  window.location.href = deepLink;
-
+    `Assalamu Alaikum. I have saved my admission form PDF (${filename}). I will attach the file here and send.`;
+  window.location.href = `whatsapp://send?text=${encodeURIComponent(helper)}`;
   setTimeout(() => {
     alert("If WhatsApp didn’t open automatically, please open the WhatsApp app and attach the saved PDF from your downloads.");
   }, 1200);
 }
+
 
 
 /* ---------- 5) Grade: force single selection (radio-like) ---------- */
@@ -284,4 +283,5 @@ function initSingleGradeSelect() {
     });
   });
 }
+
 
