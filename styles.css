@@ -1141,6 +1141,47 @@ html,body{overflow-x:hidden}
   .page{ padding: 0 8px 14px; }
   .header-banner{ margin-bottom: 6px; }
 }
+/* ===== Mobile banner perfect fit (no clipping, no overflow) ===== */
+
+/* page ki real padding/border ke hisaab se nikaal lo */
+:root{
+  --page-pad-x: 12px;   /* .page ki left/right padding (aapke CSS me 12px hai) */
+  --page-border: 10px;  /* .page ka maroon outer border width (aapke CSS me 10px) */
+}
+
+/* Ensure the page allows the banner to extend */
+.page{ overflow: visible !important; }
+
+/* Banner ko center + full width dila do, bina crop ke */
+.header-banner{
+  position: relative;
+  /* .page ke padding + border ko negate kar rahe hain taake banner fit ho jaye */
+  margin-left: calc(-1 * (var(--page-pad-x) + var(--page-border))) !important;
+  margin-right: calc(-1 * (var(--page-pad-x) + var(--page-border))) !important;
+  width: calc(100% + 2 * (var(--page-pad-x) + var(--page-border))) !important;
+  text-align: center;
+}
+
+/* Image ko bilkul scale-down/contain par rakhna hai */
+.header-banner img{
+  display: block;
+  width: 100% !important;   /* container ke barabar */
+  height: auto !important;  /* aspect ratio safe */
+  max-width: none !important;
+  object-fit: contain;      /* kuch bhi crop na ho */
+  line-height: 0;
+}
+
+/* Thoda space niche */
+.header-banner{ margin-bottom: 8px !important; }
+
+/* Very small phones: banner ki max height thodi limit kar do taake fold upar rahe */
+@media (max-width: 430px){
+  .header-banner img{
+    max-height: 180px;   /* zaroorat ho to 160–200px me adjust kar sakte ho */
+  }
+}
+
 
 
 
