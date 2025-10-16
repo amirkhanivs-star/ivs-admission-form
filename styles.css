@@ -1122,40 +1122,44 @@ html,body{overflow-x:hidden}
 @media (max-width: 640px){
   .title{ font-size: 28px; }
 }
-/* === Page: responsive width so it fits on phones === */
+/* ===== Page: fluid width (mobile پر 100%, desktop پر cap) ===== */
 .page{
-  width: min(794px, 100%);     /* desktop پر 794px cap, mobile پر 100% */
+  max-width: 794px;           /* desktop cap */
+  width: 100%;                /* mobile پر پورا */
   margin: 12px auto;
-  padding: 0 12px 16px;        /* تھوڑا side padding تاکہ شارپ cut نہ لگے */
+  padding: 0 12px 16px;       /* اندرونی سائیڈ padding */
   box-sizing: border-box;
+  --page-xpad: 12px;          /* padding variable (نیچے استعمال ہوگا) */
 }
 
-/* === Banner wrapper & image: never overflow === */
+/* ===== Banner: نظر آنے والی page چوڑائی کے مطابق 100% ===== */
+/* padding negate کر کے image کو پورا پھیلا دیتے ہیں تاکہ کناروں پر کٹ نہ ہو */
 .header-banner{
-  padding: 6px 0;              /* تھوڑا breathing space */
-  overflow: hidden;            /* safety: کوئی overflow cut کر دے */
+  margin-left: calc(-1 * var(--page-xpad));
+  margin-right: calc(-1 * var(--page-xpad));
 }
 .header-banner img{
   display: block;
-  width: 100%;                 /* ہمیشہ page کی چوڑائی کے برابر */
-  height: auto;
-  max-width: 680px;            /* desktop پر optional cap */
-  margin: 0 auto;              /* center */
+  width: 100%;                /* ہمیشہ available width بھرے */
+  max-width: 100%;
+  height: auto;               /* aspect برقرار */
+  object-fit: contain;        /* ہر حالت میں پورا نظر آئے، crop نہیں */
 }
 
-/* === Mobile tweaks === */
+/* ===== Mobile tweaks ===== */
 @media (max-width: 600px){
   .page{
-    padding: 0 8px 14px;
-    border-width: 8px;         /* موٹی سرحد mobile پر تھوڑی کم */
+    padding-left: 8px;
+    padding-right: 8px;
+    --page-xpad: 8px;         /* اوپر والے negate margins خود adjust ہو جائیں گے */
+    border-width: 8px;        /* اگر آپ کا outer maroon border ہے تو mobile پر ہلکا رکھیں */
   }
-  .header-banner img{
-    max-width: 100%;           /* phone پر کوئی cap نہیں */
-  }
-  /* (optional) تھوڑا title/date چھوٹا کر دیں تاکہ سب آرام سے فٹ ہو */
-  .title{ font-size: 24px; margin: 8px 0 6px; }
+
+  /* (optional) Date boxes تھوڑے چھوٹے تاکہ اوپر سب فِٹ ہو */
   .date-boxes .box{ width: 36px; height: 36px; font-size: 18px; }
+  .title{ font-size: 24px; margin: 8px 0 6px; }
 }
+
 
 
 
