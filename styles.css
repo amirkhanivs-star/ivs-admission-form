@@ -1104,61 +1104,44 @@ html,body{overflow-x:hidden}
     width: 100% !important;     /* for PDF, use width-based fit */
   }
 }
-/* Keep the banner with some gap under it */
-.header-banner { margin-bottom: 8px; }
-
-/* Make sure the title is visible and styled */
-.title{
-  display: block !important;         /* force visible */
-  text-align: center;
-  color: var(--maroon);
-  font-weight: 900;
-  font-size: 36px;
-  letter-spacing: .2px;
-  margin: 8px 0 6px;
-}
-.title .title-accent{ color:#402c8e; }
-
-@media (max-width: 640px){
-  .title{ font-size: 28px; }
-}
-/* ===== Page: fluid width (mobile پر 100%, desktop پر cap) ===== */
+/* Keep the page constrained, but allow the banner to span full screen */
 .page{
-  max-width: 794px;           /* desktop cap */
-  width: 100%;                /* mobile پر پورا */
+  max-width: 794px;      /* desktop cap */
+  width: 100%;
   margin: 12px auto;
-  padding: 0 12px 16px;       /* اندرونی سائیڈ padding */
+  padding: 0 12px 16px;  /* side padding only for the form */
   box-sizing: border-box;
-  --page-xpad: 12px;          /* padding variable (نیچے استعمال ہوگا) */
+  overflow: visible;     /* allow the banner container to extend */
 }
 
-/* ===== Banner: نظر آنے والی page چوڑائی کے مطابق 100% ===== */
-/* padding negate کر کے image کو پورا پھیلا دیتے ہیں تاکہ کناروں پر کٹ نہ ہو */
+/* Make the banner go edge-to-edge (full viewport width) */
 .header-banner{
-  margin-left: calc(-1 * var(--page-xpad));
-  margin-right: calc(-1 * var(--page-xpad));
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;    /* pull out of .page padding/border */
+  margin-right: -50vw;
+  width: 100vw;          /* always full screen width on mobile/desktop */
 }
+
+/* Image should never crop, just scale down */
 .header-banner img{
   display: block;
-  width: 100%;                /* ہمیشہ available width بھرے */
-  max-width: 100%;
-  height: auto;               /* aspect برقرار */
-  object-fit: contain;        /* ہر حالت میں پورا نظر آئے، crop نہیں */
+  width: 100%;
+  height: auto;
+  max-width: none;       /* allow 100vw sizing */
+  object-fit: contain;   /* keep full image visible */
 }
 
-/* ===== Mobile tweaks ===== */
-@media (max-width: 600px){
-  .page{
-    padding-left: 8px;
-    padding-right: 8px;
-    --page-xpad: 8px;         /* اوپر والے negate margins خود adjust ہو جائیں گے */
-    border-width: 8px;        /* اگر آپ کا outer maroon border ہے تو mobile پر ہلکا رکھیں */
-  }
+/* Optional: a little spacing below the banner */
+.header-banner{ margin-bottom: 8px; }
 
-  /* (optional) Date boxes تھوڑے چھوٹے تاکہ اوپر سب فِٹ ہو */
-  .date-boxes .box{ width: 36px; height: 36px; font-size: 18px; }
-  .title{ font-size: 24px; margin: 8px 0 6px; }
+/* Tweak slightly on very small phones if needed */
+@media (max-width: 480px){
+  .page{ padding: 0 8px 14px; }
+  .header-banner{ margin-bottom: 6px; }
 }
+
 
 
 
