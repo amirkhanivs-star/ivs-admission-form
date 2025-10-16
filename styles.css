@@ -1035,6 +1035,94 @@ html,body{overflow-x:hidden}
   cursor:not-allowed;
   filter: grayscale(40%);
 }
+/* Hide old logos/title (safest if you didn't delete HTML) */
+.header-top.with-logos,
+.title { display: none !important; }
+
+/* NEW header banner */
+.header-banner {
+  margin: 8px 0 10px;
+}
+.header-banner img{
+  display: block;
+  width: 100%;
+  height: auto;              /* aspect-ratio safe */
+  object-fit: contain;
+  /* optional: limit desktop height so صفحہ compact رہے */
+  max-height: 220px;
+}
+
+/* Mobile: تھوڑا کم gap */
+@media (max-width: 640px){
+  .header-banner { margin: 6px 0 8px; }
+  .header-banner img{ max-height: 180px; }
+}
+
+/* Print/PDF: بینر crisp رہے (html2canvas-friendly) */
+@media print{
+  .header-banner img{ max-height: none; }
+}
+
+/* === BIG EDGE-TO-EDGE HEADER BANNER === */
+.header-banner{
+  /* pull the banner out to the page border (your .page has 24px side padding) */
+  margin-left: -24px;
+  margin-right: -24px;
+
+  /* give it a fixed tall area so the artwork appears big */
+  height: 240px;               /* adjust 220–300 if you want */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* remove extra gaps around */
+  padding: 0;
+}
+
+/* scale by HEIGHT so the banner text looks larger */
+.header-banner img{
+  height: 100% !important;     /* fill the 240px area */
+  width: auto !important;      /* keep aspect ratio */
+  max-width: none !important;  /* ignore any previous max-width */
+  display: block;
+}
+
+/* Mobile: a little shorter so it fits nicely */
+@media (max-width: 640px){
+  .header-banner{ height: 200px; }
+}
+
+/* Print/PDF: let html2canvas capture full quality */
+@media print{
+  .header-banner{
+    margin-left: 0; 
+    margin-right: 0;
+    height: auto;
+  }
+  .header-banner img{
+    height: auto !important;
+    width: 100% !important;     /* for PDF, use width-based fit */
+  }
+}
+/* Keep the banner with some gap under it */
+.header-banner { margin-bottom: 8px; }
+
+/* Make sure the title is visible and styled */
+.title{
+  display: block !important;         /* force visible */
+  text-align: center;
+  color: var(--maroon);
+  font-weight: 900;
+  font-size: 36px;
+  letter-spacing: .2px;
+  margin: 8px 0 6px;
+}
+.title .title-accent{ color:#402c8e; }
+
+@media (max-width: 640px){
+  .title{ font-size: 28px; }
+}
+
 
 
 
