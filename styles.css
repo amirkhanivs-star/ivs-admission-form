@@ -1104,43 +1104,6 @@ html,body{overflow-x:hidden}
     width: 100% !important;     /* for PDF, use width-based fit */
   }
 }
-/* Keep the page constrained, but allow the banner to span full screen */
-.page{
-  max-width: 794px;      /* desktop cap */
-  width: 100%;
-  margin: 12px auto;
-  padding: 0 12px 16px;  /* side padding only for the form */
-  box-sizing: border-box;
-  overflow: visible;     /* allow the banner container to extend */
-}
-
-/* Make the banner go edge-to-edge (full viewport width) */
-.header-banner{
-  position: relative;
-  left: 50%;
-  right: 50%;
-  margin-left: -50vw;    /* pull out of .page padding/border */
-  margin-right: -50vw;
-  width: 100vw;          /* always full screen width on mobile/desktop */
-}
-
-/* Image should never crop, just scale down */
-.header-banner img{
-  display: block;
-  width: 100%;
-  height: auto;
-  max-width: none;       /* allow 100vw sizing */
-  object-fit: contain;   /* keep full image visible */
-}
-
-/* Optional: a little spacing below the banner */
-.header-banner{ margin-bottom: 8px; }
-
-/* Tweak slightly on very small phones if needed */
-@media (max-width: 480px){
-  .page{ padding: 0 8px 14px; }
-  .header-banner{ margin-bottom: 6px; }
-}
 /* ===== Mobile banner perfect fit (no clipping, no overflow) ===== */
 
 /* page ki real padding/border ke hisaab se nikaal lo */
@@ -1181,6 +1144,7 @@ html,body{overflow-x:hidden}
     max-height: 180px;   /* zaroorat ho to 160–200px me adjust kar sakte ho */
   }
 }
+
 
 
 
