@@ -1053,10 +1053,10 @@ html,body{overflow-x:hidden}
 }
 
 /* Mobile: تھوڑا کم gap */
-@media (max-width: 640px){
+/* @media (max-width: 640px){
   .header-banner { margin: 6px 0 8px; }
   .header-banner img{ max-height: 180px; }
-}
+} */
 
 /* Print/PDF: بینر crisp رہے (html2canvas-friendly) */
 @media print{
@@ -1087,10 +1087,10 @@ html,body{overflow-x:hidden}
   display: block;
 }
 
-/* Mobile: a little shorter so it fits nicely */
+/* /* Mobile: a little shorter so it fits nicely */
 @media (max-width: 640px){
   .header-banner{ height: 200px; }
-}
+} */
 
 /* Print/PDF: let html2canvas capture full quality */
 @media print{
@@ -1156,6 +1156,7 @@ html,body{overflow-x:hidden}
   .title{ font-size: 24px; margin: 8px 0 6px; }
   .date-boxes .box{ width: 36px; height: 36px; font-size: 18px; }
 }
+
 
 
 
