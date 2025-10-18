@@ -166,6 +166,20 @@ input[type="radio"], input[type="checkbox"]{accent-color:var(--blue)}
   }
   .date-boxes .slash{font-size:clamp(14px,4vw,18px)}
   .info-bar{position:static; margin-top:10px}
+
+  /* ---------- FIX: banner fits inside maroon border on phones ---------- */
+  .header-banner{
+    /* negative margins ko sirf mobile par neutralize */
+    margin-left:0 !important;
+    margin-right:0 !important;
+    width:100% !important;
+  }
+  .header-banner img{
+    width:100% !important;
+    height:auto !important;
+    object-fit:contain;
+    max-height:160px;            /* banner height limit on phones; tweak 140–180px if needed */
+  }
 }
 
 /* ---------- Small quality-of-life ---------- */
