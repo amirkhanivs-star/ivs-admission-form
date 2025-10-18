@@ -166,22 +166,39 @@ input[type="radio"], input[type="checkbox"]{accent-color:var(--blue)}
   }
   .date-boxes .slash{font-size:clamp(14px,4vw,18px)}
   .info-bar{position:static; margin-top:10px}
-
-  /* ---------- FIX: banner fits inside maroon border on phones ---------- */
-  .header-banner{
-    /* negative margins ko sirf mobile par neutralize */
-    margin-left:0 !important;
-    margin-right:0 !important;
-    width:100% !important;
-  }
-  .header-banner img{
-    width:100% !important;
-    height:auto !important;
-    object-fit:contain;
-    max-height:160px;            /* banner height limit on phones; tweak 140–180px if needed */
-  }
 }
 
 /* ---------- Small quality-of-life ---------- */
 .toolbar{display:none}                  /* old toolbar hide */
 hr.sep{border:0; border-top:2px dashed #d8dde7; margin:14px 0}
+
+
+/* ========================= */
+/*   ADDED: Declaration tweaks  */
+/* ========================= */
+
+/* (A) Make first three paragraphs under any .title bold.
+   On page 1 your layout after .title is not <p>, so this only
+   catches the Declaration page where those lines are <p>. */
+.title + p,
+.title + p + p,
+.title + p + p + p{
+  font-weight: 700;
+}
+
+/* (B) Give the “How to complete your admission” block some
+   breathing room below the signature. Works if the block
+   uses .sig-notes; otherwise the fallbacks handle common markup. */
+.sig-notes{
+  margin-top: 12px;
+  padding-top: 8px;
+}
+
+/* Fallbacks (safe): try common positions after the signature row */
+.signature + .sig-notes,
+.signature + * + .sig-notes,
+.signature + * + .instructions,
+.signature + * + .howto{
+  margin-top: 12px;
+  padding-top: 8px;
+}
