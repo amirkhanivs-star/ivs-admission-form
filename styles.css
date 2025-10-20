@@ -60,11 +60,11 @@ img{max-width:100%; height:auto; display:block}
 /* ---------- Sections, grids, inputs ---------- */
 .section{margin-top:16px; border:1.5px solid #d8dde7; border-radius:8px; overflow:hidden}
 .section h3{
-  margin:0; padding:10px 12px; background:#eef2f7; color:var(--blue);
+  margin:0; padding:24px 24px; background:#eef2f7; color:var(--blue);
   font-weight:800; letter-spacing:.2px; border-bottom:1.5px solid #dde3ee; position:relative;
 }
 .section h3::after{content:""; position:absolute; left:12px; bottom:8px; width:54px; height:3px; background:var(--maroon); border-radius:2px}
-.section .content{padding:12px}
+.section .content{padding:24px}
 
 .grid{display:grid; gap:10px}
 .grid.cols-2{grid-template-columns:1fr 1fr}
@@ -138,12 +138,12 @@ input[type="radio"], input[type="checkbox"]{accent-color:var(--blue)}
 .pdf-export .input,
 .pdf-export textarea.textarea,
 .pdf-export .textarea{
-  line-height:1.35 !important; padding-top:10px !important; padding-bottom:10px !important;
+  line-height:2 !important; padding-top:24px !important; padding-bottom:24px !important;
   height:auto !important; -webkit-appearance:none; appearance:none; box-shadow:none !important; border-width:1.5px !important;
 }
 @media print{
   input.input,.input,textarea.textarea,.textarea{
-    line-height:1.35 !important; padding-top:10px !important; padding-bottom:10px !important; height:auto !important;
+    line-height:2 !important; padding-top:24px !important; padding-bottom:10px !important; height:auto !important;
     -webkit-appearance:none; appearance:none; box-shadow:none !important; border-width:1.5px !important;
   }
   .info-bar{display:none !important}
@@ -185,3 +185,4 @@ input[type="radio"], input[type="checkbox"]{accent-color:var(--blue)}
 /* ---------- Small quality-of-life ---------- */
 .toolbar{display:none}                  /* old toolbar hide */
 hr.sep{border:0; border-top:2px dashed #d8dde7; margin:14px 0}
+
