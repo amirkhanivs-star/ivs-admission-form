@@ -72,7 +72,7 @@ img{max-width:100%; height:auto; display:block}
 
 .label{font-size:12px; color:#334155; margin-bottom:4px}
 .input,.textarea{
-  width:100%; background:#fff; border:1.5px solid var(--line); border-radius:6px; min-height:38px; padding:10px;
+  width:100%; background:#fff; border:1.5px solid var(--line); border-radius:6px; min-height:42px; padding:10px;line-height:1.6; 
 }
 .input:focus,.textarea:focus{outline:0; border-color:var(--blue); box-shadow:0 0 0 3px rgba(37,58,119,.12)}
 .textarea{min-height:64px; resize:vertical}
@@ -138,13 +138,13 @@ input[type="radio"], input[type="checkbox"]{accent-color:var(--blue)}
 .pdf-export .input,
 .pdf-export textarea.textarea,
 .pdf-export .textarea{
-  line-height:1.35 !important; padding-top:10px !important; padding-bottom:10px !important;
-  height:auto !important; -webkit-appearance:none; appearance:none; box-shadow:none !important; border-width:1.5px !important;
+  line-height:2 !important; padding-top:10px !important; padding-bottom:10px !important;
+  height:auto !important;  min-height:42px !important;-webkit-appearance:none; appearance:none; box-shadow:none !important; border-width:1.5px !important;
 }
 @media print{
   input.input,.input,textarea.textarea,.textarea{
-    line-height:1.35 !important; padding-top:10px !important; padding-bottom:10px !important; height:auto !important;
-    -webkit-appearance:none; appearance:none; box-shadow:none !important; border-width:1.5px !important;
+    line-height:2 !important; padding-top:10px !important; padding-bottom:10px !important; height:auto !important;
+      min-height:42px !important;-webkit-appearance:none; appearance:none; box-shadow:none !important; border-width:1.5px !important;
   }
   .info-bar{display:none !important}
   .page{box-shadow:none}
@@ -185,3 +185,4 @@ input[type="radio"], input[type="checkbox"]{accent-color:var(--blue)}
 /* ---------- Small quality-of-life ---------- */
 .toolbar{display:none}                  /* old toolbar hide */
 hr.sep{border:0; border-top:2px dashed #d8dde7; margin:14px 0}
+
