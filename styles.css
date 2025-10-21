@@ -240,13 +240,23 @@ hr.sep{border:0; border-top:2px dashed #d8dde7; margin:14px 0}
 .pdf-export #clearSig {
   display: none !important; /* ensures buttons don’t appear in generated PDF */
 }
-/* ---------- FIX: Center & align "I agree to the declaration above" properly in PDF ---------- */
+/* ---------- FINAL FIX: Center & align "I agree to the declaration above" properly in PDF ---------- */
 .pdf-export .agree-line {
-  padding: 0 60px !important;      /* adds safe left-right space in PDF */
-  justify-content: center !important;  /* centers text & checkbox */
-  font-weight: 700 !important;     /* keeps text bold */
-  font-size: 15px !important;      /* ensures same readable size */
-  gap: 8px !important;             /* keeps checkbox spacing consistent */
+  display: block !important;          /* switch from flex to block for stable PDF layout */
+  width: 100% !important;             /* occupy full width of page area */
+  text-align: center !important;      /* centers text and checkbox */
+  font-weight: 700 !important;        /* keep text bold */
+  font-size: 15px !important;         /* readable text size */
+  padding: 0 70px !important;         /* balanced left-right padding for PDF */
+  margin-top: 14px !important;        /* same top spacing */
+}
+
+/* force checkbox alignment and size inside centered block */
+.pdf-export .agree-line input[type="checkbox"] {
+  transform: scale(1.3) !important;   /* slightly larger for clarity */
+  vertical-align: middle !important;  /* align checkbox with text baseline */
+  margin-right: 6px !important;       /* space between checkbox and text */
+  accent-color: var(--blue) !important;
 }
 
 /* Hide during browser print */
@@ -256,6 +266,7 @@ hr.sep{border:0; border-top:2px dashed #d8dde7; margin:14px 0}
     display: none !important; /* hides them if user prints directly */
   }
 }
+
 
 
 
