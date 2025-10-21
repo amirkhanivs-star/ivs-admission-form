@@ -172,7 +172,7 @@ async function buildPdfFromPages() {
     const y = M;                 // top aligned
 
     if (i > 0) pdf.addPage();
-    pdf.addImage(img, "JPEG", x, y, wpt, hpt, "", "FAST");
+    pdf.addImage(img, "JPEG", 0, 0, 595, 842);
   }
 
   // restore UI
@@ -312,6 +312,7 @@ function initDeclarationMaster(){
     }
   });
 }
+
 
 
 
