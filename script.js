@@ -117,12 +117,12 @@ function getSignatureDataURL() {
   if (sigCanvas.toDataURL() === blank.toDataURL()) return "";
   return sigCanvas.toDataURL("image/png");
 }
-
 /* ---------- 3) Build PDF from .page elements (A4, top-aligned) ---------- */
 async function buildPdfFromPages() {
   const { jsPDF } = window.jspdf;
-const pages = Array.from(document.querySelectorAll(".page")); 
-   if (!pages.length) return null;
+  const pages = Array.from(document.querySelectorAll(".page"));
+  if (!pages.length) return null;
+
   // export mode: hide fixed footer
   document.body.classList.add("pdf-export");
   const infoBar = document.querySelector(".info-bar");
@@ -152,7 +152,7 @@ const pages = Array.from(document.querySelectorAll(".page"));
       backgroundColor: "#ffffff",
       logging: false,
       windowWidth: 980,
-      scrollY: 0,
+      scrollX: 0,         // کوئی اسکرول آفسیٹ نہیں
       scrollY: 0
     });
 
@@ -162,8 +162,8 @@ const pages = Array.from(document.querySelectorAll(".page"));
     // fit inside A4 while preserving aspect — top aligned
     let ratio = (pageW - 2 * M) / wpx; // fit width
     let wpt = wpx * ratio, hpt = hpx * ratio;
-    if (hpt > pageH - 2*PAD) {         // too tall? fit height
-      ratio = (pageH - 2*PAD) / hpx;
+    if (hpt > pageH - 2 * M) {         // too tall? fit height
+      ratio = (pageH - 2 * M) / hpx;
       wpt = wpx * ratio;
       hpt = hpx * ratio;
     }
@@ -312,6 +312,7 @@ function initDeclarationMaster(){
     }
   });
 }
+
 
 
 
