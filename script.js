@@ -152,8 +152,9 @@ async function buildPdfFromPages() {
       allowTaint: false,
       backgroundColor: "#ffffff",
       logging: false,
-      windowWidth: document.documentElement.scrollWidth,
-      scrollY: -window.scrollY
+      windowWidth: 980,
+      scrollY: 0,
+      scrollY: 0
     });
 
     const img = canvas.toDataURL("image/jpeg", 0.95);
@@ -312,3 +313,4 @@ function initDeclarationMaster(){
     }
   });
 }
+
