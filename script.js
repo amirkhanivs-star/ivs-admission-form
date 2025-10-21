@@ -121,16 +121,8 @@ function getSignatureDataURL() {
 /* ---------- 3) Build PDF from .page elements (A4, top-aligned) ---------- */
 async function buildPdfFromPages() {
   const { jsPDF } = window.jspdf;
-     // 0) Switch to "PDF mode": hide bars, fix backgrounds, lock layout
-  document.body.classList.add("pdf-export");
-// 1) Collect pages you want to capture (each .page will be 1 PDF page)
-  const pages = Array.from(document.querySelectorAll(".page"));
-  if (!pages.length) { 
-    alert("No .page found"); 
-    document.body.classList.remove("pdf-export");
-    return; 
-  }
-
+const pages = Array.from(document.querySelectorAll(".page")); 
+   if (!pages.length) return null;
   // export mode: hide fixed footer
   document.body.classList.add("pdf-export");
   const infoBar = document.querySelector(".info-bar");
@@ -320,6 +312,7 @@ function initDeclarationMaster(){
     }
   });
 }
+
 
 
 
