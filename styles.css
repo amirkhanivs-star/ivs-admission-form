@@ -1,283 +1,249 @@
 /* ---------- Theme vars ---------- */
-:root {
-  --blue: #253a77;
-  --maroon: #b41f2d;
-  --ink: #0f172a;
-  --line: #d9dee8;
-  --paper: #fff;
-  --bg: #1f2937; /* desktop bg; phone پر سفید کر دیں گے */
+:root{
+  --blue:#253a77;
+  --maroon:#b41f2d;
+  --ink:#0f172a;
+  --line:#d9dee8;
+  --paper:#fff;
+  --bg:#1f2937;        /* desktop bg; phone پر سفید کر دیں گے */
 }
 
 /* ---------- Base ---------- */
-* { box-sizing: border-box; }
-html, body {
-  margin: 0;
-  padding: 0;
-  color: var(--ink);
-  font-family: Inter, system-ui, Segoe UI, Roboto, Arial, sans-serif;
-  background: var(--bg);
+*{box-sizing:border-box}
+html,body{
+  margin:0; padding:0; color:var(--ink); font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;
+  background:var(--bg);
 }
-img { max-width: 100%; height: auto; display: block; }
+img{max-width:100%; height:auto; display:block}
 
 /* ---------- Layout wrappers ---------- */
-.wrapper { max-width: 980px; margin: 24px auto; padding: 12px; }
-.page {
-  width: 794px;
-  margin: 0 auto 16px;
-  background: var(--paper);
-  border: 10px solid var(--maroon);
-  border-radius: 4px;
-  padding: 0 24px 24px;
-  box-shadow: 0 10px 24px rgba(0,0,0,.08);
-  -webkit-print-color-adjust: exact;
-  print-color-adjust: exact;
-  overflow: visible;
+.wrapper{max-width:980px; margin:24px auto; padding:12px}
+.page{
+  width:794px; margin:0 auto 16px; background:var(--paper);
+  border:10px solid var(--maroon); border-radius:4px;
+  padding:0 24px 24px; box-shadow:0 10px 24px rgba(0,0,0,.08);
+  -webkit-print-color-adjust:exact; print-color-adjust:exact;
+  overflow:visible;
 }
 
 /* ---------- Header banner + title ---------- */
-.header-banner {
-  margin-left: -24px;
-  margin-right: -24px;
-  width: calc(100% + 48px);
-  margin-bottom: 16px;
-  text-align: center;
-  position: relative;
+.header-banner{
+  margin-left:-24px; margin-right:-24px;   /* pull to page edges */
+  width:calc(100% + 48px);
+  margin-bottom:16px; text-align:center; position:relative; z-index:0;
 }
-.header-banner img {
-  width: 100% !important;
-  height: auto !important;
-  object-fit: contain;
+.header-banner img{
+  width:100% !important; height:auto !important; object-fit:contain; line-height:0;
 }
-.title {
-  margin: 6px 0 10px;
-  text-align: center;
-  font-weight: 900;
-  color: var(--maroon);
-  font-size: clamp(22px, 4.3vw, 36px);
+.title{
+  margin:6px 0 10px; text-align:center; font-weight:900;
+  color:var(--maroon); font-size:clamp(22px,4.3vw,36px); position:relative; z-index:1;
 }
-.title .title-accent { color: #402c8e; }
+.title .title-accent{ color:#402c8e }
 
 /* ---------- Top meta (Session + Date) ---------- */
-.meta.meta--top { display: flex; gap: 24px; align-items: flex-end; flex-wrap: wrap; }
-.field-stack { min-width: 220px; }
-.stack-label { font-size: 13px; font-weight: 800; letter-spacing: .3px; text-transform: uppercase; }
-.stack-value { font-size: 18px; font-weight: 800; margin-top: 2px; }
-.stack-underline { height: 3px; background: #e5e7eb; border-radius: 2px; margin-top: 6px; }
-.meta.meta--top .field-stack:first-child .stack-underline { display: none; }
+.meta.meta--top{display:flex; gap:24px; align-items:flex-end; flex-wrap:wrap}
+.field-stack{min-width:220px}
+.stack-label{font-size:13px; font-weight:800; letter-spacing:.3px; text-transform:uppercase}
+.stack-value{font-size:18px; font-weight:800; margin-top:2px}
+.stack-underline{height:3px; background:#e5e7eb; border-radius:2px; margin-top:6px}
+.meta.meta--top .field-stack:first-child .stack-underline{display:none}
 
-.date-boxes { display: flex; align-items: center; gap: 10px; margin-top: 4px; flex-wrap: wrap; }
-.date-boxes .box {
-  width: 42px;
-  height: 42px;
-  border: 2px solid #9aa3b2;
-  border-radius: 4px;
-  text-align: center;
-  font-weight: 800;
-  font-size: 18px;
-  outline: none;
+.date-boxes{display:flex; align-items:center; gap:10px; margin-top:4px; flex-wrap:wrap}
+.date-boxes .box{
+  width:42px; height:42px; border:2px solid #9aa3b2; border-radius:4px;
+  text-align:center; font-weight:800; font-size:18px; outline:none;
 }
-.date-boxes .box:focus {
-  border-color: var(--blue);
-  box-shadow: 0 0 0 3px rgba(37,58,119,.15);
-}
-.date-boxes .slash { font-weight: 800; font-size: 18px; }
+.date-boxes .box:focus{border-color:var(--blue); box-shadow:0 0 0 3px rgba(37,58,119,.15)}
+.date-boxes .slash{font-weight:800; font-size:18px}
 
 /* ---------- Sections, grids, inputs ---------- */
-.section { margin-top: 16px; border: 1.5px solid #d8dde7; border-radius: 8px; overflow: hidden; }
-.section h3 {
-  margin: 0;
-  padding: 10px 12px;
-  background: #eef2f7;
-  color: var(--blue);
-  font-weight: 800;
-  border-bottom: 1.5px solid #dde3ee;
+.section{margin-top:16px; border:1.5px solid #d8dde7; border-radius:8px; overflow:hidden}
+.section h3{
+  margin:0; padding:10px 12px; background:#eef2f7; color:var(--blue);
+  font-weight:800; letter-spacing:.2px; border-bottom:1.5px solid #dde3ee; position:relative;
 }
-.section h3::after { content: none; } /* remove red underline */
-.section .content { padding: 12px; }
+/* Removed the red underline from section titles */
+.section h3::after{
+  content:none; /* disables the red decorative line */
+}
+.section .content{padding:12px}
 
-.grid { display: grid; gap: 10px; }
-.grid.cols-2 { grid-template-columns: 1fr 1fr; }
-.grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+.grid{display:grid; gap:10px}
+.grid.cols-2{grid-template-columns:1fr 1fr}
+.grid.cols-3{grid-template-columns:repeat(3,1fr)}
 
-.label { font-size: 12px; color: #334155; margin-bottom: 4px; }
-.input, .textarea {
-  width: 100%;
-  background: #fff;
-  border: 1.5px solid var(--line);
-  border-radius: 6px;
-  min-height: 42px;
-  padding: 10px;
-  line-height: 1.6;
+.label{font-size:12px; color:#334155; margin-bottom:4px}
+.input,.textarea{
+  width:100%; background:#fff; border:1.5px solid var(--line); border-radius:6px; min-height:42px; padding:10px;line-height:1.6; 
 }
-.input:focus, .textarea:focus {
-  outline: 0;
-  border-color: var(--blue);
-  box-shadow: 0 0 0 3px rgba(37,58,119,.12);
-}
-.textarea { min-height: 64px; resize: vertical; }
-input[type="radio"], input[type="checkbox"] { accent-color: var(--blue); }
+.input:focus,.textarea:focus{outline:0; border-color:var(--blue); box-shadow:0 0 0 3px rgba(37,58,119,.12)}
+.textarea{min-height:64px; resize:vertical}
+input[type="radio"], input[type="checkbox"]{accent-color:var(--blue)}
 
 /* ---------- Grades ---------- */
-.grades { display: grid; grid-template-columns: repeat(4, minmax(140px, 1fr)); gap: 10px; }
-.grade-box {
-  border: 1.5px solid var(--line);
-  border-radius: 6px;
-  padding: 10px;
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  font-weight: 600;
-  background: #fff;
-  transition: border-color .15s ease, box-shadow .15s ease;
+.grades{display:grid; grid-template-columns:repeat(4,minmax(140px,1fr)); gap:10px}
+.grade-box{
+  border:1.5px solid var(--line); border-radius:6px; padding:10px; display:flex; gap:8px; align-items:center;
+  font-weight:600; background:#fff; transition:border-color .15s ease, box-shadow .15s ease;
 }
-.grade-box:hover { border-color: var(--blue); box-shadow: 0 0 0 4px rgba(37,58,119,.1); }
-.grade-box input { transform: scale(1.05); }
+.grade-box:hover{border-color:var(--blue); box-shadow:0 0 0 4px rgba(37,58,119,.1)}
+.grade-box input{transform:scale(1.05)}
 
 /* ---------- Signature ---------- */
-.signature { margin-top: 12px; position: relative; }
-.signature canvas {
-  border: 1.5px dashed #94a3b8;
-  border-radius: 8px;
-  background: #fff;
-  width: 480px;
-  height: 140px;
-  max-width: 100%;
-  touch-action: none;
+.signature{margin-top:12px; position:relative}
+.signature canvas{
+  border:1.5px dashed #94a3b8; border-radius:8px; background:#fff;
+  width:480px; height:140px; max-width:100%;
+  touch-action:none; pointer-events:auto; position:relative; z-index:2;
 }
 
 /* ---------- Buttons ---------- */
-.btn {
-  border: 0;
-  background: var(--blue);
-  color: #fff;
-  padding: 10px 14px;
-  border-radius: 10px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color .15s, box-shadow .15s, transform .06s;
-  box-shadow: 0 6px 14px rgba(37,58,119,.18);
+.btn{
+  border:0; background:var(--blue); color:#fff; padding:10px 14px; border-radius:10px; font-weight:600; cursor:pointer;
+  transition:background-color .15s, box-shadow .15s, transform .06s; box-shadow:0 6px 14px rgba(37,58,119,.18);
 }
-.btn:hover { background: #1f2f66; box-shadow: 0 10px 18px rgba(37,58,119,.22); }
-.btn:active { transform: translateY(1px); }
-.btn.secondary { background: #334155; }
-.btn.secondary:hover { background: #232b3a; }
-.actions { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
-#btnPdf[aria-disabled="true"] { opacity: .5; cursor: not-allowed; filter: grayscale(40%); }
+.btn:hover{background:#1f2f66; box-shadow:0 10px 18px rgba(37,58,119,.22)}
+.btn:active{transform:translateY(1px)}
+.btn.secondary{background:#334155}
+.btn.secondary:hover{background:#232b3a}
+.actions{margin-top:16px; display:flex; flex-wrap:wrap; gap:10px; justify-content:center}
 
-/* ---------- Declaration checklist ---------- */
-.decl-list { list-style: decimal; padding-left: 22px; margin: 0; }
-.decl-list li { display: flex; align-items: flex-start; gap: 10px; margin: 6px 0; line-height: 1.35; }
-.decl-list input[type="checkbox"] { transform: scale(1.15); margin-top: 2px; }
-.decl-note {
-  margin: 6px 0 10px;
-  font-size: 13px;
-  color: #475569;
-  background: #fff7ed;
-  border: 1px solid rgba(245,158,11,.35);
-  padding: 6px 8px;
-  border-radius: 6px;
-}
-.decl-note strong { color: #111827; }
+/* Disable look for PDF button until agree */
+#btnPdf[aria-disabled="true"]{opacity:.5; cursor:not-allowed; filter:grayscale(40%)}
 
-/* ---------- Agree line ---------- */
-.agree-line {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 15px;
-  margin-top: 14px;
-  gap: 8px;
-  padding: 0 20px;
+/* ---------- Declaration checklist (classic 1–10 with tick) ---------- */
+.decl-list{list-style:decimal; padding-left:22px; margin:0}
+.decl-list li{display:flex; align-items:flex-start; gap:10px; margin:6px 0; line-height:1.35}
+.decl-list li::before{content:none}
+.decl-list input[type="checkbox"]{transform:scale(1.15); margin-top:2px; flex:0 0 auto}
+.decl-list label{flex:1 1 auto; cursor:pointer; user-select:none}
+.decl-note{
+  margin:6px 0 10px; font-size:13px; color:#475569; background:#fff7ed;
+  border:1px solid rgba(245,158,11,.35); padding:6px 8px; border-radius:6px;
 }
-.agree-line input[type="checkbox"] {
-  transform: scale(1.2);
-  accent-color: var(--blue);
-}
+.decl-note strong{color:#111827}
 
 /* ---------- Info bar (footer) ---------- */
-.info-bar {
-  position: fixed;
-  left: 0; right: 0; bottom: 0;
-  background: #1f2937;
-  color: #fff;
-  border-top: 4px solid var(--maroon);
-  font-size: 13px;
-  z-index: 1000;
+.info-bar{
+  position:fixed; left:0; right:0; bottom:0; background:#1f2937; color:#fff;
+  border-top:4px solid var(--maroon); font-size:13px; z-index:1000;
 }
-.info-wrap {
-  max-width: 794px;
-  margin: 0 auto;
-  padding: 8px 14px;
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  justify-content: center;
-  white-space: nowrap;
-  text-align: center;
+.info-wrap{
+  max-width:794px; margin:0 auto; padding:8px 14px; display:flex; align-items:center; gap:18px; justify-content:center;
+  white-space:nowrap; text-align:center;
 }
-.info-wrap span+span { position: relative; padding-left: 18px; }
-.info-wrap span+span::before {
-  content: "•";
-  position: absolute;
-  left: 6px;
-  top: 0;
-  color: #cbd5e1;
-  opacity: .8;
+.info-wrap span+span{position:relative; padding-left:18px}
+.info-wrap span+span::before{content:"•"; position:absolute; left:6px; top:0; color:#cbd5e1; opacity:.8}
+/* ---------- CENTER & BOLD THE "I agree to the declaration above." LINE ---------- */
+.agree-line {
+  display: flex;                /* places checkbox and text in one line */
+  align-items: center;          /* vertically centers both */
+  justify-content: center;      /* centers the whole line horizontally */
+  font-weight: 700;             /* makes text bold */
+  font-size: 15px;              /* optional: slightly larger text */
+  margin-top: 14px;             /* adds spacing above the line */
+  gap: 8px;                     /* small space between checkbox and text */
+}
+
+/* optional: make checkbox slightly larger for clarity */
+.agree-line input[type="checkbox"] {
+  transform: scale(1.2);        /* increases checkbox size a bit */
+  accent-color: var(--blue);    /* keeps theme color consistent */
+}
+
+/* ---------- PDF/Print safety: prevent input clipping ---------- */
+.pdf-export input.input,
+.pdf-export .input,
+.pdf-export textarea.textarea,
+.pdf-export .textarea{
+  line-height:2 !important; padding-top:10px !important; padding-bottom:10px !important;
+  height:auto !important;  min-height:42px !important;-webkit-appearance:none; appearance:none; box-shadow:none !important; border-width:1.5px !important;
+}
+@media print{
+  input.input,.input,textarea.textarea,.textarea{
+    line-height:2 !important; padding-top:10px !important; padding-bottom:10px !important; height:auto !important;
+      min-height:42px !important;-webkit-appearance:none; appearance:none; box-shadow:none !important; border-width:1.5px !important;
+  }
+  .info-bar{display:none !important}
+  .page{box-shadow:none}
+}
+
+/* ---------- Mobile (phones) ---------- */
+@media (max-width: 840px){
+  html,body{background:#fff !important; overflow-x:hidden; padding-bottom:0 !important}
+  .wrapper{max-width:none; margin:0; padding:0}
+  .page{
+    width:100%; max-width:100%; margin:0 auto 12px; padding:0 12px 16px; border-width:8px; box-shadow:none;
+  }
+  .grid.cols-2, .grid.cols-3{grid-template-columns:1fr}
+  .grades{grid-template-columns:repeat(2,1fr); gap:10px}
+  @media (max-width:380px){ .grades{grid-template-columns:1fr} }
+  .date-boxes{gap:clamp(4px,1.5vw,8px)}
+  .date-boxes .box{
+    width:clamp(28px,8vw,40px); height:clamp(28px,8vw,40px); font-size:clamp(14px,4vw,18px); border-width:2px;
+  }
+  .date-boxes .slash{font-size:clamp(14px,4vw,18px)}
+  .info-bar{position:static; margin-top:10px}
+
+  /* ---------- FIX: banner fits inside maroon border on phones ---------- */
+  .header-banner{
+    /* negative margins ko sirf mobile par neutralize */
+    margin-left:0 !important;
+    margin-right:0 !important;
+    width:100% !important;
+  }
+  .header-banner img{
+    width:100% !important;
+    height:auto !important;
+    object-fit:contain;
+    max-height:160px;            /* banner height limit on phones; tweak 140–180px if needed */
+  }
 }
 
 /* ---------- Small quality-of-life ---------- */
-.toolbar { display: none; }
-hr.sep { border: 0; border-top: 2px dashed #d8dde7; margin: 14px 0; }
+.toolbar{display:none}                  /* old toolbar hide */
+hr.sep{border:0; border-top:2px dashed #d8dde7; margin:14px 0}
 
-/* ---------- Mobile ---------- */
-@media (max-width: 840px) {
-  html, body { background: #fff !important; overflow-x: hidden; padding-bottom: 0 !important; }
-  .wrapper { max-width: none; margin: 0; padding: 0; }
-  .page { width: 100%; max-width: 100%; margin: 0 auto 12px; padding: 0 12px 16px; border-width: 8px; box-shadow: none; }
-  .grid.cols-2, .grid.cols-3 { grid-template-columns: 1fr; }
-  .grades { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-  @media (max-width:380px){ .grades { grid-template-columns: 1fr; } }
-  .info-bar { position: static; margin-top: 10px; }
-  .header-banner { margin: 0 !important; width: 100% !important; }
-  .header-banner img { width: 100% !important; height: auto !important; max-height: 160px; object-fit: contain; }
-}
-
-/* ---------- Print / PDF ---------- */
-@media print {
-  .info-bar, .hide-in-pdf, #clearSig { display: none !important; }
-  .page { box-shadow: none; }
-}
-
-/* ---------- PDF Export Layout ---------- */
-.pdf-export .page {
-  width: 794px !important;
+/* ===== Freeze desktop layout while exporting PDF (works on mobile too) ===== */
+.pdf-export .page{
+  width: 794px !important;            /* A4 snapshot width */
   max-width: 794px !important;
   margin: 0 auto !important;
-  padding: 0 24px 24px !important;
-  border-width: 10px !important;
+  padding: 0 24px 24px !important;    /* desktop padding */
+  border-width: 10px !important;      /* desktop border */
   box-shadow: none !important;
 }
-.pdf-export .wrapper {
+
+.pdf-export .wrapper{
   max-width: 980px !important;
   padding: 12px !important;
   margin: 24px auto !important;
 }
-.pdf-export .header-banner {
+
+/* Banner ko desktop jaisa pull-out dena (taake frame se align rahe) */
+.pdf-export .header-banner{
   margin-left: -24px !important;
   margin-right: -24px !important;
   width: calc(100% + 48px) !important;
 }
-.pdf-export .info-bar,
+
+/* Fixed footer/mobile helpers ko hamesha hide rakho jab PDF ban rahi ho */
+.pdf-export .info-bar{ display: none !important; }
+
+/* iOS text autosize se bachao */
+.pdf-export html, .pdf-export body{ -webkit-text-size-adjust: 100% !important; }
+/* ---------- HIDE BUTTONS IN PDF/PRINT MODE ---------- */
+
+/* Hide during PDF export */
 .pdf-export .hide-in-pdf,
 .pdf-export #clearSig {
-  display: none !important;
+  display: none !important; /* ensures buttons don’t appear in generated PDF */
 }
-.pdf-export .agree-line {
-  padding: 0 24px !important;  /* same as website */
-  justify-content: center !important;
-  font-weight: 700 !important;
-  font-size: 15px !important;
-  gap: 8px !important;
+/* Hide during browser print */
+@media print {
+  .hide-in-pdf,
+  #clearSig {
+    display: none !important; /* hides them if user prints directly */
+  }
 }
-.pdf-export html, .pdf-export body { -webkit-text-size-adjust: 100% !important; }
