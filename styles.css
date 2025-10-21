@@ -135,6 +135,22 @@ input[type="radio"], input[type="checkbox"]{accent-color:var(--blue)}
 }
 .info-wrap span+span{position:relative; padding-left:18px}
 .info-wrap span+span::before{content:"•"; position:absolute; left:6px; top:0; color:#cbd5e1; opacity:.8}
+/* ---------- CENTER & BOLD THE "I agree to the declaration above." LINE ---------- */
+.agree-line {
+  display: flex;                /* places checkbox and text in one line */
+  align-items: center;          /* vertically centers both */
+  justify-content: center;      /* centers the whole line horizontally */
+  font-weight: 700;             /* makes text bold */
+  font-size: 15px;              /* optional: slightly larger text */
+  margin-top: 14px;             /* adds spacing above the line */
+  gap: 8px;                     /* small space between checkbox and text */
+}
+
+/* optional: make checkbox slightly larger for clarity */
+.agree-line input[type="checkbox"] {
+  transform: scale(1.2);        /* increases checkbox size a bit */
+  accent-color: var(--blue);    /* keeps theme color consistent */
+}
 
 /* ---------- PDF/Print safety: prevent input clipping ---------- */
 .pdf-export input.input,
@@ -232,4 +248,5 @@ hr.sep{border:0; border-top:2px dashed #d8dde7; margin:14px 0}
     display: none !important; /* hides them if user prints directly */
   }
 }
+
 
