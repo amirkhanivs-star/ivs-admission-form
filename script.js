@@ -124,15 +124,13 @@ async function buildPdfFromPages() {
   const pages = Array.from(document.querySelectorAll(".page"));
   if (!pages.length) return null;
 
-  // PDF موڈ: صرف info-bar کو JS سے hide کر رہے ہیں
-  // نوٹ: یہاں body پر .pdf-export کلاس تو لگائی گئی ہے
-  // مگر info-bar کیلئے الگ سے style.display = "none" بھی کیا جا رہا ہے۔
+  // export mode: hide fixed footer
   document.body.classList.add("pdf-export");
   const infoBar = document.querySelector(".info-bar");
   const prevBarDisp = infoBar ? infoBar.style.display : null;
   if (infoBar) infoBar.style.display = "none";
 
-  // تمام تصاویر لوڈ ہونے کا انتظار (لوگوز وغیرہ کٹنے سے بچانے کیلئے)
+  // ensure images are ready (logos, etc.)
   await Promise.all(
     Array.from(document.images).map(img => {
       if (img.complete) return Promise.resolve();
@@ -143,47 +141,40 @@ async function buildPdfFromPages() {
   const pdf = new jsPDF("p", "pt", "a4");
   const pageW = pdf.internal.pageSize.getWidth();   // ~595pt
   const pageH = pdf.internal.pageSize.getHeight();  // ~842pt
-  const M = 18;                                     // PDF میں اوپر/کناروں کا مارجن
+  const M = 18;
 
   for (let i = 0; i < pages.length; i++) {
     const el = pages[i];
 
     const canvas = await html2canvas(el, {
-      scale: 2.2,                                    // تھوڑا زیادہ ریزولوشن
+      scale: 2.2,
       useCORS: true,
       allowTaint: false,
       backgroundColor: "#ffffff",
       logging: false,
-      // ↓ یہاں موجودہ ونڈو کی چوڑائی لی جا رہی ہے
-      // (موبائل/ڈیسک ٹاپ پر مختلف ہونے کی وجہ سے اسنیپ شاٹ کا سائز بدل جاتا ہے)
       windowWidth: document.documentElement.scrollWidth,
-      // ↓ موجودہ اسکرول آفسیٹ ایڈجسٹ کیا جا رہا ہے
-      // (کچھ ڈیوائسز پر کینوس شفٹ/کٹ سکتا ہے)
       scrollY: -window.scrollY
     });
 
     const img = canvas.toDataURL("image/jpeg", 0.95);
     const wpx = canvas.width, hpx = canvas.height;
 
-    // A4 کے اندر تصویر کو "aspect ratio برقرار رکھتے ہوئے" fit کرنا
-    // (_margin M_ کی وجہ سے چاروں طرف سفید جگہ آ سکتی ہے)
-    let ratio = (pageW - 2 * M) / wpx; // چوڑائی کے حساب سے فٹ
+    // fit inside A4 while preserving aspect — top aligned
+    let ratio = (pageW - 2 * M) / wpx; // fit width
     let wpt = wpx * ratio, hpt = hpx * ratio;
-    if (hpt > pageH - 2 * M) {         // اگر اونچائی سے باہر جا رہی ہو تو
+    if (hpt > pageH - 2 * M) {         // too tall? fit height
       ratio = (pageH - 2 * M) / hpx;
       wpt = wpx * ratio;
       hpt = hpx * ratio;
     }
 
-    const x = (pageW - wpt) / 2; // افقی سنٹر
-    const y = M;                 // اوپر سے مارجن
+    const x = (pageW - wpt) / 2; // center horizontally
+    const y = M;                 // top aligned
 
     if (i > 0) pdf.addPage();
-    // FAST موڈ + مارجن/سینٹر کے ساتھ ایمیج لگانا
     pdf.addImage(img, "JPEG", x, y, wpt, hpt, "", "FAST");
   }
-  // (آپ کے کوڈ میں آخر میں infoBar واپس show کرنے/کلاس remove کرنے کا حصہ نظر نہیں آ رہا)
-}
+
   // restore UI
   if (infoBar) infoBar.style.display = prevBarDisp || "";
   document.body.classList.remove("pdf-export");
@@ -321,9 +312,3 @@ function initDeclarationMaster(){
     }
   });
 }
-
-
-
-
-
-
