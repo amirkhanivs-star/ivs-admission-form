@@ -118,62 +118,76 @@ function getSignatureDataURL() {
   return sigCanvas.toDataURL("image/png");
 }
 
-/* ---------- 3) Build PDF from .page elements (A4, top-aligned) ---------- */
+/* ---------- 3) Build PDF from .page elements (A4, FULL-BLEED) ---------- */
+/* یہ ورژن موبائل/پی سی دونوں پر بالکل ایک جیسا PDF بناتا ہے
+   1) CSS کی کلاس .pdf-export آن کر کے لی آؤٹ کو "ڈیسک ٹاپ جیسا" فریز کر دیتا ہے
+   2) html2canvas کو فکسڈ چوڑائی (980px) دیتا ہے تاکہ اسنیپ شاٹ ہر ڈیوائس پر ایک جیسا ہو
+   3) jsPDF میں پورا A4 بھر دیتا ہے (0,0,595,842) — اس سے کناروں پر سفید جگہ نہیں رہتی
+   4) امیجز/لوگوز مکمل لوڈ ہونے کا انتظار کرتا ہے، تاکہ بینر یا لوگو کٹ نہ جائیں
+*/
 async function buildPdfFromPages() {
   const { jsPDF } = window.jspdf;
+
+  // 0) اگر پیجز ہی نہیں ہیں تو واپس چلے جائیں
   const pages = Array.from(document.querySelectorAll(".page"));
   if (!pages.length) return null;
 
-  // export mode: hide fixed footer
+  // 1) PDF موڈ آن: CSS میں .pdf-export آپ کا لی آؤٹ (page width, padding, banner margins, info-bar hide)
+  //    ڈیسک ٹاپ جیسا "فریز" کر دے گا۔ اسی لئے پی سی/موبائل پر نتیجہ ایک جیسا آتا ہے۔
   document.body.classList.add("pdf-export");
-  const infoBar = document.querySelector(".info-bar");
-  const prevBarDisp = infoBar ? infoBar.style.display : null;
-  if (infoBar) infoBar.style.display = "none";
 
-  // ensure images are ready (logos, etc.)
+  // 2) تمام امیجز/لوگوز لوڈ ہونے کا انتظار — ورنہ html2canvas جزوی امیج کیپچر کر لیتا ہے
   await Promise.all(
-    Array.from(document.images).map(img => {
-      if (img.complete) return Promise.resolve();
-      return new Promise(res => { img.onload = img.onerror = res; });
-    })
+    Array.from(document.images).map(img =>
+      img.complete ? Promise.resolve() : new Promise(res => (img.onload = img.onerror = res))
+    )
   );
 
-  const pdf = new jsPDF("p", "pt", "a4");
-  const pageW = pdf.internal.pageSize.getWidth();   // ~595pt
-  const pageH = pdf.internal.pageSize.getHeight();  // ~842pt
-  const M = 18;
+  // 3) jsPDF A4 کینوس تیار
+  const pdf = new jsPDF("p", "pt", "a4"); // Portrait, point units, A4
+  const PAGE_W = pdf.internal.pageSize.getWidth();   // 595pt
+  const PAGE_H = pdf.internal.pageSize.getHeight();  // 842pt
 
+  // 4) ہر .page کو html2canvas سے پکڑیں
   for (let i = 0; i < pages.length; i++) {
     const el = pages[i];
 
+    // html2canvas کیلئے فکسڈ snapshot سیٹنگز:
+    // - windowWidth: 980 => آپ کی CSS کی ڈیسک ٹاپ max-width سے میچ
+    // - scrollX/scrollY: 0 => اسکرول آفسیٹ کا اثر ختم
+    // - scale: 2 => اچھی کوالٹی/سائز بیلنس
     const canvas = await html2canvas(el, {
-      scale: 2.2,
+      backgroundColor: "#ffffff",
       useCORS: true,
       allowTaint: false,
-      backgroundColor: "#ffffff",
-      logging: false,
-      windowWidth: document.documentElement.scrollWidth,
-      scrollY: -window.scrollY
+      scale: 2,
+      windowWidth: 980,
+      scrollX: 0,
+      scrollY: 0,
+      logging: false
     });
 
     const img = canvas.toDataURL("image/jpeg", 0.95);
-    const wpx = canvas.width, hpx = canvas.height;
 
-    // fit inside A4 while preserving aspect — top aligned
-    let ratio = (pageW - 2 * M) / wpx; // fit width
-    let wpt = wpx * ratio, hpt = hpx * ratio;
-    if (hpt > pageH - 2 * M) {         // too tall? fit height
-      ratio = (pageH - 2 * M) / hpx;
-      wpt = wpx * ratio;
-      hpt = hpx * ratio;
-    }
-
-    const x = (pageW - wpt) / 2; // center horizontally
-    const y = M;                 // top aligned
-
+    // پہلی کے بعد نئی A4 پیج
     if (i > 0) pdf.addPage();
-    pdf.addImage(img, "JPEG", x, y, wpt, hpt, "", "FAST");
+
+    // 5) FULL-BLEED: پورا A4 بھر دیں — اس سے مرون بارڈر/فریم کٹا نہیں لگے گا
+    // نوٹ: یہاں کوئی مارجن/fit-calculation نہیں، سیدھا 595×842
+    pdf.addImage(img, "JPEG", 0, 0, PAGE_W, PAGE_H, "", "FAST");
   }
+
+  // 6) PDF موڈ آف — UI نارمل پر واپس
+  document.body.classList.remove("pdf-export");
+
+  // 7) جو آپ کے فلو میں بہتر ہو:
+  //    a) اگر آپ بعد میں WhatsApp share وغیرہ کرتے ہیں تو object واپس کریں:
+  const filename = `IVS-Admission-${new Date().toISOString().slice(0,10)}.pdf`;
+  return { pdf, filename };
+
+  //    b) یا سیدھا save کر دیں (اگر یہی مطلوب ہو):
+  // pdf.save(filename);
+}
 
   // restore UI
   if (infoBar) infoBar.style.display = prevBarDisp || "";
@@ -312,6 +326,7 @@ function initDeclarationMaster(){
     }
   });
 }
+
 
 
 
