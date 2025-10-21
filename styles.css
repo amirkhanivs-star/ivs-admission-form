@@ -214,3 +214,69 @@ hr.sep{border:0; border-top:2px dashed #d8dde7; margin:14px 0}
 
 /* iOS text autosize se bachao */
 .pdf-export html, .pdf-export body{ -webkit-text-size-adjust: 100% !important; }
+/* =======================================================================
+   📄 PDF EXPORT – اضافی ضروری رولز
+   اس بلاک کو style.css کے بالکل آخر میں رکھیں (کسی @media کے اندر نہیں)
+   مقصد:
+   - PDF بناتے وقت desktop جیسا ٹھیک 794px اسنیپ شاٹ لینا
+   - Header banner کو بھی desktop والی پوزیشن دینا
+   - بٹن/فٹر جیسی چیزیں مکمل hide
+   - iOS میں text auto-zoom disable
+   ======================================================================= */
+
+/* PDF موڈ آن ہونے پر (body پر .pdf-export لگتی ہے) عمومی سیٹنگز */
+.pdf-export {
+  background: #fff !important;              /* باہر والی ڈارک بیک گراؤنڈ کبھی نہ آئے */
+  -webkit-text-size-adjust: 100% !important;/* iOS text zoom بند رکھیں */
+}
+
+/* 🔲 ہر page کو A4 snapshot width پر فِکس کریں (آپ کے پاس پہلے سے ہے — رہنے دیں) */
+.pdf-export .page{
+  width: 794px !important;                  /* A4 چوڑائی (pt میں 595 ہے؛ html2canvas کیلئے px/pt mapping نیچے JS میں) */
+  max-width: 794px !important;
+  margin: 0 auto !important;
+  padding: 0 24px 24px !important;          /* وہی پیڈنگ جو desktop میں ہے */
+  border-width: 10px !important;            /* مرون باڈر برقرار */
+  box-shadow: none !important;              /* سائے PDF میں نہیں چاہئیں */
+}
+
+/* 📦 باہر والا wrapper بھی desktop کے مطابق رکھیں (آپ کے پاس پہلے سے ہے — رہنے دیں) */
+.pdf-export .wrapper{
+  max-width: 980px !important;
+  padding: 12px !important;
+  margin: 24px auto !important;
+}
+
+/* 🖼️ Header banner کو بھی اسی طرح edge-to-edge کھینچیں جیسے desktop میں ہے */
+.pdf-export .header-banner{
+  margin-left: -24px !important;            /* اندر والی پیڈنگ کو نیگیٹ کریں */
+  margin-right: -24px !important;
+  width: calc(100% + 48px) !important;      /* پورے فریم تک پھیلائیں */
+}
+
+/* 🧹 PDF کے وقت بٹن/فٹر/ہیلپر UI چھپا دیں
+   نوٹ: HTML میں جن چیزوں کو آپ چھپانا چاہتے ہیں ان پر class="hide-in-pdf" بھی لگا دیں */
+.pdf-export .hide-in-pdf,
+.pdf-export .actions,
+.pdf-export .btn,
+.pdf-export .info-bar{
+  display: none !important;
+}
+
+/* ✍️ ان پُٹ/ٹیکسٹ ایریاز کی لائن ہائٹ/پیڈنگ PDF میں بالکل وہی رکھیں
+   (آپ نے اوپر line-height:2 والا بلاک ڈال دیا ہے — یہ صرف وضاحت کیلئے دہرایا ہے) */
+.pdf-export input.input,
+.pdf-export .input,
+.pdf-export textarea.textarea,
+.pdf-export .textarea{
+  line-height: 2 !important;
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+  min-height: 42px !important;
+  height: auto !important;
+  -webkit-appearance: none;
+  appearance: none;
+  box-shadow: none !important;
+  border-width: 1.5px !important;
+}
+
