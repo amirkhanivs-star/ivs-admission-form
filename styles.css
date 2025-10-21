@@ -126,7 +126,7 @@ input[type="radio"], input[type="checkbox"]{accent-color:var(--blue)}
 
 /* ---------- Info bar (footer) ---------- */
 .info-bar{
-  position:fixed; left:0; right:0; bottom:0; background:#1f2937; color:#fff;
+  position:fixed; left:0; right:20px; bottom:0; background:#1f2937; color:#fff;
   border-top:4px solid var(--maroon); font-size:13px; z-index:1000;
 }
 .info-wrap{
@@ -144,7 +144,6 @@ input[type="radio"], input[type="checkbox"]{accent-color:var(--blue)}
   font-size: 15px;              /* optional: slightly larger text */
   margin-top: 14px;             /* adds spacing above the line */
   gap: 8px;                     /* small space between checkbox and text */
-  padding: 0 20px;
 }
 
 /* optional: make checkbox slightly larger for clarity */
@@ -249,6 +248,7 @@ hr.sep{border:0; border-top:2px dashed #d8dde7; margin:14px 0}
     display: none !important; /* hides them if user prints directly */
   }
 }
+
 
 
 
