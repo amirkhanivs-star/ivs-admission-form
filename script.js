@@ -152,7 +152,7 @@ async function buildPdfFromPages() {
       allowTaint: false,
       backgroundColor: "#ffffff",
       logging: false,
-      windowWidth: 980,
+      windowWidth: 1000,
       scrollY: 0,
       scrollY: 0
     });
@@ -313,4 +313,5 @@ function initDeclarationMaster(){
     }
   });
 }
+
 
