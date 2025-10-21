@@ -282,36 +282,43 @@ function initSingleGradeSelect() {
     });
   });
 }
-function initDeclarationMaster(){
-  const master = document.getElementById('declMaster');   // ماسٹر "I agree" چیک باکس
-  const btn     = document.getElementById('btnPdf');      // PDF بٹن
+function initDeclarationMaster() {
+  const master = document.getElementById('declMaster');   // "I agree" checkbox
+  const btn    = document.getElementById('btnPdf');       // PDF button
 
   if (!master || !btn) return;
 
-  // بٹن کی حالت سیٹ کریں
+  // بٹن کی حالت سیٹ کریں (blur / active)
   const setBtnState = () => {
     if (master.checked) {
       btn.removeAttribute('aria-disabled');
+      btn.style.pointerEvents = "auto";   // ✅ clickable
+      btn.style.opacity = "1";            // ✅ visible active
     } else {
       btn.setAttribute('aria-disabled', 'true');
+      btn.style.pointerEvents = "none";   // ✅ completely unclickable
+      btn.style.opacity = "0.5";          // ✅ visually disabled
     }
   };
 
-  // صفحہ کھلتے ہی حالت سیٹ
+  // صفحہ لوڈ ہوتے ہی بٹن کی حالت سیٹ کریں
   setBtnState();
 
-  // چیک باکس بدلے تو حالت اپڈیٹ
+  // جب checkbox بدلے تو بٹن کی حالت اپڈیٹ کریں
   master.addEventListener('change', setBtnState);
 
-  // اگر agree نہیں ہوا اور بٹن دبایا تو پیغام دکھائیں
+  // اگر tick نہیں ہوا تو alert دکھا کر روک دو
   btn.addEventListener('click', (e) => {
     if (!master.checked) {
       e.preventDefault();
+      e.stopImmediatePropagation(); // ✅ event کو مکمل طور پر روک دے
       alert('Please tick the “I agree” checkbox to proceed.');
       try { master.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch {}
+      return false;
     }
   });
 }
+
 
 
 
