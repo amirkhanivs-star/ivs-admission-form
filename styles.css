@@ -247,6 +247,28 @@ hr.sep{border:0; border-top:2px dashed #d8dde7; margin:14px 0}
     display: none !important; /* hides them if user prints directly */
   }
 }
+/* ---------- GUARANTEED PDF FIX FOR "I agree to the declaration above." ---------- */
+.pdf-export .agree-line {
+  position: relative !important;
+  display: block !important;
+  width: 100% !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;  /* centers it perfectly in PDF */
+  text-align: center !important;
+  font-weight: 700 !important;
+  font-size: 16px !important;
+  padding: 6px 80px !important;            /* adjust horizontal space */
+  margin-top: 16px !important;
+}
+
+.pdf-export .agree-line input[type="checkbox"] {
+  transform: scale(1.4) !important;
+  margin-right: 8px !important;
+  vertical-align: middle !important;
+  accent-color: var(--blue) !important;
+}
+
+
 
 
 
