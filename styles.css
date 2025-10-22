@@ -114,10 +114,10 @@ input[type="radio"], input[type="checkbox"]{accent-color:var(--blue)}
 
 /* ---------- Declaration checklist (classic 1–10 with tick) ---------- */
 .decl-list{list-style:decimal; padding-left:22px; margin:0}
-.decl-list li{display:flex; align-items:flex-start; gap:10px; margin:6px 0; line-height:1.35}
+.decl-list li{display:flex; align-items:center; gap:10px; margin:6px 0; line-height:1.5}
 .decl-list li::before{content:none}
-.decl-list input[type="checkbox"]{transform:scale(1.15); margin-top:2px; flex:0 0 auto}
-.decl-list label{flex:1 1 auto; cursor:pointer; user-select:none}
+.decl-list input[type="checkbox"]{transform:scale(1.2); margin:0; vertical-align: middle;}
+.decl-list label{flex:1; cursor:pointer; user-select:none; display: inline-block; vertical-align: middle;}
 .decl-note{
   margin:6px 0 10px; font-size:13px; color:#475569; background:#fff7ed;
   border:1px solid rgba(245,158,11,.35); padding:6px 8px; border-radius:6px;
@@ -233,6 +233,7 @@ hr.sep{border:0; border-top:2px dashed #d8dde7; margin:14px 0}
     display: none !important; /* hides them if user prints directly */
   }
 }
+
 
 
 
