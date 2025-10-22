@@ -162,28 +162,6 @@ input[type="radio"], input[type="checkbox"]{accent-color:var(--blue)}
   margin-top: 0; /* perfect alignment with text */
 }
 .decl-note strong{color:#111827}
-/* ---------- Perfect alignment for numbered lists in PDF & web ---------- */
-ol {
-  list-style-position: inside;      /* keeps number inline with text */
-  margin: 0;
-  padding-left: 0;
-  line-height: 1.55;
-}
-
-ol li {
-  margin: 4px 0;
-  padding-left: 0;                  /* remove extra spacing */
-  text-indent: -4px;                /* pull text slightly closer to number */
-  vertical-align: middle;
-}
-
-/* Fix for html2canvas PDF rendering */
-.pdf-export ol,
-.pdf-export ol li {
-  line-height: 1.6 !important;
-  text-indent: -4px !important;     /* ensures same spacing in PDF */
-  margin: 3px 0 !important;
-}
 /* ---------- Info bar (footer) ---------- */
 .info-bar{
   position:fixed;left:0;right:0; bottom:0; background:#1f2937; color:#fff;
@@ -293,6 +271,7 @@ hr.sep{border:0; border-top:2px dashed #d8dde7; margin:14px 0}
     display: none !important; /* hides them if user prints directly */
   }
 }
+
 
 
 
