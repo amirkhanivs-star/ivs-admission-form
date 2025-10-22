@@ -163,6 +163,30 @@ input[type="radio"], input[type="checkbox"]{accent-color:var(--blue)}
 }
 .decl-note strong{color:#111827}
 
+/* ---------- Fix PDF misalignment for ordered lists ---------- */
+ol {
+  list-style-position: inside;   /* ensures number is aligned with first line of text */
+  margin: 0;
+  padding-left: 0;
+  line-height: 1.6;
+}
+
+ol li {
+  display: list-item;            /* reset flex or custom display */
+  margin: 4px 0;
+  padding-left: 4px;             /* small padding for neat spacing */
+  vertical-align: middle;        /* aligns numbers properly */
+}
+
+/* PDF export fix for html2canvas */
+.pdf-export ol,
+.pdf-export ol li {
+  line-height: 1.7 !important;   /* increases vertical spacing in PDF to balance */
+  position: relative;
+  top: 0;                        /* neutralize any small shifts */
+}
+
+
 /* ---------- Info bar (footer) ---------- */
 .info-bar{
   position:fixed;left:0;right:0; bottom:0; background:#1f2937; color:#fff;
@@ -272,6 +296,7 @@ hr.sep{border:0; border-top:2px dashed #d8dde7; margin:14px 0}
     display: none !important; /* hides them if user prints directly */
   }
 }
+
 
 
 
