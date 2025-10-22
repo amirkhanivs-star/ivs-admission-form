@@ -112,15 +112,51 @@ input[type="radio"], input[type="checkbox"]{accent-color:var(--blue)}
 /* Disable look for PDF button until agree */
 #btnPdf[aria-disabled="true"]{opacity:.5; cursor:not-allowed; filter:grayscale(40%)}
 
-/* ---------- Declaration checklist (classic 1–10 with tick) ---------- */
-.decl-list{ counter-reset: item; padding-left: 0; margin: 0}
-.decl-list li{list-style: none; position: relative; margin: 10px 0; line-height: 1.55; padding-left: 28px}
-.decl-list li::before{counter-increment: item;  content: counter(item) "."; position: absolute; left: 0; top: 0; font-weight: 600;color: #000}
-.decl-list input[type="checkbox"]{position: relative; top: 2px; transform:scale(1.2);  margin-right: 8px;  accent-color: var(--blue)}
-.decl-list label{display: inline-block;  vertical-align: middle; width: calc(100% - 40px); cursor: pointer; user-select: none}
-.decl-note{
-  margin:6px 0 10px; font-size:13px; color:#475569; background:#fff7ed;
-  border:1px solid rgba(245,158,11,.35); padding:6px 8px; border-radius:6px;
+/* ---------- Declaration checklist (PDF-proof) ---------- */
+.decl-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: num;
+}
+
+.decl-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 8px 0;
+  line-height: 1.55;
+  counter-increment: num;
+}
+
+.decl-list li::before {
+  content: counter(num) ".";
+  font-weight: 600;
+  flex-shrink: 0;
+  width: 20px;
+  text-align: right;
+  color: #000;
+  margin-top: 2px; /* ensures perfect vertical balance in PDF */
+}
+
+.decl-list input[type="checkbox"] {
+  transform: scale(1.2);
+  margin-right: 8px;
+  accent-color: var(--blue);
+}
+
+.decl-list label {
+  flex: 1;
+  cursor: pointer;
+  user-select: none;
+}
+
+.decl-list .agree-line {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  margin-top: 10px;
 }
 .decl-note strong{color:#111827}
 
@@ -233,6 +269,7 @@ hr.sep{border:0; border-top:2px dashed #d8dde7; margin:14px 0}
     display: none !important; /* hides them if user prints directly */
   }
 }
+
 
 
 
