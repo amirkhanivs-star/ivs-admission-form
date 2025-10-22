@@ -112,7 +112,7 @@ input[type="radio"], input[type="checkbox"]{accent-color:var(--blue)}
 /* Disable look for PDF button until agree */
 #btnPdf[aria-disabled="true"]{opacity:.5; cursor:not-allowed; filter:grayscale(40%)}
 
-/* ---------- Declaration checklist (PDF-proof) ---------- */
+/* ---------- Declaration checklist (PDF-perfect) ---------- */
 .decl-list {
   list-style: none;
   margin: 0;
@@ -120,6 +120,7 @@ input[type="radio"], input[type="checkbox"]{accent-color:var(--blue)}
   counter-reset: num;
 }
 
+/* regular items 1–10 */
 .decl-list li {
   display: flex;
   align-items: flex-start;
@@ -133,30 +134,32 @@ input[type="radio"], input[type="checkbox"]{accent-color:var(--blue)}
   content: counter(num) ".";
   font-weight: 600;
   flex-shrink: 0;
-  width: 20px;
+  width: 22px;
   text-align: right;
   color: #000;
-  margin-top: 2px; /* ensures perfect vertical balance in PDF */
+  margin-top: 2px; /* keeps vertical balance in PDF */
 }
 
-.decl-list input[type="checkbox"] {
-  transform: scale(1.2);
-  margin-right: 8px;
-  accent-color: var(--blue);
+/* ✅ remove number from “Agree” line */
+.decl-list li.agree-line::before {
+  content: none; /* hides 11. */
 }
 
-.decl-list label {
-  flex: 1;
-  cursor: pointer;
-  user-select: none;
-}
-
-.decl-list .agree-line {
+/* ✅ align checkbox with text perfectly */
+.decl-list .agree-line label {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-weight: 600;
+  justify-content: center; /* centers checkbox + text together */
+  font-weight: 700;
+  gap: 8px;
   margin-top: 10px;
+  text-align: center;
+}
+
+.decl-list .agree-line input[type="checkbox"] {
+  transform: scale(1.2);
+  accent-color: var(--blue);
+  margin-top: 0; /* perfect alignment with text */
 }
 .decl-note strong{color:#111827}
 
@@ -269,6 +272,7 @@ hr.sep{border:0; border-top:2px dashed #d8dde7; margin:14px 0}
     display: none !important; /* hides them if user prints directly */
   }
 }
+
 
 
 
