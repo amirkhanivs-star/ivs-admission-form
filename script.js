@@ -95,17 +95,6 @@ const SCHOOL_WHATSAPP = "923355245551"; // 92 + phone (no plus sign)
 function wireButtons() {
   const pdfBtn = document.getElementById("btnPdf");
   if (pdfBtn) pdfBtn.addEventListener("click", () => exportPdfAndOpenWhatsAppApp());
-
-  const printBtn = document.getElementById("btnPrint");
-  if (printBtn) printBtn.addEventListener("click", () => {
-    const bar = document.querySelector(".info-bar");
-    const prev = bar ? bar.style.display : null;
-    if (bar) bar.style.display = "none";
-    window.print();
-    if (bar) bar.style.display = prev || "";
-  });
-
-  // if you still have a form submit somewhere, leave it as-is
 }
 
 /* Utility for signature if needed elsewhere */
@@ -318,6 +307,7 @@ function initDeclarationMaster() {
     }
   });
 }
+
 
 
 
