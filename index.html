@@ -58,53 +58,171 @@
           </div>
         </header>
 
+        <section class="section" id="studentInfoSection">
+  <h3>Student Info</h3>
+  <div class="content">
+
+    <!-- Student Details Row -->
+    <div class="grid cols-2">
+      <div>
+        <div class="label">Student Name</div>
+        <input id="studentName" class="input" required>
+      </div>
+
+      <div>
+        <div class="label">Gender</div>
+        <div class="inline" style="margin-top:6px;">
+          <label style="margin-right:12px;">
+            <input type="radio" name="gender" value="Male" style="transform:scale(1.1);"> Male
+          </label>
+          <label>
+            <input type="radio" name="gender" value="Female" style="transform:scale(1.1);"> Female
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- DOB and Grade -->
+    <div class="grid cols-2" style="margin-top:10px;">
+      <div>
+        <div class="label">Date of Birth</div>
+        <input id="dob" class="input" type="date">
+      </div>
+
+      <div>
+        <div class="label">Grade:</div>
+        <select id="gradeSelect" class="input" required>
+          <option value="">Select Grade</option>
+          <option value="FS 1">FS 1</option>
+          <option value="FS 2">FS 2</option>
+          <option value="FS 3">FS 3</option>
+          <option value="Grade 1">Grade 1</option>
+          <option value="Grade 2">Grade 2</option>
+          <option value="Grade 3">Grade 3</option>
+          <option value="Grade 4">Grade 4</option>
+          <option value="Grade 5">Grade 5</option>
+          <option value="Grade 6">Grade 6</option>
+          <option value="Grade 7">Grade 7</option>
+          <option value="Grade 8 (FBISE)">Grade 8 (FBISE)</option>
+          <option value="Grade 8 (IGCSE / O&#39;Level)">Grade 8 (IGCSE / O'Level)</option>
+          <option value="Grade 9 (FBISE)">Grade 9 (FBISE)</option>
+          <option value="Grade 9 (IGCSE / O&#39;Level)">Grade 9 (IGCSE / O'Level)</option>
+          <option value="Grade 10 (FBISE)">Grade 10 (FBISE)</option>
+          <option value="Grade 10 (IGCSE / O&#39;Level)">Grade 10 (IGCSE / O'Level)</option>
+          <option value="Grade 11 (FBISE)">Grade 11 (FBISE)</option>
+          <option value="Grade 11 (IGCSE, O / A&#39;Level)">Grade 11 (IGCSE, O / A'Level)</option>
+          <option value="Grade 12 (FBISE)">Grade 12 (FBISE)</option>
+        </select>
+      </div>
+    </div>
+
+    <hr class="sep">
+    <!-- ADD ANOTHER CHILD BUTTON -->
+<div style="text-align:center; margin:10px 0;">
+  <button type="button" id="addChildBtn" class="btn hide-in-pdf">+ Add Another Child</button>
+</div>
+
+<div id="childTemplate" style="display:none;">
+  <hr class="sep">
+  <div class="child-block">
+    <div class="grid cols-2">
+      <div>
+        <div class="label">Student Name</div>
+        <input class="input studentName" placeholder="Student Name" required>
+      </div>
+
+      <div>
+        <div class="label">Gender</div>
+        <div class="inline" style="margin-top:6px;">
+          <label style="margin-right:12px;">
+            <input type="radio" name="gender__INDEX__" value="Male" style="transform:scale(1.1);"> Male
+          </label>
+          <label>
+            <input type="radio" name="gender__INDEX__" value="Female" style="transform:scale(1.1);"> Female
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid cols-2" style="margin-top:10px;">
+      <div>
+        <div class="label">Date of Birth</div>
+        <input class="input dob" type="date" required>
+      </div>
+
+      <div>
+        <div class="label">Grade:</div>
+        <select id="childGrade" name="childGrade" class="input" style="margin-bottom:10px;">
+          <option value="">Select Grade</option>
+          <option value="FS 1">FS 1</option>
+          <option value="FS 2">FS 2</option>
+          <option value="FS 3">FS 3</option>
+          <option value="Grade 1">Grade 1</option>
+          <option value="Grade 2">Grade 2</option>
+          <option value="Grade 3">Grade 3</option>
+          <option value="Grade 4">Grade 4</option>
+          <option value="Grade 5">Grade 5</option>
+          <option value="Grade 6">Grade 6</option>
+          <option value="Grade 7">Grade 7</option>
+          <option value="Grade 8(Fed)">Grade 8 (FBISE)</option>
+          <option value="Grade 8(IGCSE)">Grade 8 (IGCSE / O'Level)</option>
+          <option value="Grade 9(Fed)">Grade 9 (FBISE)</option>
+          <option value="Grade 9(IGCSE)">Grade 9 (IGCSE / O'Level)</option>
+          <option value="Grade 10(Fed)">Grade 10 (FBISE)</option>
+          <option value="Grade 10(IGCSE)">Grade 10 (IGCSE / O'Level)</option>
+          <option value="Grade 11(Fed)">Grade 11 (FBISE)</option>
+          <option value="Grade 11(IGCSE)">Grade 11 (IGCSE, O / A'Level)</option>
+          <option value="Grade 12(Fed)">Grade 12 (FBISE)</option>
+        </select>
+      </div>
+    </div>
+    <div style="text-align:right; margin-top:8px;">
+  <button type="button" class="btn secondary removeChildBtn hide-in-pdf">
+    Remove Child
+  </button>
+</div>
+
+  </div>
+</div>
+</section>
+
+   <!-- NEW: Father Information (اپنا الگ سیکشن) -->
+<section class="section" id="fatherInfoSection">
+  <h3>Father Info</h3>
+  <div class="content" id="parentInfoSection">
+    <div class="grid cols-2">
+      <div>
+        <div class="label">Father Name</div>
+        <input id="fatherName" class="input">
+      </div>
+      <div>
+        <div class="label">Guardian WhatsApp #</div>
+        <input id="gWhats" class="input" placeholder="+92-xxx-xxxxxxx">
+      </div>
+    </div>
+
+    <div class="grid cols-2" style="margin-top:10px;">
+      <div>
+        <div class="label">Religion</div>
+        <input id="religion" class="input">
+      </div>
+      <div>
+        <div class="label">Father Occupation</div>
+        <input id="fOcc" class="input">
+      </div>
+    </div>
+
+    <div style="margin-top:10px;">
+      <div class="label">Nationality</div>
+      <input id="nation" class="input">
+    </div>
+  </div>
+</section>
+
+
+
         <section class="section">
-          <h3>STUDENT INFORMATION</h3>
-          <div class="content">
-            <div class="grid cols-2">
-              <div><div class="label">Student Name</div><input id="studentName" class="input" required></div>
-              <div><div class="label">Father Name</div><input id="fatherName" class="input"></div>
-              <div><div class="label">Date of Birth</div><input id="dob" class="input" type="date"></div>
-              <div>
-                <div class="label">Gender</div>
-                <div class="inline">
-                  <label><input type="radio" name="gender" value="Male"> Male</label>
-                  <label><input type="radio" name="gender" value="Female"> Female</label>
-                </div>
-              </div>
-              <div><div class="label">Guardian WhatsApp #</div><input id="gWhats" class="input" placeholder="+92-xxx-xxxxxxx"></div>
-              <div><div class="label">Religion</div><input id="religion" class="input"></div>
-              <div><div class="label">Father Occupation</div><input id="fOcc" class="input"></div>
-              <div><div class="label">Nationality</div><input id="nation" class="input"></div>
-            </div>
-
-            <hr class="sep"/>
-
-            <div class="label"><strong>Grade:</strong> (tick)</div>
-            <div class="grades">
-              <label class="grade-box"><input id="g_nur" type="checkbox"> Nur / LKG / KG-1</label>
-              <label class="grade-box"><input id="g_prep" type="checkbox"> Prep / UKG / KG-2</label>
-              <label class="grade-box"><input id="g_1" type="checkbox"> Grade 1</label>
-              <label class="grade-box"><input id="g_2" type="checkbox"> Grade 2</label>
-              <label class="grade-box"><input id="g_3" type="checkbox"> Grade 3</label>
-              <label class="grade-box"><input id="g_4" type="checkbox"> Grade 4</label>
-              <label class="grade-box"><input id="g_5" type="checkbox"> Grade 5</label>
-              <label class="grade-box"><input id="g_6" type="checkbox"> Grade 6</label>
-              <label class="grade-box"><input id="g_7" type="checkbox"> Grade 7</label>
-              <label class="grade-box"><input id="g_8fb" type="checkbox"> Grade 8 (FB)</label>
-              <label class="grade-box"><input id="g_9fb" type="checkbox"> Grade 9 (FB)</label>
-              <label class="grade-box"><input id="g_10fb" type="checkbox"> Grade 10 (FB)</label>
-              <label class="grade-box"><input id="g_11fb" type="checkbox"> Grade 11 (FB)</label>
-              <label class="grade-box"><input id="g_ig" type="checkbox"> IGCSE / O'Level (type below)</label>
-            </div>
-            <div style="margin-top:8px">
-              <input id="igcse_text" class="input" placeholder="For IGCSE & O'Level, write exact grade here">
-            </div>
-          </div>
-        </section>
-
-        <section class="section">
-          <h3>ADDRESS DETAIL</h3>
+          <h3>Address Details</h3>
           <div class="content">
             <div class="grid">
               <div><div class="label">Present Address</div><textarea id="addr" class="textarea"></textarea></div>
@@ -120,6 +238,11 @@
             </div>
           </div>
         </section>
+        <!-- STUDENT SUMMARY (auto generated below main form) -->
+<section class="section" id="studentSummarySection">
+  <h3>Children Summary</h3>
+  <div class="content" id="studentSummary"></div>
+</section>
       </div>
 
       <!-- ================= PAGE 2 ================= -->
@@ -167,32 +290,33 @@
                   </div>
                 </div>
 
-   <aside class="sig-notes hide-in-pdf">
-  <div class="sig-notes-title">
-    <h4>How to complete your admission</h4>
-  </div>
+            <aside class="sig-notes hide-in-pdf">
+       <div class="sig-notes-title">
+          <h4>How to complete your admission</h4>
+       </div>
 
-  <ol class="sig-steps">
-    <li>To complete your admission, you must tick <strong>Agree</strong> box.</li>
-    <li>Draw your signature.</li>
-    <li>Click <strong>Save filled form as PDF</strong>.</li>
-    <li>When WhatsApp opens, send the PDF with the file <strong>attached</strong>.</li>
-    <li>That’s it — your admission request will be completed.</li>
-  </ol>
+       <ol class="sig-steps">
+       <li>To complete your admission, you must tick <strong>Agree</strong> box.</li>
+       <li>Draw your signature.</li>
+       <li>Click <strong>Save filled form as PDF</strong>.</li>
+       <li>When WhatsApp opens, send the PDF with the file <strong>attached</strong>.</li>
+       <li>That’s it — your admission request will be completed.</li>
+       </ol>
 
   <div class="sig-hint">
-    <h4>Note:</h4>
-    If you’re not redirected to WhatsApp automatically, please send the filled PDF on the number from which you received the link.
+     <h4>Note:</h4>
+        If you’re not redirected to WhatsApp automatically, please send the filled PDF on the number from which you received the link.
   </div>
 </aside>
-
             <div class="actions hide-in-pdf" style="margin-top:14px">
               <button id="btnPdf" class="btn" type="button">Save filled form as PDF</button>
-              <!-- <button id="btnPrint" class="btn secondary" type="button">Print</button> -->
             </div>
           </div>
+        <div id="processedBy" class="processed-by">
+             Processed by: <strong id="processedByName">—</strong>
+        </div>
         </section>
-      </div> <!-- /page2 -->
+      </div> 
     </form>
   </div>
 
@@ -253,27 +377,7 @@
   <nav class="info-bar" role="contentinfo">
     <div class="info-wrap">
       <span><strong>Administration Contact/WhatsApp #:</strong> +92 335 524 5551</span>
-      <!-- <span><strong>Web:</strong> www.iqravirtualschool.com</span>
-      <span><strong>E-mail:</strong> acivs2021@gmail.com</span> -->
     </div>
   </nav>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
