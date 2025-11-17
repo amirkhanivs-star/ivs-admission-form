@@ -30,19 +30,27 @@ img{max-width:100%; height:auto; display:block}
 .header-banner{
   margin-left:-24px; margin-right:-24px;   /* pull to page edges */
   width:calc(100% + 48px);
-  margin-bottom:16px; text-align:center; position:relative; z-index:0;
+  margin-bottom:8px;  /* ✅ CHANGE: banner اور title کے درمیان تھوڑا gap */
+  text-align:center; 
+  position:relative; 
+  z-index:0;
 }
 .header-banner img{
   width:100% !important; height:auto !important; object-fit:contain; line-height:0;
 }
 .title{
-  margin:6px 0 10px; text-align:center; font-weight:900;
-  color:var(--maroon); font-size:clamp(22px,4.3vw,36px); position:relative; z-index:1;
+  margin:0 0 10px 0;  /* ✅ CHANGE: normal margin، overlap نہیں */
+  text-align:center; 
+  font-weight:900;
+  color:var(--maroon); 
+  font-size:clamp(22px,4.3vw,36px); 
+  position:relative; 
+  z-index:1;
 }
 .title .title-accent{ color:#402c8e }
 
 /* ---------- Top meta (Session + Date) ---------- */
-.meta.meta--top{display:flex; gap:24px; align-items:flex-end; flex-wrap:wrap}
+.meta.meta--top{display:flex; gap:24px; align-items:flex-end; flex-wrap:wrap; margin-top:16px}
 .field-stack{min-width:220px}
 .stack-label{font-size:13px; font-weight:800; letter-spacing:.3px; text-transform:uppercase}
 .stack-value{font-size:18px; font-weight:800; margin-top:2px}
@@ -51,8 +59,10 @@ img{max-width:100%; height:auto; display:block}
 
 .date-boxes{display:flex; align-items:center; gap:10px; margin-top:4px; flex-wrap:wrap}
 .date-boxes .box{
-  width:42px; height:42px; border:2px solid #9aa3b2; border-radius:4px;
-  text-align:center; font-weight:800; font-size:18px; outline:none;
+  width:34px;
+  height:38px;
+  border:2px solid #9aa3b2; border-radius:4px;
+  text-align:center; font-weight:800; font-size:16px; outline:none;
 }
 .date-boxes .box:focus{border-color:var(--blue); box-shadow:0 0 0 3px rgba(37,58,119,.15)}
 .date-boxes .slash{font-weight:800; font-size:18px}
@@ -140,7 +150,7 @@ input[type="radio"], input[type="checkbox"]{accent-color:var(--blue)}
   margin-top: 2px; /* keeps vertical balance in PDF */
 }
 
-/* ✅ remove number from “Agree” line */
+/* ✅ remove number from "Agree" line */
 .decl-list li.agree-line::before {
   content: none; /* hides 11. */
 }
@@ -198,12 +208,15 @@ input[type="radio"], input[type="checkbox"]{accent-color:var(--blue)}
   .page{
     width:100%; max-width:100%; margin:0 auto 12px; padding:0 12px 16px; border-width:8px; box-shadow:none;
   }
+  
   .grid.cols-2, .grid.cols-3{grid-template-columns:1fr}
   .grades{grid-template-columns:repeat(2,1fr); gap:10px}
   @media (max-width:380px){ .grades{grid-template-columns:1fr} }
   .date-boxes{gap:clamp(4px,1.5vw,8px)}
   .date-boxes .box{
-    width:clamp(28px,8vw,40px); height:clamp(28px,8vw,40px); font-size:clamp(14px,4vw,18px); border-width:2px;
+    width:clamp(28px,8vw,36px);
+    height:clamp(28px,8vw,36px);
+    font-size:clamp(13px,4vw,16px); border-width:2px;
   }
   .date-boxes .slash{font-size:clamp(14px,4vw,18px)}
   .info-bar{position:static; margin-top:10px}
@@ -243,6 +256,11 @@ hr.sep{border:0; border-top:2px dashed #d8dde7; margin:14px 0}
   margin: 24px auto !important;
 }
 
+/* Hide Student Information (and Add Another Child) only in PDF */
+.pdf-export #studentInfoSection {
+  display: none !important;
+}
+
 /* Banner ko desktop jaisa pull-out dena (taake frame se align rahe) */
 .pdf-export .header-banner{
   margin-left: -24px !important;
@@ -261,7 +279,7 @@ hr.sep{border:0; border-top:2px dashed #d8dde7; margin:14px 0}
 /* Hide during PDF export */
 .pdf-export .hide-in-pdf,
 .pdf-export #clearSig {
-  display: none !important; /* ensures buttons don’t appear in generated PDF */
+  display: none !important; /* ensures buttons don't appear in generated PDF */
 }
 
 /* Hide during browser print */
@@ -271,17 +289,9 @@ hr.sep{border:0; border-top:2px dashed #d8dde7; margin:14px 0}
     display: none !important; /* hides them if user prints directly */
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.processed-by{
+  margin-top:10px;
+  text-align:right;
+  font-size:12px;
+  color:#334155;
+}
