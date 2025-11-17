@@ -1,10 +1,8 @@
 import express from "express";
 import path from "path";
 import dotenv from "dotenv";
-import mongoose from "mongoose";
 import cors from "cors";
 import morgan from "morgan";
-import Form from "./models/Form.js";
 import { fileURLToPath } from "url";
 
 dotenv.config();
@@ -70,15 +68,5 @@ app.get("/api/forms", async (_req, res) => {
   res.json(rows);
 });
 
-const MONGODB_URI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/ivs_admissions";
-mongoose.set("strictQuery", true);
-mongoose.connect(MONGODB_URI).then(async () => {
-  // Ensure indexes (creates unique index if missing)
-  await Form.syncIndexes();
-
   const PORT = process.env.PORT || 5000;
   app.listen(PORT, () => console.log(`Server running: http://localhost:${PORT}`));
-}).catch(err => {
-  console.error("Mongo connect error:", err.message);
-  process.exit(1);
-});
