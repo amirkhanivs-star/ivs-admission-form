@@ -185,7 +185,11 @@
   </div>
 </div>
 </section>
-
+<!-- STUDENT SUMMARY (auto generated below main form) -->
+<section class="section" id="studentSummarySection">
+  <h3>Children Summary</h3>
+  <div class="content" id="studentSummary"></div>
+</section>
    <!-- NEW: Father Information (اپنا الگ سیکشن) -->
 <section class="section" id="fatherInfoSection">
   <h3>Father Info</h3>
@@ -197,7 +201,31 @@
       </div>
       <div>
         <div class="label">Guardian WhatsApp #</div>
-        <input id="gWhats" class="input" placeholder="+92-xxx-xxxxxxx">
+        <!-- ✅ NEW WRAPPER WITH DROPDOWN -->
+        <div class="phone-wrapper" style="position:relative;">
+          <input
+            id="gWhats"
+            class="input"
+            type="tel"
+            autocomplete="tel"
+            placeholder="Select country & enter number"
+          >
+          <div
+            id="countryDropdown"
+            class="country-dropdown hide-in-pdf"
+            style="display:none; position:absolute; top:100%; left:0; right:0; background:#ffffff; border:1px solid #e5e7eb; border-radius:8px; box-shadow:0 10px 25px rgba(15,23,42,0.12); padding:6px; margin-top:4px; max-height:240px; overflow:auto; z-index:40;"
+          >
+            <input
+              type="text"
+              id="countrySearch"
+              class="input"
+              placeholder="Search country..."
+              style="margin-bottom:6px; font-size:13px; padding:4px 8px;"
+            >
+            <div id="countryList" class="country-list"></div>
+          </div>
+        </div>
+        <!-- ✅ END NEW WRAPPER -->
       </div>
     </div>
 
@@ -230,19 +258,12 @@
             <div class="grid cols-3">
               <div><div class="label">The City</div><input id="city" class="input"></div>
               <div><div class="label">Present State</div><input id="state" class="input"></div>
-              <div><div class="label">Zip Code</div><input id="zip" class="input"></div>
+               <div><div class="label">Secondary Contact</div><input id="sContact" class="input"></div>
             </div>
             <div class="grid cols-2">
-              <div><div class="label">Guardian Contact</div><input id="gContact" class="input"></div>
-              <div><div class="label">Secondary Contact</div><input id="sContact" class="input"></div>
             </div>
           </div>
         </section>
-        <!-- STUDENT SUMMARY (auto generated below main form) -->
-<section class="section" id="studentSummarySection">
-  <h3>Children Summary</h3>
-  <div class="content" id="studentSummary"></div>
-</section>
       </div>
 
       <!-- ================= PAGE 2 ================= -->
