@@ -28,12 +28,13 @@ app.get("/api/forms/check", async (req, res) => {
 
   // replicate normalizers used in the model
   const nameNorm = String(name).trim().toLowerCase().replace(/\s+/g, " ");
-  const guardianNorm = (guardian.startsWith("+") ? "+" : "") + guardian.replace(/\D+/g, "");
+  const guardianNorm =
+    (guardian.startsWith("+") ? "+" : "") + guardian.replace(/\D+/g, "");
 
   const exists = await Form.exists({
     studentNameNorm: nameNorm,
     dob: new Date(dob),
-    guardianWhatsappNorm: guardianNorm
+    guardianWhatsappNorm: guardianNorm,
   });
 
   res.json({ exists: Boolean(exists) });
@@ -43,7 +44,9 @@ app.post("/api/forms", async (req, res) => {
   try {
     const payload = req.body;
     if (!payload?.studentName || !payload?.signatureDataUrl) {
-      return res.status(400).json({ error: "studentName and signature are required" });
+      return res
+        .status(400)
+        .json({ error: "studentName and signature are required" });
     }
     // Create — unique index will enforce duplicates at DB level
     const saved = await Form.create(payload);
@@ -54,7 +57,8 @@ app.post("/api/forms", async (req, res) => {
       return res.status(409).json({
         ok: false,
         error: "duplicate",
-        message: "An admission with the same student, DOB and guardian WhatsApp already exists."
+        message:
+          "An admission with the same student, DOB and guardian WhatsApp already exists.",
       });
     }
     console.error(e);
@@ -68,5 +72,5 @@ app.get("/api/forms", async (_req, res) => {
   res.json(rows);
 });
 
-  const PORT = process.env.PORT || 5000;
-  app.listen(PORT, () => console.log(`Server running: http://localhost:${PORT}`));
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running: http://localhost:${PORT}`));
