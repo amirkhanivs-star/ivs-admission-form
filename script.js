@@ -1,13 +1,17 @@
 /* public/script.js
    IVS Admission Form — signature pad + PDF export + print + WhatsApp (app) share
 */
+const DASHBOARD_ADMISSIONS_API = "http://187.77.112.43/api/admissions";
+// ✅ SAME value jo .env me hai
+const DASHBOARD_API_KEY = "ivs_super_secret_2025_123456";
+
 document.addEventListener("DOMContentLoaded", () => {
   initSignaturePad();
   wireButtons();
-  initSingleGradeSelect();   // <<< make Grade checkboxes single-select
-  autoFillRegDate();         // <<< NEW: auto-fill DATE OF REGISTRATION with today's date
-  initDeclarationMaster();   // <<< NEW
-  initGuardianWhatsAppDropdown(); // <<< NEW: country dropdown for Guardian WhatsApp
+  initSingleGradeSelect();   // make Grade checkboxes single-select
+  autoFillRegDate();         // auto-fill DATE OF REGISTRATION with today's date
+  initDeclarationMaster();   // declaration master checkbox
+  initGuardianWhatsAppDropdown(); // country dropdown for Guardian WhatsApp
 });
 
 /* ---------- NEW: Auto-fill DATE OF REGISTRATION (MM/DD/YYYY boxes) ---------- */
@@ -150,17 +154,17 @@ async function buildPdfFromPages() {
       extraData += `Child ${i + 1}:\nName: ${name}\nDOB: ${dob}\nGender: ${gender}\nGrade: ${grade}\n\n`;
     }
   });
-  // ✅ Make sure summary is updated before PDF capture
+  // Make sure summary is updated before PDF capture
   if (typeof generateSummaryHTML === "function") generateSummaryHTML();
 
-  // ✅ Move this line here, before hiding footer
+  // Collect .page elements before hiding footer
   const pages = Array.from(document.querySelectorAll(".page"));
   if (!pages.length) return null;
 
   // export mode: hide fixed footer
   document.body.classList.add("pdf-export");
   const infoBar = document.querySelector(".info-bar");
-  const prevBarDisp = infoBar ? infoBar.style.display : null;
+  const prevBarDisp = infoBar ? infoBar.style.display = infoBar.style.display : null;
   if (infoBar) infoBar.style.display = "none";
 
   // ensure images are ready (logos, etc.)
@@ -188,7 +192,7 @@ async function buildPdfFromPages() {
       backgroundColor: "#ffffff",
       logging: false,
       windowWidth: 980,
-      scrollX: 0, // کوئی اسکرول آفسیٹ نہیں
+      scrollX: 0, // no scroll offset
       scrollY: 0,
     });
 
@@ -207,25 +211,179 @@ async function buildPdfFromPages() {
   return { pdf, filename };
 }
 
+/* ---------- Build payload for dashboard /api/admissions ---------- */
+function buildAdmissionPayloadForDashboard() {
+  // session
+  let session =
+    document.getElementById("session")?.value?.trim() ||
+    document.getElementById("sessionText")?.textContent?.trim() ||
+    "";
+  if (!session) session = "2025-26";
+
+  // registration date (hidden ISO from autoFillRegDate)
+  let registration_date =
+    document.getElementById("regDate")?.value?.trim() || "";
+  if (!registration_date) {
+    const now = new Date();
+    const mm = String(now.getMonth() + 1).padStart(2, "0");
+    const dd = String(now.getDate()).padStart(2, "0");
+    const yyyy = String(now.getFullYear());
+    registration_date = `${yyyy}-${mm}-${dd}`;
+  }
+
+  const processed_by =
+    document.getElementById("processedByName")?.textContent?.trim() || "";
+
+  const father_name =
+    document.getElementById("fatherName")?.value?.trim() || "";
+  const guardian_whatsapp =
+    document.getElementById("gWhats")?.value?.trim() || "";
+  const religion =
+    document.getElementById("religion")?.value?.trim() || "";
+  const father_email =
+  document.getElementById("fatherEmail")?.value?.trim() || "";
+
+  // UPDATED: use correct element IDs from the form
+  const father_occupation =
+    document.getElementById("fOcc")?.value?.trim() || "";
+  const nationality =
+    document.getElementById("nation")?.value?.trim() || "";
+
+  const present_address =
+    document.getElementById("addr")?.value?.trim() ||
+    document.getElementById("address")?.value?.trim() ||
+    "";
+  const secondary_contact =
+    document.getElementById("sContact")?.value?.trim() || "";
+
+  // NOTE: city/state variables assume IDs exist in HTML
+  const city =
+    document.getElementById("city")?.value?.trim() || "";
+  const state =
+    document.getElementById("state")?.value?.trim() || "";
+
+  const children = [];
+
+  // main student
+  const mainName =
+    document.getElementById("studentName")?.value?.trim() || "";
+  const mainDob = document.getElementById("dob")?.value?.trim() || "";
+  const mainGrade =
+    document.getElementById("gradeSelect")?.value?.trim() || "";
+  const mainGender =
+    Array.from(document.querySelectorAll('input[name="gender"]')).find(
+      (r) => r.checked
+    )?.value || "";
+
+  if (mainName || mainDob || mainGrade || mainGender) {
+    children.push({
+      student_name: mainName,
+      gender: mainGender,
+      dob: mainDob,
+      grade: mainGrade,
+    });
+  }
+
+  // extra children
+  const childBlocks = document.querySelectorAll(".child-block");
+  childBlocks.forEach((block) => {
+    const name = block.querySelector(".studentName")?.value?.trim() || "";
+    const dob = block.querySelector(".dob")?.value?.trim() || "";
+    const grade = block.querySelector("select")?.value?.trim() || "";
+    const gender =
+      block.querySelector('input[type="radio"]:checked')?.value || "";
+
+    if (name || dob || grade || gender) {
+      children.push({
+        student_name: name,
+        gender,
+        dob,
+        grade,
+      });
+    }
+  });
+
+  return {
+    session,
+    registration_date,
+    processed_by,
+    father_name,
+    guardian_whatsapp,
+    religion,
+    father_email,
+    father_occupation,
+    nationality,
+    present_address,
+    city,
+    state,
+    secondary_contact,
+    children,
+  };
+}
+
+async function sendAdmissionToDashboard() {
+  const payload = buildAdmissionPayloadForDashboard();
+
+  if (!payload.children || !payload.children.length) {
+    console.warn("No children data found, skipping DB save.");
+    return false;
+  }
+
+  try {
+    const res = await fetch(DASHBOARD_ADMISSIONS_API, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        // ✅ API key header
+        "x-api-key": DASHBOARD_API_KEY,
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const data = await res.json().catch(() => ({}));
+
+    if (!res.ok || !data.success) {
+      console.error("Dashboard save failed:", res.status, data);
+      alert(
+        "Form PDF will be saved, but data could not be saved to the dashboard. Please inform the IT department."
+      );
+      return false;
+    }
+
+    console.log("Admission saved to dashboard:", data);
+    return true;
+  } catch (err) {
+    console.error("Error calling dashboard /api/admissions:", err);
+    alert(
+      "Form PDF will be saved, but connection to dashboard failed (network error)."
+    );
+    return false;
+  }
+}
+
 /* ---------- 4) Send Data + Export PDF + WhatsApp ---------- */
 async function exportPdfAndOpenWhatsAppApp() {
-  // Master "I agree" لازمی
+  // Master "I agree" must be checked (extra safety, initDeclarationMaster already guards)
   const master = document.getElementById("declMaster");
   if (master && !master.checked) {
     alert('Please tick the "I agree" checkbox to proceed.');
     return;
   }
 
-  // (اختیاری) اگر آپ 1–10 والے hidden/رکھے ہوئے چیک باکس بھی ساتھ ٹک کرانا چاہتے ہیں:
+  // Optionally mark all declaration checkboxes as checked
   document
     .querySelectorAll(".declaration-list input.decl")
     .forEach((cb) => (cb.checked = true));
 
-  // ---- یہاں سے آپ کا موجودہ PDF + WhatsApp والا کوڈ as-is رہے گا ----
+  // First try to save to DB
+  await sendAdmissionToDashboard();
+
+  // Then continue with WhatsApp + PDF flow (even if DB save fails)
+  await exportPdfAndOpenWhatsAppApp_Inner();
 }
 
 /* ---------- 4) Share to WhatsApp APP with attached PDF (native share) ---------- */
-async function exportPdfAndOpenWhatsAppApp() {
+async function exportPdfAndOpenWhatsAppApp_Inner() {
   const built = await buildPdfFromPages();
   if (!built) return;
   const { pdf, filename } = built;
@@ -242,7 +400,7 @@ async function exportPdfAndOpenWhatsAppApp() {
     `Please review the attached PDF. Thank you.`;
 
   try {
-    // ✅ Best path: native share with FILES (Android Chrome, iOS Safari 16.4+ over HTTPS)
+    // Best path: native share with FILES (Android Chrome, iOS Safari 16.4+ over HTTPS)
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
       await navigator.share({
         files: [file],
@@ -254,20 +412,19 @@ async function exportPdfAndOpenWhatsAppApp() {
       try {
         pdf.save(filename);
       } catch {}
-      return; // stop here — user is now in WhatsApp app with the file attached
+      return; // user is now in WhatsApp app with the file attached
     }
   } catch (err) {
     console.warn("Native share failed, will fallback:", err);
   }
 
-  // ❗ Fallbacks (no WhatsApp Web):
+  // Fallbacks (no WhatsApp Web):
   // 1) Save the PDF locally so the user can attach inside WhatsApp app
   try {
     pdf.save(filename);
   } catch {}
 
   // 2) Try to open WhatsApp app with a helpful prefilled text (cannot attach via URL)
-  // On many phones, this deep link opens the app directly.
   const helper =
     `Assalamu Alaikum. I have saved my admission form PDF (${filename}). ` +
     `I will attach the file here and send.`;
@@ -327,30 +484,30 @@ function initDeclarationMaster() {
 
   if (!master || !btn) return;
 
-  // بٹن کی حالت سیٹ کریں (blur / active)
+  // Set button state (blur / active)
   const setBtnState = () => {
     if (master.checked) {
       btn.removeAttribute("aria-disabled");
-      btn.style.pointerEvents = "auto"; // ✅ clickable
-      btn.style.opacity = "1"; // ✅ visible active
+      btn.style.pointerEvents = "auto"; // clickable
+      btn.style.opacity = "1"; // visually active
     } else {
       btn.setAttribute("aria-disabled", "true");
-      btn.style.pointerEvents = "none"; // ✅ completely unclickable
-      btn.style.opacity = "0.5"; // ✅ visually disabled
+      btn.style.pointerEvents = "none"; // completely unclickable
+      btn.style.opacity = "0.5"; // visually disabled
     }
   };
 
-  // صفحہ لوڈ ہوتے ہی بٹن کی حالت سیٹ کریں
+  // Set initial state on page load
   setBtnState();
 
-  // جب checkbox بدلے تو بٹن کی حالت اپڈیٹ کریں
+  // Update when checkbox changes
   master.addEventListener("change", setBtnState);
 
-  // اگر tick نہیں ہوا تو alert دکھا کر روک دو
+  // If not ticked, show alert and block click
   btn.addEventListener("click", (e) => {
     if (!master.checked) {
       e.preventDefault();
-      e.stopImmediatePropagation(); // ✅ event کو مکمل طور پر روک دے
+      e.stopImmediatePropagation(); // stop event completely
       alert('Please tick the “I agree” checkbox to proceed.');
       try {
         master.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -364,7 +521,7 @@ function initDeclarationMaster() {
 document.addEventListener("DOMContentLoaded", () => {
   const addBtn = document.getElementById("addChildBtn");
   const template = document.getElementById("childTemplate");
-  // ✅ نیا target: Student Information سیکشن کے اندر والا .content
+  // new target: .content inside Student Information section
   const studentContainer =
     document.querySelector("#studentInfoSection .content") ||
     document.getElementById("studentInfoSection");
@@ -387,7 +544,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (removeBtn) {
       removeBtn.addEventListener("click", () => {
         clone.remove();
-        // ✅ Update summary immediately after removing child
+        // Update summary after removing child
         if (typeof generateSummaryHTML === "function") {
           generateSummaryHTML();
         }
@@ -397,7 +554,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Smooth scroll to new section
     clone.scrollIntoView({ behavior: "smooth", block: "center" });
 
-    // ✅ New inputs will also update summary when user types
+    // New inputs will also update summary when user types
     setTimeout(() => {
       const newInputs = clone.querySelectorAll("input, select");
       newInputs.forEach((inp) =>
@@ -413,7 +570,7 @@ document.addEventListener("DOMContentLoaded", () => {
       );
     }, 200);
 
-    // ✅ Update summary after adding child
+    // Update summary after adding child
     if (typeof generateSummaryHTML === "function") {
       generateSummaryHTML();
     }
@@ -435,7 +592,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let html = "";
     let index = 1;
 
-    // 🧒 Main Student Info
+    // Main Student Info
     const mainGender =
       Array.from(mainFields.genderRadios).find((r) => r.checked)?.value || "";
     if (
@@ -461,7 +618,7 @@ document.addEventListener("DOMContentLoaded", () => {
       index++;
     }
 
-    // 👶 Added Child Blocks
+    // Added Child Blocks
     const childBlocks = document.querySelectorAll(".child-block");
     childBlocks.forEach((block, i) => {
       const name = block.querySelector(".studentName")?.value || "";
@@ -492,7 +649,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     summaryDiv.innerHTML = html || "<em>No student data yet.</em>";
 
-    // 🎯 Attach click to each ❌ button
+    // Attach click to each remove button
     summaryDiv.querySelectorAll(".remove-summary-btn").forEach((btn) => {
       btn.addEventListener("click", (e) => {
         const blockIndex = e.target.closest(".child-summary").dataset.index;
@@ -514,7 +671,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   };
 
-  // 🎯 Watch for main student input changes
+  // Watch for main student input changes
   [mainFields.name, mainFields.dob, mainFields.grade].forEach((el) =>
     el.addEventListener("input", generateSummaryHTML)
   );
@@ -522,7 +679,7 @@ document.addEventListener("DOMContentLoaded", () => {
     r.addEventListener("change", generateSummaryHTML)
   );
 
-  // 🎯 When Add Another Child button clicked
+  // When Add Another Child button clicked
   if (addChildBtn) {
     addChildBtn.addEventListener("click", () => {
       setTimeout(() => {
@@ -550,11 +707,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const nameBox = document.getElementById("processedByName");
   if (!nameBox) return;
 
-  // URL سے sentBy پڑھیں
+  // Read sentBy from URL
   const qs = new URLSearchParams(window.location.search);
   let sender = (qs.get("sentBy") || "").trim();
 
-  // چاہیں تو short-codes map کر دیں (اختیاری)
+  // Optional short-code map
   const MAP = {
     ms: "Mustafa",
     sz: "Shahzor",
@@ -563,12 +720,12 @@ document.addEventListener("DOMContentLoaded", () => {
   };
   if (!sender && qs.get("s")) sender = MAP[qs.get("s")] || "";
 
-  // Format: پہلا حرف بڑا، باقی جیسا بھی آئے
+  // Capitalize first letter
   if (sender) {
     const formatted = sender.charAt(0).toUpperCase() + sender.slice(1);
     nameBox.textContent = formatted;
   } else {
-    nameBox.textContent = "—"; // simple link پر blank رہے گا
+    nameBox.textContent = "—"; // blank for simple link
   }
 });
 
@@ -581,7 +738,7 @@ function initGuardianWhatsAppDropdown() {
   input.setAttribute("inputmode", "tel");
   input.setAttribute("autocomplete", "tel");
 
-  // ❌ Jab tak country select na ho, user number type nahi kar sakta
+  // Until a country is selected, user cannot type the number
   input.readOnly = true;
   let countrySelected = false;
 
@@ -847,7 +1004,7 @@ function initGuardianWhatsAppDropdown() {
     { name: "Yemen", code: "YE", dial: "+967" },
 
     { name: "Zambia", code: "ZM", dial: "+260" },
-    { name: "Zimbabwe", code: "ZW", dial: "+263" }
+    { name: "Zimbabwe", code: "ZW", dial: "+263" },
   ];
 
   function renderList(filter = "") {
@@ -914,7 +1071,7 @@ function initGuardianWhatsAppDropdown() {
     input.dataset.currentCode = country.dial.replace(/\D/g, "");
     input.dataset.currentDial = country.dial;
 
-    // ✅ Sirf jab user dropdown se country select kare tab number typing allow ho
+    // Only when user selects from dropdown, allow typing number
     if (fromUser) {
       countrySelected = true;
       input.readOnly = false;
@@ -942,11 +1099,11 @@ function initGuardianWhatsAppDropdown() {
     }
   });
 
-  // 👉 Input guard: code hataoge to sab lock ho jayega
+  // Input guard: if code is removed, lock everything
   input.addEventListener("input", () => {
     const dial = input.dataset.currentDial || "";
 
-    // Agar pehle se country fix hi nahi hai
+    // If no country is fixed yet
     if (!dial || !countrySelected) {
       input.value = "";
       input.readOnly = true;
@@ -956,7 +1113,7 @@ function initGuardianWhatsAppDropdown() {
       return;
     }
 
-    // Agar user ne sab clear kar diya
+    // If user cleared everything
     if (!input.value.trim()) {
       input.value = "";
       input.readOnly = true;
@@ -966,7 +1123,7 @@ function initGuardianWhatsAppDropdown() {
       return;
     }
 
-    // Agar value ab dial se start hi nahi ho rahi => code remove kiya
+    // If value no longer starts with dial code => code removed
     if (!input.value.startsWith(dial)) {
       input.value = "";
       input.readOnly = true;
@@ -976,5 +1133,5 @@ function initGuardianWhatsAppDropdown() {
     }
   });
 
-  // ❌ No default Pakistan now — user must select a country first
+  // No default country now — user must select a country first
 }
