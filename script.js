@@ -1,7 +1,7 @@
 /* public/script.js
    IVS Admission Form — signature pad + PDF export + print + WhatsApp (app) share
 */
-const DASHBOARD_ADMISSIONS_API = "http://187.77.112.43/api/admissions";
+const DASHBOARD_ADMISSIONS_API = "https://187.77.112.43/api/admissions";
 // ✅ SAME value jo .env me hai
 const DASHBOARD_API_KEY = "ivs_super_secret_2025_123456";
 
