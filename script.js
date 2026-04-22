@@ -48,6 +48,9 @@ let sigCanvas,
   isDrawing = false,
   lastPoint = null;
 
+// Prevent double submit / double save
+let isSubmittingAdmission = false;
+
 function initSignaturePad() {
   sigCanvas = document.getElementById("sig");
   if (!sigCanvas) return; // not on this page
@@ -113,6 +116,39 @@ function wireButtons() {
   const pdfBtn = document.getElementById("btnPdf");
   if (pdfBtn)
     pdfBtn.addEventListener("click", () => exportPdfAndOpenWhatsAppApp());
+}
+
+function setPdfButtonBusyState(isBusy) {
+  const btn = document.getElementById("btnPdf");
+  if (!btn) return;
+
+  if (isBusy) {
+    btn.disabled = true;
+    btn.setAttribute("aria-disabled", "true");
+    btn.style.pointerEvents = "none";
+    btn.style.opacity = "0.6";
+    btn.dataset.originalText = btn.textContent;
+    btn.textContent = "Saving...";
+  } else {
+    btn.disabled = false;
+
+    const master = document.getElementById("declMaster");
+    if (master && !master.checked) {
+      btn.setAttribute("aria-disabled", "true");
+      btn.style.pointerEvents = "none";
+      btn.style.opacity = "0.5";
+    } else {
+      btn.removeAttribute("aria-disabled");
+      btn.style.pointerEvents = "auto";
+      btn.style.opacity = "1";
+    }
+
+    if (btn.dataset.originalText) {
+      btn.textContent = btn.dataset.originalText;
+    } else {
+      btn.textContent = "Save Filled Form as PDF";
+    }
+  }
 }
 
 /* Utility for signature if needed elsewhere */
@@ -363,23 +399,39 @@ async function sendAdmissionToDashboard() {
 
 /* ---------- 4) Send Data + Export PDF + WhatsApp ---------- */
 async function exportPdfAndOpenWhatsAppApp() {
-  // Master "I agree" must be checked (extra safety, initDeclarationMaster already guards)
+  // Stop repeated clicks immediately
+  if (isSubmittingAdmission) {
+    return;
+  }
+
+  // Master "I agree" must be checked
   const master = document.getElementById("declMaster");
   if (master && !master.checked) {
     alert('Please tick the "I agree" checkbox to proceed.');
     return;
   }
 
-  // Optionally mark all declaration checkboxes as checked
-  document
-    .querySelectorAll(".declaration-list input.decl")
-    .forEach((cb) => (cb.checked = true));
+  isSubmittingAdmission = true;
+  setPdfButtonBusyState(true);
 
-  // First try to save to DB
-  await sendAdmissionToDashboard();
+  try {
+    // Optionally mark all declaration checkboxes as checked
+    document
+      .querySelectorAll(".declaration-list input.decl")
+      .forEach((cb) => (cb.checked = true));
 
-  // Then continue with WhatsApp + PDF flow (even if DB save fails)
-  await exportPdfAndOpenWhatsAppApp_Inner();
+    // First try to save to DB
+    await sendAdmissionToDashboard();
+
+    // Then continue with WhatsApp + PDF flow
+    await exportPdfAndOpenWhatsAppApp_Inner();
+  } catch (err) {
+    console.error("Error during admission submit flow:", err);
+    alert("Something went wrong while saving the form. Please try again.");
+  } finally {
+    isSubmittingAdmission = false;
+    setPdfButtonBusyState(false);
+  }
 }
 
 /* ---------- 4) Share to WhatsApp APP with attached PDF (native share) ---------- */
