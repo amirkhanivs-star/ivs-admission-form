@@ -8,12 +8,32 @@ const DASHBOARD_API_KEY = "ivs_super_secret_2025_123456";
 document.addEventListener("DOMContentLoaded", () => {
   initSignaturePad();
   wireButtons();
+  autoFillCurrentSession();  // auto-fill SESSION like 2026-27, 2027-28
   initSingleGradeSelect();   // make Grade checkboxes single-select
   autoFillRegDate();         // auto-fill DATE OF REGISTRATION with today's date
   initDeclarationMaster();   // declaration master checkbox
   initGuardianWhatsAppDropdown(); // country dropdown for Guardian WhatsApp
 });
+/* ---------- NEW: Auto-fill SESSION based on current year ---------- */
+function getCurrentAcademicSession() {
+  const currentYear = new Date().getFullYear();
+  const nextYear = currentYear + 1;
 
+  const start = String(currentYear);
+  const end = String(nextYear).slice(-2);
+
+  return `${start}-${end}`;
+}
+
+function autoFillCurrentSession() {
+  const sessionValue = getCurrentAcademicSession();
+
+  const sessionText = document.getElementById("sessionText");
+  if (sessionText) sessionText.textContent = sessionValue;
+
+  const sessionInput = document.getElementById("session");
+  if (sessionInput) sessionInput.value = sessionValue;
+}
 /* ---------- NEW: Auto-fill DATE OF REGISTRATION (MM/DD/YYYY boxes) ---------- */
 function autoFillRegDate() {
   const container = document.getElementById("regBoxes");
@@ -254,7 +274,7 @@ function buildAdmissionPayloadForDashboard() {
     document.getElementById("session")?.value?.trim() ||
     document.getElementById("sessionText")?.textContent?.trim() ||
     "";
-  if (!session) session = "2025-26";
+  if (!session) session = getCurrentAcademicSession();
 
   // registration date (hidden ISO from autoFillRegDate)
   let registration_date =
@@ -448,7 +468,7 @@ async function exportPdfAndOpenWhatsAppApp_Inner() {
     document.getElementById("studentName")?.value?.trim() || "student";
   const caption =
     `IVS Admission Form for ${student}\n` +
-    `Session: 2025–26\n\n` +
+    `Session: ${getCurrentAcademicSession()}\n\n` +
     `Please review the attached PDF. Thank you.`;
 
   try {
