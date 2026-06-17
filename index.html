@@ -35,7 +35,8 @@
           <div class="meta meta--top">
             <div class="field-stack">
               <div class="stack-label">SESSION:</div>
-              <div class="stack-value">2025–26</div>
+              <div class="stack-value" id="sessionText">--</div>
+              <input type="hidden" id="session" name="session" value="">
               <div class="stack-underline"></div>
             </div>
 
@@ -59,7 +60,7 @@
         </header>
 
         <section class="section" id="studentInfoSection">
-  <h3>Student Information</h3>
+  <h3>Student Info</h3>
   <div class="content">
 
     <!-- Student Details Row -->
@@ -192,7 +193,7 @@
 </section>
    <!-- NEW: Father Information (اپنا الگ سیکشن) -->
 <section class="section" id="fatherInfoSection">
-  <h3>Father Information</h3>
+  <h3>Father Info</h3>
   <div class="content" id="parentInfoSection">
     <div class="grid cols-2">
       <div>
@@ -230,20 +231,26 @@
     </div>
 
     <div class="grid cols-2" style="margin-top:10px;">
-      <div>
-        <div class="label">Religion</div>
-        <input id="religion" class="input">
-      </div>
-      <div>
-        <div class="label">Father Occupation</div>
-        <input id="fOcc" class="input">
-      </div>
-    </div>
+  <div>
+    <div class="label">Religion</div>
+    <input id="religion" class="input">
+  </div>
+  <div>
+    <div class="label">Father Occupation</div>
+    <input id="fOcc" class="input">
+  </div>
+</div>
 
-    <div style="margin-top:10px;">
-      <div class="label">Nationality</div>
-      <input id="nation" class="input">
-    </div>
+<div class="grid cols-2" style="margin-top:10px;">
+  <div>
+    <div class="label">Email Address</div>
+    <input id="fatherEmail" class="input" type="email" placeholder="Enter email address">
+  </div>
+  <div>
+    <div class="label">Nationality</div>
+    <input id="nation" class="input">
+  </div>
+</div>
   </div>
 </section>
 
@@ -402,4 +409,3 @@
   </nav>
 </body>
 </html>
-
