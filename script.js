@@ -293,7 +293,7 @@ function buildAdmissionPayloadForDashboard() {
   const father_name =
     document.getElementById("fatherName")?.value?.trim() || "";
   const guardian_whatsapp =
-    document.getElementById("gWhats")?.value?.trim() || "";
+    cleanPhoneNumber(document.getElementById("gWhats")?.value || "");
   const religion =
     document.getElementById("religion")?.value?.trim() || "";
   const father_email =
@@ -310,7 +310,7 @@ function buildAdmissionPayloadForDashboard() {
     document.getElementById("address")?.value?.trim() ||
     "";
   const secondary_contact =
-    document.getElementById("sContact")?.value?.trim() || "";
+    cleanPhoneNumber(document.getElementById("sContact")?.value || "");
 
   // NOTE: city/state variables assume IDs exist in HTML
   const city =
@@ -1138,7 +1138,7 @@ function initGuardianWhatsAppDropdown() {
       local = digits;
     }
 
-    const sanitizedLocal = local ? " " + local : "";
+    const sanitizedLocal = local ? local : "";
     input.value = country.dial + sanitizedLocal;
     input.dataset.currentCode = country.dial.replace(/\D/g, "");
     input.dataset.currentDial = country.dial;
@@ -1207,3 +1207,4 @@ function initGuardianWhatsAppDropdown() {
 
   // No default country now — user must select a country first
 }
+
