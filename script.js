@@ -5,6 +5,11 @@ const DASHBOARD_ADMISSIONS_API = "https://dashboard.iqravs.com/api/admissions";
 // ✅ SAME value jo .env me hai
 const DASHBOARD_API_KEY = "ivs_super_secret_2025_123456";
 
+function cleanPhoneNumber(value) {
+  return String(value || "").replace(/\s+/g, "");
+}
+
+
 document.addEventListener("DOMContentLoaded", () => {
   initSignaturePad();
   wireButtons();
