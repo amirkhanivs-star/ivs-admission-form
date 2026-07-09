@@ -284,6 +284,101 @@
         </div>
 
   <section class="section">
+  <style>
+    .fee-policy-link {
+      color: #1d4ed8;
+      font-weight: 700;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .fee-policy-modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      z-index: 99999;
+      font-family: inherit;
+    }
+
+    .fee-policy-modal.show {
+      display: block;
+    }
+
+    .fee-policy-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.58);
+    }
+
+    .fee-policy-box {
+      position: relative;
+      width: min(92%, 720px);
+      max-height: 86vh;
+      overflow-y: auto;
+      margin: 5vh auto;
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 22px 24px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
+      z-index: 2;
+      color: #0f172a;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .fee-policy-box h2 {
+      margin: 0 0 14px;
+      color: #b1122d;
+      font-size: 26px;
+      line-height: 1.2;
+      text-transform: uppercase;
+    }
+
+    .fee-policy-box h3 {
+      margin: 18px 0 8px;
+      color: #111827;
+      font-size: 18px;
+    }
+
+    .fee-policy-box ul,
+    .fee-policy-box ol {
+      margin: 8px 0 14px;
+      padding-left: 22px;
+    }
+
+    .fee-policy-box li {
+      margin-bottom: 8px;
+    }
+
+    .fee-policy-close {
+      position: absolute;
+      top: 10px;
+      right: 14px;
+      border: none;
+      background: transparent;
+      color: #334155;
+      font-size: 30px;
+      line-height: 1;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .fee-policy-note {
+      margin-top: 12px;
+      padding: 10px 12px;
+      background: #f8fafc;
+      border-left: 4px solid #b1122d;
+      border-radius: 6px;
+      font-size: 13px;
+    }
+
+    @media print {
+      .fee-policy-modal {
+        display: none !important;
+      }
+    }
+  </style>
+
   <div class="content declaration-list">
     <p class="decl-note">
       <strong>Note:</strong> After reading the declaration form carefully, kindly click “Agree” to confirm your acknowledgment.
@@ -299,12 +394,88 @@
       <li>I understand that late fee payments may result in restricted access to classes or withheld academic reports.</li>
       <li>I acknowledge that all course materials and resources provided by IVS are for my child’s personal use only and must not be shared externally.</li>
       <li>I agree to monitor my child’s academic progress and maintain regular communication with the school for updates.</li>
+      <li>
+        I have read and understood the
+        <a href="#" id="openFeePolicy" class="fee-policy-link">School Fee Policy</a>
+        and agree to follow the school fee rules.
+      </li>
       <li>I have read and understood all the rules and regulations of IVS and agree to follow them to support my child’s academic success.</li>
       <li class="agree-line">
         <label><input id="declMaster" type="checkbox"> Agree to the declaration above.</label>
       </li>
     </ol>
   </div>
+
+  <!-- Fee Policy Popup -->
+  <div id="feePolicyModal" class="fee-policy-modal" aria-hidden="true">
+    <div id="feePolicyBackdrop" class="fee-policy-backdrop"></div>
+
+    <div class="fee-policy-box" role="dialog" aria-modal="true" aria-labelledby="feePolicyTitle">
+      <button type="button" id="closeFeePolicy" class="fee-policy-close" aria-label="Close Fee Policy">
+        ×
+      </button>
+
+      <h2 id="feePolicyTitle">School Fee Policy</h2>
+
+      <h3>Advance Fee Discount Plan</h3>
+      <ul>
+        <li><strong>12 Months Advance Fee Payment:</strong> Get 1 Month Tuition Fee Free.</li>
+        <li><strong>6 Months Advance Fee Payment:</strong> Get 50% Discount on One Month Tuition Fee.</li>
+        <li><strong>4 Months Advance Fee Payment:</strong> Get 15% Discount on Total Tuition Fee.</li>
+      </ul>
+
+      <h3>General Terms & Conditions</h3>
+      <ol>
+        <li>Monthly tuition fee must be paid on or before the 10th of each month. Late payment may result in additional charges according to school policy.</li>
+        <li>Parents who pay 12 months’ fee in advance will receive 1 month fee waiver or discount.</li>
+        <li>Parents who pay 6 months’ fee in advance will receive 50% discount on one month’s tuition fee.</li>
+        <li>Parents who pay 4 months’ fee in advance will receive 15% discount on total payable tuition fee.</li>
+        <li>Admission fee and annual charges, if applicable, are non-refundable after admission confirmation.</li>
+        <li>Fee once deposited will not be adjusted or refunded except under approved school rules.</li>
+        <li>In case of non-payment beyond the allowed period, the school reserves the right to suspend classes, exams, or re-admission procedures according to school regulations.</li>
+        <li>The school management reserves the right to revise fee policy with prior notice.</li>
+        <li>This offer cannot be combined with any other discount or concession.</li>
+      </ol>
+
+      <div class="fee-policy-note">
+        <strong>Note:</strong> Discount is applicable only on advance fee submission.
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function initFeePolicyPopup() {
+      const openBtn = document.getElementById("openFeePolicy");
+      const modal = document.getElementById("feePolicyModal");
+      const closeBtn = document.getElementById("closeFeePolicy");
+      const backdrop = document.getElementById("feePolicyBackdrop");
+
+      if (!openBtn || !modal || !closeBtn || !backdrop) return;
+
+      function openModal(event) {
+        if (event) event.preventDefault();
+        modal.classList.add("show");
+        modal.setAttribute("aria-hidden", "false");
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeModal() {
+        modal.classList.remove("show");
+        modal.setAttribute("aria-hidden", "true");
+        document.body.style.overflow = "";
+      }
+
+      openBtn.addEventListener("click", openModal);
+      closeBtn.addEventListener("click", closeModal);
+      backdrop.addEventListener("click", closeModal);
+
+      document.addEventListener("keydown", function(event) {
+        if (event.key === "Escape" && modal.classList.contains("show")) {
+          closeModal();
+        }
+      });
+    })();
+  </script>
 </section>
 
             <!-- Signature area (compact + instructions on right) -->
