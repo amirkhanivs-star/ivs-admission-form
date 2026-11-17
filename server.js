@@ -164,12 +164,46 @@ app.use(morgan("dev"));
 app.use(express.json({ limit: "5mb" }));
 app.use(express.urlencoded({ extended: true, limit: "5mb" }));
 
+// Ensure public frontend assets exist and are synchronized when running locally or on Render
+function ensurePublicAssets() {
+  if (isServerless) return;
+  try {
+    const publicDir = path.join(__dirname, "public");
+    if (!fs.existsSync(publicDir)) {
+      fs.mkdirSync(publicDir, { recursive: true });
+    }
+    const filesToSync = ["index.html", "styles.css", "script.js", "google.html"];
+    for (const f of filesToSync) {
+      const src = path.join(__dirname, f);
+      const dest = path.join(publicDir, f);
+      if (fs.existsSync(src)) {
+        fs.copyFileSync(src, dest);
+      }
+    }
+    const imgSrc = path.join(__dirname, "img");
+    const imgDest = path.join(publicDir, "img");
+    if (fs.existsSync(imgSrc)) {
+      if (!fs.existsSync(imgDest)) {
+        fs.mkdirSync(imgDest, { recursive: true });
+      }
+      fs.cpSync(imgSrc, imgDest, { recursive: true });
+    }
+  } catch (err) {
+    console.warn("[Assets] Public asset synchronization note:", err.message);
+  }
+}
+ensurePublicAssets();
+
 // Static frontend files
-app.use(express.static(__dirname));
 app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(__dirname));
 
 // Open form
 app.get("/", (_req, res) => {
+  const publicIndexPath = path.join(__dirname, "public", "index.html");
+  if (fs.existsSync(publicIndexPath)) {
+    return res.sendFile(publicIndexPath);
+  }
   const indexPath = path.join(__dirname, "index.html");
   if (fs.existsSync(indexPath)) {
     return res.sendFile(indexPath);

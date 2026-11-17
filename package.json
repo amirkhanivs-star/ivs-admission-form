@@ -4,9 +4,10 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
+    "build": "node scripts/build-public.js",
     "start": "node server.js",
     "dev": "node --watch server.js",
-    "test": "node test/app.test.js"
+    "test": "node scripts/build-public.js && node test/app.test.js"
   },
   "dependencies": {
     "cors": "^2.8.5",

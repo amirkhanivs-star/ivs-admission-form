@@ -83,6 +83,32 @@ await runTest("Essential static assets exist in project root", () => {
   assert.ok(fs.existsSync(path.join(rootDir, "img", "ivs-banner.png")), "ivs-banner.png missing");
 });
 
+await runTest("Public directory assets exist for Vercel CDN delivery and match source files", () => {
+  const publicDir = path.join(rootDir, "public");
+  assert.ok(fs.existsSync(publicDir), "public/ directory missing");
+  assert.ok(fs.existsSync(path.join(publicDir, "index.html")), "public/index.html missing");
+  assert.ok(fs.existsSync(path.join(publicDir, "styles.css")), "public/styles.css missing");
+  assert.ok(fs.existsSync(path.join(publicDir, "script.js")), "public/script.js missing");
+  assert.ok(fs.existsSync(path.join(publicDir, "img", "ivs-banner.png")), "public/img/ivs-banner.png missing");
+
+  // Verify contents match source of truth
+  const rootCss = fs.readFileSync(path.join(rootDir, "styles.css"), "utf8");
+  const publicCss = fs.readFileSync(path.join(publicDir, "styles.css"), "utf8");
+  assert.equal(publicCss, rootCss, "public/styles.css must match root styles.css");
+
+  const rootJs = fs.readFileSync(path.join(rootDir, "script.js"), "utf8");
+  const publicJs = fs.readFileSync(path.join(publicDir, "script.js"), "utf8");
+  assert.equal(publicJs, rootJs, "public/script.js must match root script.js");
+});
+
+await runTest("No sensitive or server files leaked into public directory", () => {
+  const publicDir = path.join(rootDir, "public");
+  assert.ok(!fs.existsSync(path.join(publicDir, ".env")), ".env must not be in public");
+  assert.ok(!fs.existsSync(path.join(publicDir, ".env.example")), ".env.example must not be in public");
+  assert.ok(!fs.existsSync(path.join(publicDir, "server.js")), "server.js must not be in public");
+  assert.ok(!fs.existsSync(path.join(publicDir, "data")), "data directory must not be in public");
+});
+
 await runTest("Vercel configuration vercel.json is valid and contains API rewrites", () => {
   const vPath = path.join(rootDir, "vercel.json");
   assert.ok(fs.existsSync(vPath), "vercel.json missing");
@@ -122,6 +148,27 @@ await runTest("GET / returns index.html admission form with 200 OK", async () =>
   assert.equal(res.status, 200);
   assert.ok(res.body.includes("IVS Admission Registration Form"), "Root must include form title");
   assert.ok(res.body.includes("Student Info"), "Root must include Student Info section");
+});
+
+await runTest("GET /styles.css returns CSS stylesheet with 200 OK and text/css content-type", async () => {
+  const res = await testRequest(app, "GET", "/styles.css");
+  assert.equal(res.status, 200);
+  assert.ok(res.headers["content-type"]?.includes("text/css"), `Expected text/css, got ${res.headers["content-type"]}`);
+  assert.ok(res.body.includes("--blue:"), "Stylesheet should define theme variables");
+  assert.ok(res.body.includes(".page"), "Stylesheet should define .page rules");
+});
+
+await runTest("GET /script.js returns JavaScript with 200 OK and javascript content-type", async () => {
+  const res = await testRequest(app, "GET", "/script.js");
+  assert.equal(res.status, 200);
+  assert.ok(res.headers["content-type"]?.includes("javascript"), `Expected javascript content-type, got ${res.headers["content-type"]}`);
+  assert.ok(res.body.includes("checkReviewModeStatus"), "Script should contain review mode logic");
+});
+
+await runTest("GET /img/ivs-banner.png returns banner image with 200 OK and image/png content-type", async () => {
+  const res = await testRequest(app, "GET", "/img/ivs-banner.png");
+  assert.equal(res.status, 200);
+  assert.ok(res.headers["content-type"]?.includes("image/png"), `Expected image/png, got ${res.headers["content-type"]}`);
 });
 
 await runTest("GET /api/status returns service status and reviewMode", async () => {

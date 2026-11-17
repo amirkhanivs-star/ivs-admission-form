@@ -1,0 +1,1116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1,  viewport-fit=cover">
+  <title>IVS Admission Registration Form</title>
+
+  <link rel="stylesheet" href="styles.css"/>
+
+  <!-- PDF libs -->
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <div class="wrapper">
+    <form id="admissionForm">
+      <!-- ================= PAGE 1 ================= -->
+      <div class="page" id="page1">
+        <!-- NEW: single banner image -->
+  <div class="header-banner">
+    <img src="img/ivs-banner.png"
+         alt="IQRA Virtual School — Al Furqan Children Academy"
+         loading="eager"
+         decoding="sync"
+         crossorigin="anonymous" />
+  </div>
+  <h1 class="title">Admission Registration <span class="title-accent">Form</span></h1>
+
+
+  <!-- keep your existing meta (Session + Date) that comes after -->
+  <div class="meta meta--top">
+    <!-- SESSION chip and DATE boxes (جوں کے توں) -->
+  </div>
+</header>
+          <div class="meta meta--top">
+            <div class="field-stack">
+              <div class="stack-label">SESSION:</div>
+              <div class="stack-value" id="sessionText">--</div>
+              <input type="hidden" id="session" name="session" value="">
+              <div class="stack-underline"></div>
+            </div>
+
+            <div class="field-stack">
+              <div class="stack-label">DATE OF REGISTRATION</div>
+              <div class="date-boxes" id="regBoxes">
+                <input class="box" maxlength="1" id="rb1" data-next="rb2" inputmode="numeric" />
+                <input class="box" maxlength="1" id="rb2" data-next="rb3" data-prev="rb1" inputmode="numeric" />
+                <span class="slash">/</span>
+                <input class="box" maxlength="1" id="rb3" data-next="rb4" data-prev="rb2" inputmode="numeric" />
+                <input class="box" maxlength="1" id="rb4" data-next="rb5" data-prev="rb3" inputmode="numeric" />
+                <span class="slash">/</span>
+                <input class="box" maxlength="1" id="rb5" data-next="rb6" data-prev="rb4" inputmode="numeric" />
+                <input class="box" maxlength="1" id="rb6" data-next="rb7" data-prev="rb5" inputmode="numeric" />
+                <input class="box" maxlength="1" id="rb7" data-next="rb8" data-prev="rb6" inputmode="numeric" />
+                <input class="box" maxlength="1" id="rb8" data-prev="rb7" inputmode="numeric" />
+              </div>
+              <input type="hidden" id="regDate" name="regDate" />
+            </div>
+          </div>
+        </header>
+
+        <section class="section" id="studentInfoSection">
+  <h3>Student Info</h3>
+  <div class="content">
+
+    <!-- Main Child Block -->
+    <div class="child-block main-child" data-child-id="main">
+      <!-- Student Details Row -->
+      <div class="grid cols-2">
+        <div>
+          <div class="label">Student Name</div>
+          <input id="studentName" class="input" required>
+        </div>
+
+        <div>
+          <div class="label">Gender</div>
+          <div class="inline" style="margin-top:6px;">
+            <label style="margin-right:12px;">
+              <input type="radio" name="gender" value="Male" style="transform:scale(1.1);"> Male
+            </label>
+            <label>
+              <input type="radio" name="gender" value="Female" style="transform:scale(1.1);"> Female
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- DOB and Grade -->
+      <div class="grid cols-2" style="margin-top:10px;">
+        <div>
+          <div class="label">Date of Birth</div>
+          <input id="dob" class="input" type="date">
+        </div>
+
+        <div>
+          <div class="label">Grade:</div>
+          <div class="grade-field-container">
+            <select id="gradeSelect" class="input grade-select-native" required>
+              <option value="">Select Grade</option>
+              <option value="FS 1">FS 1</option>
+              <option value="FS 2">FS 2</option>
+              <option value="FS 3">FS 3</option>
+              <option value="Grade 1">Grade 1</option>
+              <option value="Grade 2">Grade 2</option>
+              <option value="Grade 3">Grade 3</option>
+              <option value="Grade 4">Grade 4</option>
+              <option value="Grade 5">Grade 5</option>
+              <option value="Grade 6">Grade 6</option>
+              <option value="Grade 7">Grade 7</option>
+              <option value="Grade 8 (FBISE)" data-curriculum="FBISE" data-grade="8">Grade 8 (FBISE)</option>
+              <option value="Grade 8 (IGCSE / O&#39;Level)" data-curriculum="IGCSE" data-grade="8">Grade 8 (IGCSE / O'Level)</option>
+              <option value="Grade 9 (FBISE)" data-curriculum="FBISE" data-grade="9">Grade 9 (FBISE)</option>
+              <option value="Grade 9 (IGCSE / O&#39;Level)" data-curriculum="IGCSE" data-grade="9">Grade 9 (IGCSE / O'Level)</option>
+              <option value="Grade 10 (FBISE)" data-curriculum="FBISE" data-grade="10">Grade 10 (FBISE)</option>
+              <option value="Grade 10 (IGCSE / O&#39;Level)" data-curriculum="IGCSE" data-grade="10">Grade 10 (IGCSE / O'Level)</option>
+              <option value="Grade 11 (FBISE)" data-curriculum="FBISE" data-grade="11">Grade 11 (FBISE)</option>
+              <option value="Grade 11 (IGCSE, O / A&#39;Level)" data-curriculum="IGCSE" data-grade="11">Grade 11 (IGCSE, O / A'Level)</option>
+              <option value="Grade 12 (FBISE)" data-curriculum="FBISE" data-grade="12">Grade 12 (FBISE)</option>
+            </select>
+            <button type="button" class="mobile-grade-trigger input" id="gradeSelectMobileTrigger" data-target="gradeSelect" aria-haspopup="dialog" aria-expanded="false" aria-label="Select Student Grade">
+              <span class="mobile-grade-value placeholder">Select Grade</span>
+              <span class="mobile-grade-arrow" aria-hidden="true">▾</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= IGCSE ACADEMIC SUBJECT SELECTION (PHASE 1 & 2 - CHILD 1) ================= -->
+      <div class="section child-academic-wrapper" id="igcseSubjectSection" data-child-id="main" style="display:none; margin-top:14px;" aria-live="polite">
+        <h3>IGCSE Academic Subject Selection</h3>
+        <div class="content" id="igcseSubjectContent">
+
+          <!-- Cambridge Examination Plan Banner -->
+          <div class="igcse-banner">
+            <div class="igcse-banner-title">
+              <span class="igcse-badge-icon">📘</span>
+              <div>
+                <strong>IVS Cambridge IGCSE / O-Level Academic Pathway</strong>
+                <div class="igcse-banner-sub">School Examination Plan & Subject Structure</div>
+              </div>
+            </div>
+            <div class="igcse-plan-grid">
+              <div class="igcse-plan-card">
+                <div class="plan-grade-tag">Grade 9 Exam Stage</div>
+                <div class="plan-sub-title">Urdu, Islamiyat &amp; Pakistan Studies</div>
+                <div class="plan-sub-note">Pakistani pathway examination stage</div>
+              </div>
+              <div class="igcse-plan-card">
+                <div class="plan-grade-tag">Grade 9 or Grade 10</div>
+                <div class="plan-sub-title">English (First or Second Language)</div>
+                <div class="plan-sub-note">Flexible examination schedule based on candidate readiness</div>
+              </div>
+              <div class="igcse-plan-card">
+                <div class="plan-grade-tag">Generally Grade 10</div>
+                <div class="plan-sub-title">Mathematics &amp; Stream Subjects</div>
+                <div class="plan-sub-note">Final Cambridge board examination completion</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Grade 8 Notice Container (Separately Configurable) -->
+          <div id="igcseGrade8Container" style="display:none;">
+            <div class="igcse-alert-box info">
+              <div class="alert-icon">ℹ️</div>
+              <div class="alert-body">
+                <h4>Grade 8 (Pre-IGCSE / Foundation) Subject Selection Information</h4>
+                <p>
+                  Grade 8 follows the exploratory IGCSE foundation program. Final subject stream selection requirements for Grade 8 have not yet been confirmed by school administration and are managed separately from Grade 9 and Grade 10.
+                </p>
+                <p>
+                  Grade 8 students are enrolled in foundational core courses. Stream specializations will be confirmed during academic counseling prior to Grade 9 entry. Grade 9 stream rules do not automatically apply to Grade 8.
+                </p>
+                <div class="foundation-tag-list">
+                  <span class="foundation-tag">Foundation Mathematics</span>
+                  <span class="foundation-tag">Foundation English</span>
+                  <span class="foundation-tag">General Science</span>
+                  <span class="foundation-tag">Urdu / National Language</span>
+                  <span class="foundation-tag">Islamiyat</span>
+                  <span class="foundation-tag">Pakistan Studies</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Grade 9 & Grade 10 Approved Subject Selection Container -->
+          <div id="igcseGrade910Container" style="display:none;">
+
+            <!-- ================= GRADE 10 SPECIAL ADMISSION & EXAMINATION CONDITIONS (PHASE 2) ================= -->
+            <div id="igcseGrade10SpecialSection" style="display:none;" class="grade10-special-container">
+              <div class="grade10-header">
+                <div class="grade10-title">
+                  <span class="g10-badge-icon">🎓</span>
+                  <div>
+                    <strong>Grade 10 Examination &amp; Admission Conditions</strong>
+                    <div class="grade10-sub">Specific evaluation and scheduling requirements for Grade 10 candidates</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="g10-fields-grid">
+                <!-- 1. Examination Board -->
+                <div class="g10-field-group">
+                  <div class="label" style="font-weight:700;">1. Examination Board: <span class="req-star">*</span></div>
+                  <div class="g10-radio-row">
+                    <label class="radio-card g10-mini-card" id="card_board_cambridge">
+                      <input type="radio" name="g10_exam_board" value="Cambridge" id="board_cambridge">
+                      <strong>Cambridge</strong>
+                    </label>
+                    <label class="radio-card g10-mini-card" id="card_board_edexcel">
+                      <input type="radio" name="g10_exam_board" value="Pearson Edexcel" id="board_edexcel">
+                      <strong>Pearson Edexcel</strong>
+                    </label>
+                  </div>
+                  <div class="validation-msg" id="validation_g10_board" style="display:none;"></div>
+                  <div class="g10-field-hint" id="hint_exam_board">Please select your registered or intended exam board.</div>
+                </div>
+
+                <!-- 2. Appearing Year & 3. Examination Session -->
+                <div class="g10-field-group">
+                  <div class="grid cols-2" style="gap:10px;">
+                    <div>
+                      <div class="label" style="font-weight:700;">2. Appearing Year: <span class="req-star">*</span></div>
+                      <select id="g10AppearingYear" class="input" style="min-height:38px; padding:6px 10px;">
+                        <option value="">Select Examination Year</option>
+                      </select>
+                      <div class="validation-msg" id="validation_g10_year" style="display:none;"></div>
+                    </div>
+                    <div>
+                      <div class="label" style="font-weight:700;">3. Examination Session: <span class="req-star">*</span></div>
+                      <div class="g10-radio-row" style="margin-top:2px;">
+                        <label class="radio-card g10-mini-card" id="card_session_may_june">
+                          <input type="radio" name="g10_exam_session" value="May/June" id="session_may_june">
+                          <span>May/June</span>
+                        </label>
+                        <label class="radio-card g10-mini-card" id="card_session_oct_nov">
+                          <input type="radio" name="g10_exam_session" value="October/November" id="session_oct_nov">
+                          <span>Oct/Nov</span>
+                        </label>
+                      </div>
+                      <div class="validation-msg" id="validation_g10_session" style="display:none;"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 4. Syllabus Preparation -->
+                <div class="g10-field-group">
+                  <div class="label" style="font-weight:700;">4. Syllabus Preparation Status: <span class="req-star">*</span></div>
+                  <div class="g10-radio-row cols-3">
+                    <label class="radio-card g10-mini-card" id="card_prep_completed">
+                      <input type="radio" name="g10_syllabus_prep" value="Syllabus completed" id="prep_completed">
+                      <span>Syllabus completed</span>
+                    </label>
+                    <label class="radio-card g10-mini-card" id="card_prep_partial">
+                      <input type="radio" name="g10_syllabus_prep" value="Partially completed" id="prep_partial">
+                      <span>Partially completed</span>
+                    </label>
+                    <label class="radio-card g10-mini-card" id="card_prep_not_completed">
+                      <input type="radio" name="g10_syllabus_prep" value="Not yet completed" id="prep_not_completed">
+                      <span>Not yet completed</span>
+                    </label>
+                  </div>
+                  <div class="validation-msg" id="validation_g10_prep" style="display:none;"></div>
+                </div>
+
+                <!-- 5. Previous Examination Information -->
+                <div class="g10-field-group">
+                  <div class="label" style="font-weight:700;">5. Previous Examination Information (Grade 9):</div>
+                  
+                  <!-- A: Subjects already examined in Grade 9 -->
+                  <div style="margin-bottom:10px;">
+                    <div class="g10-sublabel">Subjects already examined in Grade 9 (Check all that apply):</div>
+                    <div class="g10-checkbox-grid">
+                      <label class="g10-check-item">
+                        <input type="checkbox" name="g10_grade9_subjects" value="Urdu" id="g9_sub_urdu">
+                        <span>Urdu</span>
+                      </label>
+                      <label class="g10-check-item">
+                        <input type="checkbox" name="g10_grade9_subjects" value="Islamiyat" id="g9_sub_islamiyat">
+                        <span>Islamiyat</span>
+                      </label>
+                      <label class="g10-check-item">
+                        <input type="checkbox" name="g10_grade9_subjects" value="Pakistan Studies" id="g9_sub_pak_studies">
+                        <span>Pakistan Studies</span>
+                      </label>
+                      <label class="g10-check-item">
+                        <input type="checkbox" name="g10_grade9_subjects" value="English" id="g9_sub_english">
+                        <span>English</span>
+                      </label>
+                      <label class="g10-check-item">
+                        <input type="checkbox" name="g10_grade9_subjects" value="None yet" id="g9_sub_none">
+                        <span>None yet / First-time candidate</span>
+                      </label>
+                    </div>
+                    <div style="margin-top:6px;">
+                      <input type="text" id="g10OtherExaminedSubjects" class="input" placeholder="Other subjects already examined (if any, e.g. Mathematics)" style="font-size:12px; min-height:34px; padding:6px 10px;">
+                    </div>
+                    <div class="validation-msg" id="validation_g10_prev_exam" style="display:none;"></div>
+                  </div>
+
+                  <!-- B: English Examination Status -->
+                  <div style="margin-bottom:10px;">
+                    <div class="g10-sublabel">English Examination Status:</div>
+                    <div class="g10-radio-row cols-3">
+                      <label class="radio-card g10-mini-card" id="card_eng_stat_pending">
+                        <input type="radio" name="g10_english_status" value="Appearing in Grade 10" id="eng_stat_pending" checked>
+                        <span>Appearing in Grade 10</span>
+                      </label>
+                      <label class="radio-card g10-mini-card" id="card_eng_stat_done">
+                        <input type="radio" name="g10_english_status" value="Already examined in Grade 9" id="eng_stat_done">
+                        <span>Examined in Grade 9</span>
+                      </label>
+                      <label class="radio-card g10-mini-card" id="card_eng_stat_awaited">
+                        <input type="radio" name="g10_english_status" value="Result awaited" id="eng_stat_awaited">
+                        <span>Result awaited</span>
+                      </label>
+                    </div>
+                  </div>
+
+                  <!-- C: Applicable Subject Exemptions -->
+                  <div>
+                    <div class="g10-sublabel">Applicable Subject Exemptions:</div>
+                    <div class="g10-radio-row">
+                      <label class="radio-card g10-mini-card" id="card_g10_exempt_none">
+                        <input type="radio" name="g10_exempt_option" value="No exemptions (Standard curriculum)" id="g10_exempt_none" checked>
+                        <span>No exemptions (Standard curriculum)</span>
+                      </label>
+                      <label class="radio-card g10-mini-card" id="card_g10_exempt_applied">
+                        <input type="radio" name="g10_exempt_option" value="Exemption requested / approved under IBCC rules" id="g10_exempt_applied">
+                        <span>Exemption requested / approved (IBCC)</span>
+                      </label>
+                    </div>
+                    <div id="g10ExemptionNoteWrap" style="display:none; margin-top:6px;">
+                      <input type="text" id="g10ExemptionDetails" class="input" placeholder="Specify exemption details (e.g., Overseas IBCC exemption for Urdu/Islamiyat)" style="font-size:12px; min-height:34px; padding:6px 10px;">
+                    </div>
+                  </div>
+
+                </div>
+
+                <!-- Dynamic Admission Condition & Evaluation Result Box -->
+                <div id="g10AdmissionEvaluationBox" class="g10-eval-box" style="display:none;">
+                  <div class="g10-eval-header">
+                    <span class="g10-status-badge" id="g10EvalStatusBadge">Evaluation Pending</span>
+                    <strong class="g10-eval-title" id="g10EvalTitle">—</strong>
+                  </div>
+                  <p class="g10-eval-msg" id="g10EvalMessage"></p>
+                  <div class="g10-outcomes-wrap" id="g10OutcomesWrap" style="display:none;">
+                    <strong>Possible Academic Committee Recommendations:</strong>
+                    <ul class="g10-outcomes-list" id="g10OutcomesList"></ul>
+                  </div>
+
+                  <!-- Counseling Information Card -->
+                  <div class="g10-counseling-card" id="g10CounselingCard" style="display:none;">
+                    <div class="counseling-title">
+                      <span>📞</span>
+                      <strong>Academic Counseling &amp; Assessment Schedule</strong>
+                    </div>
+                    <div class="counseling-details">
+                      <div><strong>Available Days:</strong> Monday, Tuesday, Thursday, Friday, Saturday <span class="counseling-tag">(Excluding Wednesdays)</span></div>
+                      <div><strong>Counseling Window:</strong> 12:00 PM to 2:00 PM <span class="counseling-tag">Pakistan Standard Time (PKT)</span></div>
+                      <div class="counseling-note">
+                        <em>Note:</em> Admission evaluation is conducted during these counseling hours. Our academic team will contact you for assessment.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- 1. Compulsory Subjects -->
+            <div class="igcse-block">
+              <div class="igcse-block-title">
+                <span class="step-num">1</span> Compulsory Subjects
+              </div>
+              <p class="igcse-block-intro">
+                Mathematics is compulsory and automatically selected. Choose exactly ONE compulsory English syllabus.
+              </p>
+
+              <!-- Mathematics (Auto-assigned) -->
+              <div class="math-compulsory-card">
+                <div class="compulsory-check-icon">✓</div>
+                <div class="compulsory-details">
+                  <strong id="mathTitle">Mathematics (Compulsory)</strong>
+                  <div class="compulsory-note">Compulsory Subject — Automatically Selected &amp; Assigned</div>
+                </div>
+                <span class="badge-assigned">Auto Selected</span>
+              </div>
+
+              <!-- English Choice -->
+              <div class="english-choice-section">
+                <div class="label" style="font-weight:700; margin-bottom:8px; font-size:13px;">
+                  Select English Syllabus (Choose exactly ONE): <span class="req-star">*</span>
+                </div>
+                <div class="radio-card-group">
+                  <label class="radio-card" id="card_eng_first">
+                    <div class="radio-head">
+                      <input type="radio" name="igcse_english" value="English as a First Language" id="eng_first">
+                      <span class="radio-title">English as a First Language</span>
+                    </div>
+                    <p class="radio-desc">
+                      Suitable for students who have a strong command of English, good vocabulary, excellent reading and writing skills, and the ability to express ideas confidently and effectively.
+                    </p>
+                  </label>
+
+                  <label class="radio-card" id="card_eng_second">
+                    <div class="radio-head">
+                      <input type="radio" name="igcse_english" value="English as a Second Language" id="eng_second">
+                      <span class="radio-title">English as a Second Language</span>
+                    </div>
+                    <p class="radio-desc">
+                      Suitable for students who have learned English as an additional language and wish to develop their reading, writing, comprehension and communication skills.
+                    </p>
+                  </label>
+                </div>
+                <div class="validation-msg" id="validation_english" style="display:none;"></div>
+              </div>
+            </div>
+
+            <!-- 2. Academic Streams -->
+            <div class="igcse-block">
+              <div class="igcse-block-title">
+                <span class="step-num">2</span> Academic Stream Selection <span class="req-star">*</span>
+              </div>
+              <p class="igcse-block-intro">
+                Parents must choose exactly ONE complete academic stream. Once a stream is selected, all belonging subjects are automatically assigned. Subjects from different streams cannot be mixed.
+              </p>
+
+              <div class="streams-grid">
+                <!-- Pure Sciences -->
+                <div class="stream-card" id="stream_card_pure_sciences" data-stream="pure_sciences">
+                  <div class="stream-card-head">
+                    <label class="stream-radio-label">
+                      <input type="radio" name="igcse_stream" value="pure_sciences" id="stream_pure_sciences">
+                      <span class="stream-name">Pure Sciences</span>
+                    </label>
+                  </div>
+                  <ul class="stream-subject-list">
+                    <li>Biology</li>
+                    <li>Physics</li>
+                    <li>Chemistry</li>
+                  </ul>
+                </div>
+
+                <!-- IT & Engineering -->
+                <div class="stream-card" id="stream_card_it_engineering" data-stream="it_engineering">
+                  <div class="stream-card-head">
+                    <label class="stream-radio-label">
+                      <input type="radio" name="igcse_stream" value="it_engineering" id="stream_it_engineering">
+                      <span class="stream-name">IT &amp; Engineering</span>
+                    </label>
+                  </div>
+                  <ul class="stream-subject-list">
+                    <li>Computer Science</li>
+                    <li>Physics</li>
+                    <li>Chemistry</li>
+                  </ul>
+                </div>
+
+                <!-- Commerce -->
+                <div class="stream-card" id="stream_card_commerce" data-stream="commerce">
+                  <div class="stream-card-head">
+                    <label class="stream-radio-label">
+                      <input type="radio" name="igcse_stream" value="commerce" id="stream_commerce">
+                      <span class="stream-name">Commerce</span>
+                    </label>
+                  </div>
+                  <ul class="stream-subject-list">
+                    <li>Business Studies</li>
+                    <li>Accounting</li>
+                    <li>Economics</li>
+                  </ul>
+                </div>
+
+                <!-- Humanities (Available from 2027-2028) -->
+                <div class="stream-card" id="stream_card_humanities" data-stream="humanities">
+                  <div class="stream-card-head">
+                    <label class="stream-radio-label">
+                      <input type="radio" name="igcse_stream" value="humanities" id="stream_humanities">
+                      <span class="stream-name">Humanities</span>
+                    </label>
+                    <span class="session-badge" id="humanitiesSessionBadge">Available 2027–2028</span>
+                  </div>
+                  <ul class="stream-subject-list">
+                    <li>Business Studies</li>
+                    <li>Computer Science</li>
+                    <li>Psychology</li>
+                    <li>Sociology</li>
+                  </ul>
+                  <div class="stream-unavailable-msg" id="humanitiesUnavailableMsg">
+                    Humanities stream is available starting from academic session 2027–2028 and is not currently open for selection.
+                  </div>
+                </div>
+              </div>
+              <div class="validation-msg" id="validation_stream" style="display:none;"></div>
+
+              <!-- Assigned Stream Subjects Panel -->
+              <div class="assigned-stream-panel" id="assignedStreamPanel" style="display:none;">
+                <div class="assigned-stream-head">
+                  <strong>Assigned Subjects for <span id="assignedStreamName">—</span>:</strong>
+                  <span class="stream-rule-tag">Complete Stream Assigned • No Mixing Allowed</span>
+                </div>
+                <div class="subject-pills" id="assignedStreamPills"></div>
+              </div>
+            </div>
+
+            <!-- 3. Additional Optional Computer Science -->
+            <div class="igcse-block" id="optCsBlock" style="display:none;">
+              <div class="igcse-block-title">
+                <span class="step-num">3</span> Additional Optional Subject
+              </div>
+              <div class="optional-cs-card">
+                <label class="checkbox-label" style="display:flex; align-items:flex-start; gap:10px; cursor:pointer;">
+                  <input type="checkbox" id="optCsCheckbox" name="igcse_optional_cs" value="Computer Science" style="transform:scale(1.2); margin-top:3px;">
+                  <div>
+                    <strong>Request Computer Science as an Additional Optional Subject</strong>
+                    <div class="opt-cs-status-note">
+                      <span class="note-highlight">Subject to school approval and availability.</span>
+                      <div style="font-size:12px; color:#64748b; margin-top:3px;">
+                        Tracked as an optional subject request, not an automatically approved subject.
+                      </div>
+                    </div>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <!-- 4. Urdu, Islamiyat, and Pakistan Studies (Pathway & Exemption) -->
+            <div class="igcse-block" id="igcsePakPathwaySection">
+              <div class="igcse-block-title">
+                <span class="step-num">4</span> Urdu, Islamiyat &amp; Pakistan Studies
+              </div>
+              <div class="pathway-card">
+                <p class="pathway-description">
+                  These subjects are compulsory for students following the Pakistani examination and equivalence pathway, subject to applicable requirements. Students examining outside Pakistan may qualify for exemptions according to applicable IBCC requirements. Exemptions cannot be determined based on nationality alone.
+                </p>
+
+                <div class="pathway-choice-group">
+                  <label class="radio-card pathway-option selected" id="card_pathway_pak">
+                    <div class="radio-head">
+                      <input type="radio" name="igcse_pathway" value="pakistan" id="pathway_pak" checked>
+                      <span class="radio-title">Appearing in Pakistan / Pakistani Equivalence (IBCC) Required</span>
+                    </div>
+                    <div class="radio-desc">
+                      Urdu, Islamiyat, and Pakistan Studies are compulsory and scheduled for examination in Grade 9.
+                    </div>
+                    <div class="pathway-subjects-badges" id="pakPathwayAssignedBadges" style="margin-top:8px;">
+                      <span class="subject-pill">Urdu (Compulsory - Grade 9)</span>
+                      <span class="subject-pill">Islamiyat (Compulsory - Grade 9)</span>
+                      <span class="subject-pill">Pakistan Studies (Compulsory - Grade 9)</span>
+                    </div>
+                  </label>
+
+                  <label class="radio-card pathway-option" id="card_pathway_overseas">
+                    <div class="radio-head">
+                      <input type="radio" name="igcse_pathway" value="overseas_exemption" id="pathway_overseas">
+                      <span class="radio-title">Examining Outside Pakistan — Requesting IBCC Exemption</span>
+                    </div>
+                    <div class="radio-desc">
+                      Student will examine outside Pakistan and requests formal academic exemption under applicable IBCC regulations.
+                    </div>
+                  </label>
+                </div>
+
+                <!-- Exemption Details Box (Visible if overseas_exemption selected) -->
+                <div class="exemption-box" id="exemptionDetailsBox" style="display:none; margin-top:12px;">
+                  <div class="exemption-header">
+                    <span class="exemption-badge-tag">Exemption Request: Pending Academic Verification</span>
+                  </div>
+                  <p style="font-size:12px; color:#475569; margin:6px 0 10px;">
+                    Select the subjects for which an exemption is requested. In accordance with IBCC regulations, exemption requests are recorded as pending academic verification and evaluation of overseas examination documents. Nationality alone does not determine exemption.
+                  </p>
+                  <div class="exemption-checkboxes">
+                    <label class="exemption-check-item">
+                      <input type="checkbox" id="exemptUrdu" name="igcse_exemption_subject" value="Urdu">
+                      Request Exemption for Urdu
+                    </label>
+                    <label class="exemption-check-item">
+                      <input type="checkbox" id="exemptIslamiyat" name="igcse_exemption_subject" value="Islamiyat">
+                      Request Exemption for Islamiyat (Subject to IBCC non-Muslim / overseas criteria)
+                    </label>
+                    <label class="exemption-check-item">
+                      <input type="checkbox" id="exemptPakStudies" name="igcse_exemption_subject" value="Pakistan Studies">
+                      Request Exemption for Pakistan Studies
+                    </label>
+                  </div>
+                  <div class="exemption-alert-note">
+                    <strong>Verification Notice:</strong> All exemption requests are reviewed individually by the IVS Academic Committee as per IBCC guidelines. Relevant academic records and proof of examination location will be verified prior to final Cambridge exam entry.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 5. Real-Time Subject Selection Overview -->
+            <div class="igcse-selection-summary" id="igcseLiveSummary" style="display:none;">
+              <div class="summary-head">
+                <strong>Selected IGCSE Academic Package Overview</strong>
+                <span class="total-subjects-badge" id="totalSubjectsBadge">0 Subjects Selected</span>
+              </div>
+              <div class="summary-content-grid" id="igcseSummaryDetails">
+                <!-- Dynamically populated summary items -->
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Container for dynamic additional children -->
+    <div id="additionalChildrenContainer"></div>
+
+    <hr class="sep">
+    <!-- ADD ANOTHER CHILD BUTTON -->
+    <div style="text-align:center; margin:10px 0;">
+      <button type="button" id="addChildBtn" class="btn hide-in-pdf">+ Add Another Child</button>
+    </div>
+
+    <!-- CHILD TEMPLATE FOR DYNAMIC ADDITION -->
+    <div id="childTemplate" style="display:none;">
+      <div class="child-block" data-child-id="__INDEX__">
+        <hr class="sep">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <h4 style="margin:0; color:var(--blue); font-size:14px;">Additional Child (__INDEX__)</h4>
+        </div>
+        <div class="grid cols-2">
+          <div>
+            <div class="label">Student Name</div>
+            <input class="input studentName" placeholder="Student Name" required>
+          </div>
+
+          <div>
+            <div class="label">Gender</div>
+            <div class="inline" style="margin-top:6px;">
+              <label style="margin-right:12px;">
+                <input type="radio" name="gender___INDEX__" value="Male" style="transform:scale(1.1);"> Male
+              </label>
+              <label>
+                <input type="radio" name="gender___INDEX__" value="Female" style="transform:scale(1.1);"> Female
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid cols-2" style="margin-top:10px;">
+          <div>
+            <div class="label">Date of Birth</div>
+            <input class="input dob" type="date" required>
+          </div>
+
+          <div>
+            <div class="label">Grade:</div>
+            <div class="grade-field-container">
+              <select name="childGrade___INDEX__" id="childGrade___INDEX__" class="input childGradeSelect grade-select-native" style="margin-bottom:10px;" required>
+                <option value="">Select Grade</option>
+                <option value="FS 1">FS 1</option>
+                <option value="FS 2">FS 2</option>
+                <option value="FS 3">FS 3</option>
+                <option value="Grade 1">Grade 1</option>
+                <option value="Grade 2">Grade 2</option>
+                <option value="Grade 3">Grade 3</option>
+                <option value="Grade 4">Grade 4</option>
+                <option value="Grade 5">Grade 5</option>
+                <option value="Grade 6">Grade 6</option>
+                <option value="Grade 7">Grade 7</option>
+                <option value="Grade 8 (FBISE)" data-curriculum="FBISE" data-grade="8">Grade 8 (FBISE)</option>
+                <option value="Grade 8 (IGCSE / O&#39;Level)" data-curriculum="IGCSE" data-grade="8">Grade 8 (IGCSE / O'Level)</option>
+                <option value="Grade 9 (FBISE)" data-curriculum="FBISE" data-grade="9">Grade 9 (FBISE)</option>
+                <option value="Grade 9 (IGCSE / O&#39;Level)" data-curriculum="IGCSE" data-grade="9">Grade 9 (IGCSE / O'Level)</option>
+                <option value="Grade 10 (FBISE)" data-curriculum="FBISE" data-grade="10">Grade 10 (FBISE)</option>
+                <option value="Grade 10 (IGCSE / O&#39;Level)" data-curriculum="IGCSE" data-grade="10">Grade 10 (IGCSE / O'Level)</option>
+                <option value="Grade 11 (FBISE)" data-curriculum="FBISE" data-grade="11">Grade 11 (FBISE)</option>
+                <option value="Grade 11 (IGCSE, O / A&#39;Level)" data-curriculum="IGCSE" data-grade="11">Grade 11 (IGCSE, O / A'Level)</option>
+                <option value="Grade 12 (FBISE)" data-curriculum="FBISE" data-grade="12">Grade 12 (FBISE)</option>
+              </select>
+              <button type="button" class="mobile-grade-trigger input" id="childGradeTrigger___INDEX__" data-target="childGrade___INDEX__" aria-haspopup="dialog" aria-expanded="false" aria-label="Select Student Grade" style="margin-bottom:10px;">
+                <span class="mobile-grade-value placeholder">Select Grade</span>
+                <span class="mobile-grade-arrow" aria-hidden="true">▾</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Academic selection container for this child -->
+        <div class="child-academic-wrapper" id="academicContainer___INDEX__" data-child-id="__INDEX__" style="display:none; margin-top:12px;"></div>
+
+        <div style="text-align:right; margin-top:8px;">
+          <button type="button" class="btn secondary removeChildBtn hide-in-pdf">
+            Remove Child
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+<!-- STUDENT SUMMARY (auto generated below main form) -->
+<section class="section" id="studentSummarySection">
+  <h3>Children Summary</h3>
+  <div class="content" id="studentSummary"></div>
+</section>
+   <!-- NEW: Father Information (اپنا الگ سیکشن) -->
+<section class="section" id="fatherInfoSection">
+  <h3>Father Info</h3>
+  <div class="content" id="parentInfoSection">
+    <div class="grid cols-2">
+      <div>
+        <div class="label">Father Name</div>
+        <input id="fatherName" class="input">
+      </div>
+      <div>
+        <div class="label">Guardian WhatsApp #</div>
+        <!-- ✅ NEW WRAPPER WITH DROPDOWN -->
+        <div class="phone-wrapper" style="position:relative;">
+          <input
+            id="gWhats"
+            class="input"
+            type="tel"
+            autocomplete="tel"
+            placeholder="Select country & enter number"
+          >
+          <div
+            id="countryDropdown"
+            class="country-dropdown hide-in-pdf"
+            style="display:none; position:absolute; top:100%; left:0; right:0; background:#ffffff; border:1px solid #e5e7eb; border-radius:8px; box-shadow:0 10px 25px rgba(15,23,42,0.12); padding:6px; margin-top:4px; max-height:240px; overflow:auto; z-index:40;"
+          >
+            <input
+              type="text"
+              id="countrySearch"
+              class="input"
+              placeholder="Search country..."
+              style="margin-bottom:6px; font-size:13px; padding:4px 8px;"
+            >
+            <div id="countryList" class="country-list"></div>
+          </div>
+        </div>
+        <!-- ✅ END NEW WRAPPER -->
+      </div>
+    </div>
+
+    <div class="grid cols-2" style="margin-top:10px;">
+  <div>
+    <div class="label">Religion</div>
+    <input id="religion" class="input">
+  </div>
+  <div>
+    <div class="label">Father Occupation</div>
+    <input id="fOcc" class="input">
+  </div>
+</div>
+
+<div class="grid cols-2" style="margin-top:10px;">
+  <div>
+    <div class="label">Email Address</div>
+    <input id="fatherEmail" class="input" type="email" placeholder="Enter email address">
+  </div>
+  <div>
+    <div class="label">Nationality</div>
+    <input id="nation" class="input">
+  </div>
+</div>
+  </div>
+</section>
+
+
+
+        <section class="section">
+          <h3>Address Details</h3>
+          <div class="content">
+            <div class="grid">
+              <div><div class="label">Present Address</div><textarea id="addr" class="textarea"></textarea></div>
+            </div>
+            <div class="grid cols-3">
+              <div><div class="label">The City</div><input id="city" class="input"></div>
+              <div><div class="label">Present State</div><input id="state" class="input"></div>
+               <div><div class="label">Secondary Contact</div><input id="sContact" class="input"></div>
+            </div>
+            <div class="grid cols-2">
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- ================= PAGE 2 ================= -->
+      <div class="page" id="page2">
+        <div class="title" style="margin-top:18px;">DECLARATION OF PARENT/GUARDIAN</div>
+
+        <div class="badge-row">
+          <div class="badge"><h4>Affiliated with PSRA & Federal Board</h4></div>
+          <div class="badge"><h4>Based on British & Federal Board Curriculum</h4></div>
+          <div class="badge"><h3>Students across 50+ countries</h3></div>
+        </div>
+
+  <section class="section">
+  <style>
+    .fee-policy-link {
+      color: #1d4ed8;
+      font-weight: 700;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .fee-policy-modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      z-index: 99999;
+      font-family: inherit;
+    }
+
+    .fee-policy-modal.show {
+      display: block;
+    }
+
+    .fee-policy-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.58);
+    }
+
+    .fee-policy-box {
+      position: relative;
+      width: min(92%, 720px);
+      max-height: 86vh;
+      overflow-y: auto;
+      margin: 5vh auto;
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 22px 24px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
+      z-index: 2;
+      color: #0f172a;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .fee-policy-box h2 {
+      margin: 0 0 14px;
+      color: #b1122d;
+      font-size: 26px;
+      line-height: 1.2;
+      text-transform: uppercase;
+    }
+
+    .fee-policy-box h3 {
+      margin: 18px 0 8px;
+      color: #111827;
+      font-size: 18px;
+    }
+
+    .fee-policy-box ul,
+    .fee-policy-box ol {
+      margin: 8px 0 14px;
+      padding-left: 22px;
+    }
+
+    .fee-policy-box li {
+      margin-bottom: 8px;
+    }
+
+    .fee-policy-close {
+      position: absolute;
+      top: 10px;
+      right: 14px;
+      border: none;
+      background: transparent;
+      color: #334155;
+      font-size: 30px;
+      line-height: 1;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .fee-policy-note {
+      margin-top: 12px;
+      padding: 10px 12px;
+      background: #f8fafc;
+      border-left: 4px solid #b1122d;
+      border-radius: 6px;
+      font-size: 13px;
+    }
+
+    @media print {
+      .fee-policy-modal {
+        display: none !important;
+      }
+    }
+  </style>
+
+  <div class="content declaration-list">
+    <p class="decl-note">
+      <strong>Note:</strong> After reading the declaration form carefully, kindly click “Agree” to confirm your acknowledgment.
+    </p>
+
+    <ol class="decl-list">
+      <li>I understand that admission to Iqra Virtual School (IVS) is based on availability and fulfillment of all admission requirements.</li>
+      <li>I agree to ensure my child’s regular attendance in all scheduled classes and to maintain proper discipline throughout the academic year.</li>
+      <li>I understand that mobile phone use during class, abusive language, or any form of disciplinary misconduct will not be tolerated.</li>
+      <li>I will ensure that my child always behaves respectfully toward teachers, staff, and fellow students.</li>
+      <li>I acknowledge that contacting teachers or students outside IVS-approved platforms is strictly prohibited and may result in termination of services.</li>
+      <li>In case of any dispute, I will communicate directly with the school management and will not involve external parties or legal authorities.</li>
+      <li>I understand that late fee payments may result in restricted access to classes or withheld academic reports.</li>
+      <li>I acknowledge that all course materials and resources provided by IVS are for my child’s personal use only and must not be shared externally.</li>
+      <li>I agree to monitor my child’s academic progress and maintain regular communication with the school for updates.</li>
+      <li>
+        I have read and understood the
+        <a href="#" id="openFeePolicy" class="fee-policy-link">School Fee Policy</a>
+        and agree to follow the school fee rules.
+      </li>
+      <li>I have read and understood all the rules and regulations of IVS and agree to follow them to support my child’s academic success.</li>
+      <li>I confirm that I have reviewed and selected the academic stream and subjects for my child/children, and understand that subjects from different streams cannot be mixed.</li>
+      <li>I acknowledge that any additional optional subject requested (such as Computer Science) is strictly subject to school availability, timetable compatibility, and formal academic approval, and does not constitute guaranteed enrollment.</li>
+      <li>I understand the applicable IBCC examination and equivalence requirements regarding Urdu, Islamiyat, and Pakistan Studies. Any request for exemption is provisional and pending official academic verification by the school.</li>
+      <li>For Grade 10 applicants appearing in May/June examinations where syllabus coverage has been completed, I acknowledge that regular admission requires academic evaluation and counseling before confirmation, and that enrollment is subject to the academic team's review.</li>
+      <li>I confirm that all information provided in this admission form is true and complete to the best of my knowledge, and agree to abide by all school rules, academic policies, and admission regulations.</li>
+      <li class="agree-line">
+        <label><input id="declMaster" type="checkbox"> Agree to the declaration above.</label>
+      </li>
+    </ol>
+    <div id="declAckTimestamp" class="decl-timestamp-text" style="display:none; font-size:11.5px; color:#1e293b; background:#f8fafc; border:1px solid #cbd5e1; border-radius:4px; padding:6px 10px; margin-top:10px;"></div>
+    <div class="decl-notice-text" style="font-size:10.5px; color:#64748b; margin-top:6px; line-height:1.45;">Notice: This digital acknowledgment and signature record parental consent within the school registration process and institutional admission records.</div>
+  </div>
+
+  <!-- Fee Policy Popup -->
+  <div id="feePolicyModal" class="fee-policy-modal" aria-hidden="true">
+    <div id="feePolicyBackdrop" class="fee-policy-backdrop"></div>
+
+    <div class="fee-policy-box" role="dialog" aria-modal="true" aria-labelledby="feePolicyTitle">
+      <button type="button" id="closeFeePolicy" class="fee-policy-close" aria-label="Close Fee Policy">
+        ×
+      </button>
+
+      <h2 id="feePolicyTitle">School Fee Policy</h2>
+
+      <h3>Advance Fee Discount Plan</h3>
+      <ul>
+        <li><strong>12 Months Advance Fee Payment:</strong> Get Discount One Month Tuition Fee.</li>
+        <li><strong>6 Months Advance Fee Payment:</strong> Get 50% Discount on One Month Tuition Fee.</li>
+        <li><strong>4 Months Advance Fee Payment:</strong> Get 15% Discount on One Month Tuition Fee.</li>
+      </ul>
+
+      <h3>General Terms & Conditions</h3>
+      <ol>
+        <li>Monthly tuition fee must be paid on or before the 10th of each month. Late payment may result in additional charges according to school policy.</li>
+        <li>Parents who pay 12 months’ fee in advance will receive 1 month fee waiver or discount.</li>
+        <li>Parents who pay 6 months’ fee in advance will receive 50% discount on one month’s tuition fee.</li>
+        <li>Parents who pay 4 months’ fee in advance will receive 15% discount on one month’s tuition fee.</li>
+        <li>Admission fee and annual charges, if applicable, are non-refundable after admission confirmation.</li>
+        <li>Fee once deposited will not be adjusted or refunded except under approved school rules.</li>
+        <li>In case of non-payment beyond the allowed period, the school reserves the right to suspend classes, exams, or re-admission procedures according to school regulations.</li>
+        <li>The school management reserves the right to revise fee policy with prior notice.</li>
+        <li>This offer cannot be combined with any other discount or concession.</li>
+      </ol>
+
+      <div class="fee-policy-note">
+        <strong>Note:</strong> Discount is applicable only on advance fee submission.
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function initFeePolicyPopup() {
+      const openBtn = document.getElementById("openFeePolicy");
+      const modal = document.getElementById("feePolicyModal");
+      const closeBtn = document.getElementById("closeFeePolicy");
+      const backdrop = document.getElementById("feePolicyBackdrop");
+
+      if (!openBtn || !modal || !closeBtn || !backdrop) return;
+
+      function openModal(event) {
+        if (event) event.preventDefault();
+        modal.classList.add("show");
+        modal.setAttribute("aria-hidden", "false");
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeModal() {
+        modal.classList.remove("show");
+        modal.setAttribute("aria-hidden", "true");
+        document.body.style.overflow = "";
+      }
+
+      openBtn.addEventListener("click", openModal);
+      closeBtn.addEventListener("click", closeModal);
+      backdrop.addEventListener("click", closeModal);
+
+      document.addEventListener("keydown", function(event) {
+        if (event.key === "Escape" && modal.classList.contains("show")) {
+          closeModal();
+        }
+      });
+    })();
+  </script>
+</section>
+
+            <!-- Signature area (compact + instructions on right) -->
+            <div class="signature">
+              <div class="sig-row">
+                <div class="sig-col">
+                  <div class="label">Signature of Parent/Guardian (draw here)</div>
+                  <canvas id="sig" width="480" height="140"></canvas>
+                  <div class="sig-actions">
+                    <button id="clearSig" type="button" class="btn secondary">Clear Signature</button>
+                  </div>
+                  <div id="sigError" class="sig-error-msg" style="display:none; color:#dc2626; font-size:12px; margin-top:6px; font-weight:600;">⚠️ Please draw your signature on the canvas before submitting.</div>
+                </div>
+
+            <aside class="sig-notes hide-in-pdf">
+       <div class="sig-notes-title">
+          <h4>How to complete your admission</h4>
+       </div>
+
+       <ol class="sig-steps">
+       <li>To complete your admission, you must tick <strong>Agree</strong> box.</li>
+       <li>Draw your signature.</li>
+       <li>Click <strong>Save filled form as PDF</strong>.</li>
+       <li>When WhatsApp opens, send the PDF with the file <strong>attached</strong>.</li>
+       <li>That’s it — your admission request will be completed.</li>
+       </ol>
+
+  <div class="sig-hint">
+     <h4>Note:</h4>
+        If you’re not redirected to WhatsApp automatically, please send the filled PDF on the number from which you received the link.
+  </div>
+</aside>
+            <div class="actions hide-in-pdf" style="margin-top:14px">
+              <button id="btnPdf" class="btn" type="button">Save filled form as PDF</button>
+            </div>
+          </div>
+        <div id="processedBy" class="processed-by">
+             Processed by: <strong id="processedByName">—</strong>
+        </div>
+        </section>
+      </div> 
+    </form>
+  </div>
+
+  <!-- Your main JS -->
+ <script src="script.js?v=20260709-fix3" defer></script>
+
+
+  <!-- Date boxes -> hidden regDate (safe, tiny, and FIXED) -->
+  <script>
+  (function initDateBoxes(){
+    const container = document.getElementById('regBoxes');
+    if (!container) return;
+
+    const boxes  = Array.from(container.querySelectorAll('.box'));
+    const hidden = document.getElementById('regDate');
+
+    function normalize(){
+      const v = boxes.map(b => (b.value || '').replace(/\D/g,'')).join('');
+      if (v.length === 8) {
+        const mm = v.slice(0,2), dd = v.slice(2,4), yyyy = v.slice(4,8);
+        hidden.value = yyyy + '-' + mm + '-' + dd;
+      } else {
+        hidden.value = '';
+      }
+    }
+
+    boxes.forEach((b) => {
+      b.addEventListener('input', (e) => {
+        e.target.value = e.target.value.replace(/\D/g,'').slice(0,1);
+        if (e.target.value && b.dataset.next) {
+          const nx = document.getElementById(b.dataset.next);
+          if (nx) nx.focus();
+        }
+        normalize();
+      });
+
+      b.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && !b.value && b.dataset.prev) {
+          const pv = document.getElementById(b.dataset.prev);
+          if (pv) pv.focus();
+        }
+      });
+
+      b.addEventListener('paste', (e) => {
+        const text = (e.clipboardData || window.clipboardData)
+          .getData('text').replace(/\D/g,'').slice(0,8);
+        if (!text) return;
+        e.preventDefault();
+        for (let i = 0; i < text.length && i < boxes.length; i++) boxes[i].value = text[i];
+        normalize();
+        boxes[Math.min(text.length, boxes.length - 1)].focus();
+      });
+    });
+  })();
+  </script>
+
+  <!-- Mobile Grade Picker Bottom Sheet Modal -->
+  <div id="mobileGradePickerModal" class="mobile-grade-modal" role="dialog" aria-modal="true" aria-labelledby="mobileGradeModalTitle" aria-hidden="true" style="display:none;">
+    <div class="mobile-grade-backdrop" id="mobileGradeBackdrop"></div>
+    <div class="mobile-grade-sheet" role="document">
+      <div class="mobile-grade-header">
+        <div class="mobile-grade-drag-handle" aria-hidden="true"></div>
+        <div class="mobile-grade-header-bar">
+          <h3 id="mobileGradeModalTitle" class="mobile-grade-title">Select Student Grade</h3>
+          <button type="button" class="mobile-grade-close-btn" id="mobileGradeCloseBtn" aria-label="Close grade selection">✕</button>
+        </div>
+      </div>
+      <div class="mobile-grade-body" id="mobileGradeBody" role="listbox" aria-label="Available grades">
+        <!-- Dynamically rendered categories and option buttons -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Info Navbar -->
+  <nav class="info-bar" role="contentinfo">
+    <div class="info-wrap">
+      <span><strong>Administration Contact/WhatsApp #:</strong> +92 335 524 5551</span>
+    </div>
+  </nav>
+</body>
+</html>
