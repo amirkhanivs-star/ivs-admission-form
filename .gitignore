@@ -1,5 +1,8 @@
 node_modules/
 .env
 .env.local
+.vercel/
 data/*.json
+data/*.tmp
+data/*.bak
 data/test_*.json

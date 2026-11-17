@@ -5,7 +5,7 @@ import cors from "cors";
 import morgan from "morgan";
 import fs from "fs";
 import fsPromises from "fs/promises";
-import { fileURLToPath } from "url";
+import { fileURLToPath, pathToFileURL } from "url";
 
 /*
   IVS Admission Form Server
@@ -20,6 +20,15 @@ const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Check review mode and serverless execution
+function isReviewMode() {
+  return process.env.ADMISSION_REVIEW_MODE === "true" ||
+    process.env.ADMISSION_REVIEW_MODE === "1" ||
+    Boolean(process.env.VERCEL && process.env.ADMISSION_REVIEW_MODE !== "false");
+}
+
+const isServerless = Boolean(process.env.VERCEL || process.env.VERCEL_ENV || process.env.AWS_LAMBDA_FUNCTION_NAME);
+
 // Secure configuration from environment
 const PORT = process.env.PORT || 5000;
 const DASHBOARD_API_URL = process.env.DASHBOARD_API_URL || "https://dashboard.iqravs.com/api/admissions";
@@ -27,16 +36,31 @@ const DASHBOARD_API_KEY = process.env.DASHBOARD_API_KEY || "";
 const DATA_DIR = path.join(__dirname, "data");
 const DATA_FILE = path.join(DATA_DIR, "admissions.json");
 
-// Ensure local data storage directory exists
-if (!fs.existsSync(DATA_DIR)) {
-  fs.mkdirSync(DATA_DIR, { recursive: true });
+// Ensure local data storage directory exists safely (prevent crashes on read-only serverless filesystems)
+if (!isReviewMode()) {
+  try {
+    if (!fs.existsSync(DATA_DIR)) {
+      fs.mkdirSync(DATA_DIR, { recursive: true });
+    }
+  } catch (err) {
+    console.warn("[Storage] Warning: Local data directory could not be created (read-only filesystem):", err.message);
+  }
 }
 
 // Storage helpers
 async function readLocalAdmissions() {
+  if (isReviewMode() && !fs.existsSync(DATA_FILE)) {
+    return [];
+  }
   try {
     if (!fs.existsSync(DATA_FILE)) {
-      await fsPromises.writeFile(DATA_FILE, "[]", "utf8");
+      if (!isReviewMode()) {
+        try {
+          await fsPromises.writeFile(DATA_FILE, "[]", "utf8");
+        } catch (writeErr) {
+          console.warn("[Storage] Could not initialize admissions file:", writeErr.message);
+        }
+      }
       return [];
     }
     const raw = await fsPromises.readFile(DATA_FILE, "utf8");
@@ -48,6 +72,10 @@ async function readLocalAdmissions() {
 }
 
 async function writeLocalAdmissions(admissions) {
+  if (isReviewMode()) {
+    console.log("[Storage] Review mode active: Skipping persistent filesystem write.");
+    return true;
+  }
   const tempFile = `${DATA_FILE}.tmp`;
   const backupFile = `${DATA_FILE}.bak`;
   const data = JSON.stringify(admissions, null, 2);
@@ -142,7 +170,22 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // Open form
 app.get("/", (_req, res) => {
-  res.sendFile(path.join(__dirname, "index.html"));
+  const indexPath = path.join(__dirname, "index.html");
+  if (fs.existsSync(indexPath)) {
+    return res.sendFile(indexPath);
+  }
+  res.send("IVS Admission Form Server");
+});
+
+/* Service Status & Review Mode Endpoint */
+app.get("/api/status", (_req, res) => {
+  const reviewActive = isReviewMode();
+  res.json({
+    ok: true,
+    service: "ivs-admission-form",
+    reviewMode: reviewActive,
+    environment: reviewActive ? "review" : (process.env.NODE_ENV || "production")
+  });
 });
 
 /* Duplicate check endpoint
@@ -152,6 +195,10 @@ app.get("/api/forms/check", async (req, res) => {
   try {
     const { name = "", dob = "", guardian = "" } = req.query;
     if (!name || !dob || !guardian) return res.json({ exists: false });
+
+    if (isReviewMode()) {
+      return res.json({ exists: false, reviewMode: true });
+    }
 
     const exists = await checkDuplicateAdmission(name, dob, guardian);
     res.json({ exists: Boolean(exists) });
@@ -173,6 +220,16 @@ app.post("/api/forms", async (req, res) => {
         ok: false,
         error: "validation_failed",
         message: "studentName and signature are required."
+      });
+    }
+
+    if (isReviewMode()) {
+      const previewId = "REV-" + Date.now();
+      return res.status(200).json({
+        ok: true,
+        reviewMode: true,
+        id: previewId,
+        message: "Submissions are disabled in the advisor review environment. No data was saved."
       });
     }
 
@@ -288,6 +345,30 @@ app.post("/api/admissions/submit", async (req, res) => {
         success: false,
         error: "signature_required",
         message: "A valid handwritten parent/guardian signature is required before submitting."
+      });
+    }
+
+    // In Advisor Review Mode: Do NOT save to disk, do NOT sync to dashboard.
+    // Allow parents/advisors to test form, validate, and preview PDF generation safely.
+    if (isReviewMode()) {
+      const previewId = "REV-" + Date.now() + "-" + Math.random().toString(36).substring(2, 7).toUpperCase();
+      console.log(`[Admissions] [REVIEW MODE] Submission validated successfully for student "${sanitizeText(studentName, 50)}". Submissions disabled in review environment; no real data saved or transmitted.`);
+      return res.status(200).json({
+        ok: true,
+        success: true,
+        reviewMode: true,
+        localSaved: false,
+        dashboardSaved: false,
+        id: previewId,
+        applicationId: previewId,
+        dashboardStatus: null,
+        dashboardMessage: "Advisor Review Mode: Submissions disabled. No records sent to central dashboard.",
+        status: {
+          localSaved: false,
+          dashboardSaved: false,
+          reviewMode: true
+        },
+        message: "Advisor Review Mode: Form validation passed! Submissions are disabled in this review deployment; no data was saved or sent to the central dashboard. Your test PDF is now being generated."
       });
     }
 
@@ -465,8 +546,11 @@ app.post("/api/admissions/submit", async (req, res) => {
   }
 });
 
-export { app, checkDuplicateAdmission, readLocalAdmissions, writeLocalAdmissions };
+export default app;
+export { app, checkDuplicateAdmission, readLocalAdmissions, writeLocalAdmissions, isReviewMode };
 
-if (process.env.NODE_ENV !== "test") {
+const isDirectExecution = process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
+
+if (isDirectExecution && process.env.NODE_ENV !== "test" && !isServerless) {
   app.listen(PORT, () => console.log(`Server running: http://localhost:${PORT}`));
 }

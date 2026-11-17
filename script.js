@@ -18,7 +18,44 @@ document.addEventListener("DOMContentLoaded", () => {
   initGuardianWhatsAppDropdown(); // country dropdown for Guardian WhatsApp
   initIgcseSubjectSelection(); // IGCSE dynamic subject selection system (Phase 1)
   initMobileGradePicker();     // Mobile-friendly grade picker modal (<= 768px)
+  checkReviewModeStatus();     // Detect advisor review deployment and display review notice
 });
+
+/* Advisor Review Mode Detection & Banner */
+async function checkReviewModeStatus() {
+  try {
+    const res = await fetch("/api/status");
+    if (!res.ok) return;
+    const data = await res.json();
+    if (data && data.reviewMode) {
+      window.IS_REVIEW_MODE = true;
+      showReviewModeBanner();
+    }
+  } catch (err) {
+    // Graceful fallback
+  }
+}
+
+function showReviewModeBanner() {
+  const container = document.querySelector(".wrapper");
+  if (!container || document.getElementById("reviewModeBanner")) return;
+  const banner = document.createElement("div");
+  banner.id = "reviewModeBanner";
+  banner.className = "review-mode-banner";
+  banner.setAttribute("role", "note");
+  banner.innerHTML = `
+    <span class="review-mode-banner-badge">Review Mode</span>
+    <div>
+      <strong>Advisor Review Environment:</strong> Submissions are disabled in this review deployment. Parents and advisors can explore all subject selections, grade pickers, validations, and generate preview PDFs without saving or transmitting admission records.
+    </div>
+  `;
+  const headerBanner = container.querySelector(".header-banner");
+  if (headerBanner && headerBanner.parentNode) {
+    headerBanner.parentNode.insertBefore(banner, headerBanner.nextSibling);
+  } else {
+    container.insertBefore(banner, container.firstChild);
+  }
+}
 
 /* ==========================================================================
    CENTRALIZED IGCSE / O-LEVEL SUBJECT SELECTION CONFIGURATION (PHASE 1)
@@ -2795,7 +2832,10 @@ async function sendAdmissionToDashboard() {
       return false;
     }
 
-    if (data.dashboardSaved) {
+    if (data.reviewMode) {
+      console.log(`[Admission] [Review Mode] Form validated successfully. Reference: ${data.id}. Live submissions disabled.`);
+      alert("Advisor Review Mode:\n\nForm validation succeeded!\n\nNote: Submissions are disabled in this review deployment (no data was saved or sent to the dashboard).\n\nYour preview PDF will now be generated.");
+    } else if (data.dashboardSaved) {
       console.log(`[Admission] Registration completed and synced to dashboard: ${data.id}`);
     } else {
       console.warn(`[Admission] Registration saved to school database (Dashboard sync: ${data.dashboardMessage || 'Pending'})`);
@@ -2935,11 +2975,14 @@ async function exportPdfAndOpenWhatsAppApp_Inner(submitResult) {
 
   const student =
     document.getElementById("studentName")?.value?.trim() || "student";
-  const refText = submitResult?.id ? `\nApplication Ref: ${submitResult.id}` : "";
+  const isReview = Boolean(submitResult?.reviewMode);
+  const refText = isReview
+    ? `\nApplication Ref: ${submitResult.id} (Advisor Review Mode - Sample Preview)`
+    : (submitResult?.id ? `\nApplication Ref: ${submitResult.id}` : "");
   const caption =
     `IVS Admission Form for ${student}\n` +
     `Session: ${getCurrentAcademicSession()}${refText}\n\n` +
-    `Please review the attached PDF. Thank you.`;
+    (isReview ? `Please review this sample preview PDF (Review Mode). Thank you.` : `Please review the attached PDF. Thank you.`);
 
   try {
     // Best path: native share with FILES (Android Chrome, iOS Safari 16.4+ over HTTPS)
